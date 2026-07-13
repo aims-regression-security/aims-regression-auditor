@@ -140,19 +140,41 @@ jobs:
         shell: bash
         run: |
           set +e
-          mapfile -d '' changed_files < <(
-            git -C candidate diff --name-only -z "$BASE_SHA" "$HEAD_SHA"
-          )
-          python issuer/scripts/regression_auditor_check.py \
-            --root candidate \
-            --mode commit \
-            --files "${changed_files[@]}"
-          exit_code=$?
+          changed_files_path=""
+          diff_error=""
+          if ! changed_files_path="$(mktemp)"; then
+            diff_error="Authoritative PR diff buffer could not be created"
+          else
+            trap 'rm -f "$changed_files_path"' EXIT
+            if ! git -C candidate cat-file -e "${BASE_SHA}^{commit}"; then
+              diff_error="Authoritative PR base commit is unavailable"
+            elif ! git -C candidate cat-file -e "${HEAD_SHA}^{commit}"; then
+              diff_error="Authoritative PR head commit is unavailable"
+            elif ! git -C candidate merge-base "$BASE_SHA" "$HEAD_SHA" >/dev/null; then
+              diff_error="Authoritative PR commits have no common history"
+            elif ! git -C candidate diff --name-only -z \
+              "$BASE_SHA...$HEAD_SHA" > "$changed_files_path"; then
+              diff_error="Authoritative PR diff could not be derived"
+            fi
+          fi
+          if [[ -n "$diff_error" ]]; then
+            exit_code=2
+          else
+            mapfile -d '' changed_files < "$changed_files_path"
+            python issuer/scripts/regression_auditor_check.py \
+              --root candidate \
+              --mode commit \
+              --files "${changed_files[@]}"
+            exit_code=$?
+          fi
           set -e
           echo "exit_code=$exit_code" >> "$GITHUB_OUTPUT"
           if [[ "$exit_code" -eq 0 ]]; then
             echo "conclusion=success" >> "$GITHUB_OUTPUT"
             echo "summary=Protected signed receipt verified" >> "$GITHUB_OUTPUT"
+          elif [[ -n "$diff_error" ]]; then
+            echo "conclusion=failure" >> "$GITHUB_OUTPUT"
+            echo "summary=$diff_error" >> "$GITHUB_OUTPUT"
           else
             echo "conclusion=failure" >> "$GITHUB_OUTPUT"
             echo "summary=Regression Auditor gate blocked this candidate" >> "$GITHUB_OUTPUT"
