@@ -1,0 +1,115 @@
+name: Regression Auditor Receipt Issuer
+
+run-name: Issue Auditor receipt for ${{ inputs.candidate_ref }}
+
+on:
+  workflow_dispatch:
+    inputs:
+      candidate_ref:
+        description: Exact candidate commit SHA or protected ref
+        required: true
+        type: string
+      subject_receipt:
+        description: Repository-relative Regression Auditor subject receipt
+        required: true
+        type: string
+      output_receipt:
+        description: Repository-relative signed Auditor receipt output
+        required: true
+        type: string
+      auditor_decision:
+        description: Protected default-branch Auditor decision path
+        required: true
+        type: string
+
+permissions:
+  contents: read
+
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
+jobs:
+  issue-receipt:
+    name: Protected receipt issuance
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    environment: regression-auditor
+
+    steps:
+      - name: Checkout trusted issuer from default branch
+        uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6
+        with:
+          ref: ${{ github.event.repository.default_branch }}
+          path: issuer
+          fetch-depth: 1
+          persist-credentials: false
+
+      - name: Validate protected candidate configuration
+        env:
+          AIMS_CANDIDATE_REPOSITORY: ${{ vars.AIMS_REGRESSION_CANDIDATE_REPOSITORY }}
+          CANDIDATE_REF: ${{ inputs.candidate_ref }}
+        run: |
+          if [[ ! "$AIMS_CANDIDATE_REPOSITORY" =~ ^[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+$ ]]; then
+            echo "AIMS_REGRESSION_CANDIDATE_REPOSITORY must be an owner/repository value" >&2
+            exit 2
+          fi
+          if [[ ! "$CANDIDATE_REF" =~ ^[0-9a-f]{40}$ ]]; then
+            echo "candidate_ref must be an exact lowercase commit SHA" >&2
+            exit 2
+          fi
+
+      - name: Checkout candidate as read-only input
+        uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6
+        with:
+          repository: ${{ vars.AIMS_REGRESSION_CANDIDATE_REPOSITORY }}
+          ref: ${{ inputs.candidate_ref }}
+          path: candidate
+          ssh-key: ${{ secrets.AIMS_REGRESSION_CANDIDATE_READ_SSH_KEY }}
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Require exact immutable candidate SHA
+        env:
+          CANDIDATE_REF: ${{ inputs.candidate_ref }}
+        run: |
+          test "$(git -C candidate rev-parse HEAD)" = "$CANDIDATE_REF"
+
+      - name: Setup Python
+        uses: actions/setup-python@ece7cb06caefa5fff74198d8649806c4678c61a1 # v6
+        with:
+          python-version: '3.13'
+
+      - name: Install pinned signature dependency
+        run: >-
+          python -m pip install --disable-pip-version-check --no-cache-dir
+          --only-binary=:all: --require-hashes
+          -r issuer/.github/regression-auditor-requirements.txt
+
+      - name: Issue signed receipt with protected key
+        env:
+          AIMS_REGRESSION_AUDITOR_ED25519_PRIVATE_KEY_B64: ${{ secrets.AIMS_REGRESSION_AUDITOR_ED25519_PRIVATE_KEY_B64 }}
+          AIMS_CANDIDATE_REPOSITORY: ${{ vars.AIMS_REGRESSION_CANDIDATE_REPOSITORY }}
+          AUDITOR_DECISION: ${{ inputs.auditor_decision }}
+          SUBJECT_RECEIPT: ${{ inputs.subject_receipt }}
+          OUTPUT_RECEIPT: ${{ inputs.output_receipt }}
+        run: |
+          python issuer/scripts/regression_auditor_issue.py \
+            --candidate-root candidate \
+            --trust-root issuer \
+            --output-root issued \
+            --subject "$SUBJECT_RECEIPT" \
+            --output "$OUTPUT_RECEIPT" \
+            --decision "$AUDITOR_DECISION" \
+            --repository "$AIMS_CANDIDATE_REPOSITORY" \
+            --issuer "github-environment:regression-auditor" \
+            --key-id "primary-2026-07" \
+            --implementation-identity "github-actor-id:${{ github.actor_id }}" \
+            --ttl-seconds 600
+
+      - name: Upload signed receipt only
+        uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f # v7.0.0
+        with:
+          name: regression-auditor-receipt-${{ github.run_id }}
+          path: issued/${{ inputs.output_receipt }}
+          if-no-files-found: error
+          retention-days: 7
