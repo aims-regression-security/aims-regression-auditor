@@ -1,45 +1,57 @@
 # AIMS Regression Auditor
 
-This private repository is the protected trust boundary for AIMS regression
-receipts. Candidate repository write access does not grant access to the signing
-key or permission to modify the default-branch verifier.
+이 공개 저장소는 AIMS 회귀 검증 receipt의 보호된 신뢰 경계입니다. AIMS
+구현 저장소에 쓰기 권한이 있어도 서명키에 접근하거나 기본 브랜치의 검증기를
+직접 변경할 수 없습니다.
 
-The default branch contains:
+## 저장소에 공개되는 항목
 
-- the authoritative Ed25519 public-key trust policy;
-- the protected receipt issuer and verifier implementation;
-- independently reviewed, candidate-bound decisions under `decisions/`.
+기본 브랜치는 다음 항목을 보관합니다.
 
-The signing key, read-only AIMS deploy key, and security GitHub App private key
-are GitHub environment secrets. The `regression-auditor` environment permits
-only the `main` branch, so a collaborator cannot modify a workflow on another
-ref and dispatch it with those secrets. AIMS code is read as untrusted input and
-is never executed by the verifier.
+- Ed25519 공개키 기반의 권위 있는 신뢰 정책
+- 보호된 receipt 발급기와 검증기 구현
+- `decisions/` 아래의 독립 검수 및 candidate 결속 결정
 
-Every `decisions/*.json` change must be introduced by a pull request and
-approved by a GitHub reviewer whose numeric user ID differs from the decision's
-bound implementation identity. The issuer verifies that merged review through
-the GitHub API before using the signing key. The receipt copies implementation
-identity from the protected decision, not from the security account that starts
-the issuer workflow, and the external verifier later compares it with the actual
-AIMS PR author returned by GitHub.
+공개키와 검증 코드는 비밀 정보가 아닙니다. 서명 개인키, AIMS 읽기 전용 deploy
+key, 보안 GitHub App 개인키는 저장소 파일이 아니라 GitHub environment secret으로만
+보관합니다.
 
-The personal private-repository plan does not provide environment required
-reviewers. Independence is fail-closed through default-branch pull-request
-protection and a distinct security reviewer account instead.
+## 비밀과 실행 경계
 
-The AIMS-side workflow has no status/check write permission. It dispatches only
-the expected repository and pull-request number. The separately owned GitHub
-App reads that pull request from GitHub, derives the actual base SHA, head SHA,
-repository, base branch, and author identity, then verifies the complete PR
-delta. Caller-supplied SHA or identity fields are not accepted. The App has
-Checks write and Pull requests read permission, and AIMS branch rules pin the
-required check source to that App.
+`regression-auditor` environment는 `main` 브랜치만 허용합니다. 따라서 collaborator가
+다른 ref에서 workflow를 바꾼 뒤 secret을 사용해 실행할 수 없습니다. 검증기는 AIMS
+코드를 신뢰하지 않는 입력으로 읽으며 실행하지 않습니다.
 
-The bootstrap order is fixed. First, merge the infrastructure with
-`provisioned: false`; install the App; prove that the App can publish a failure
-Check while trust is locked; and pin that App source in the AIMS ruleset. Next,
-an independently reviewed activation PR changes the trust policy to true and
-records the App integration ID and activation evidence. Only then may the
-issuer create a signed receipt and the App publish a success Check. The
-implementation account must have read-only or no issuer access after transfer.
+모든 `decisions/*.json` 변경은 pull request로 제출해야 합니다. 결정에 결속된 구현자와
+숫자 GitHub user ID가 다른 검수자가 승인해야 하며, 발급기는 서명키를 사용하기 전에
+GitHub API로 병합된 승인 상태를 확인합니다. Receipt의 구현자 신원은 workflow 실행
+계정이 아니라 보호된 결정에서 가져오고, 외부 검증기는 이를 실제 AIMS PR 작성자와
+비교합니다.
+
+## 독립 Check 발행
+
+AIMS 측 workflow에는 status 또는 check 쓰기 권한이 없습니다. 예상 저장소와 PR 번호만
+외부 저장소로 전달합니다. 별도 보안계정이 소유한 GitHub App이 실제 PR의 base SHA,
+head SHA, 저장소, 기본 브랜치, 작성자 신원을 GitHub에서 직접 조회하고 전체 PR 변경을
+검증합니다. 호출자가 제공하는 SHA나 신원은 신뢰하지 않습니다.
+
+GitHub App 권한은 Pull requests read와 Checks write로 제한합니다. AIMS 브랜치 규칙은
+필수 Check 이름뿐 아니라 해당 App의 integration source까지 고정합니다.
+
+## 활성화 순서
+
+1. `provisioned: false` 상태로 보호 인프라를 병합합니다.
+2. GitHub App을 설치하고 잠금 상태에서 failure Check 발행을 증명합니다.
+3. AIMS ruleset에 해당 App source를 고정합니다.
+4. 독립 검수된 activation PR에서 App integration ID와 활성화 증거를 기록하고 신뢰
+   정책을 활성화합니다.
+5. 그 이후에만 서명 receipt와 success Check를 발행할 수 있습니다.
+
+구현 계정은 소유권 이전 후 이 저장소에 쓰기 권한을 가지면 안 됩니다.
+
+## 공개 저장소인 이유
+
+GitHub Free 개인계정은 public 저장소에서만 이 저장소에 필요한 ruleset과 보호 규칙을
+사용할 수 있습니다. Private으로 운영하려면 소유 보안계정에 GitHub Pro 이상의
+private repository ruleset 지원이 필요합니다. 저장소를 공개해도 개인키와 deploy key는
+GitHub Secrets에만 있으므로 공개되지 않습니다.
