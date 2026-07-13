@@ -109,10 +109,6 @@ jobs:
           assert policy["provisioned"] is False
           assert policy["activation"] == {
               "state": "BOOTSTRAP_LOCKED",
-              "requiredCheckName": "Regression Auditor / trusted-verifier",
-          }
-          assert policy["activation"] == {
-              "state": "BOOTSTRAP_LOCKED",
               "issuerRepository": (
                   "aims-regression-security/aims-regression-auditor"
               ),
