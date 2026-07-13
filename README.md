@@ -1,7 +1,7 @@
 # AIMS Regression Auditor
 
-이 공개 저장소는 AIMS 회귀 검증 receipt의 보호된 신뢰 경계입니다. AIMS
-구현 저장소에 쓰기 권한이 있어도 서명키에 접근하거나 기본 브랜치의 검증기를
+이 공개 저장소는 AIMS 회귀 검증 receipt의 보호된 자동화 경계입니다. AIMS
+구현 workflow와 구현 agent는 서명키에 접근하거나 기본 브랜치의 검증기를
 직접 변경할 수 없습니다.
 
 ## 저장소에 공개되는 항목
@@ -22,11 +22,10 @@ key, 보안 GitHub App 개인키는 저장소 파일이 아니라 GitHub environ
 다른 ref에서 workflow를 바꾼 뒤 secret을 사용해 실행할 수 없습니다. 검증기는 AIMS
 코드를 신뢰하지 않는 입력으로 읽으며 실행하지 않습니다.
 
-모든 `decisions/*.json` 변경은 pull request로 제출해야 합니다. 결정에 결속된 구현자와
-숫자 GitHub user ID가 다른 검수자가 승인해야 하며, 발급기는 서명키를 사용하기 전에
-GitHub API로 병합된 승인 상태를 확인합니다. Receipt의 구현자 신원은 workflow 실행
-계정이 아니라 보호된 결정에서 가져오고, 외부 검증기는 이를 실제 AIMS PR 작성자와
-비교합니다.
+모든 `decisions/*.json` 변경은 pull request로 제출해야 합니다. 보호된 자동 Auditor
+결정은 구현 agent/session과 분리되고 GitHub App identity에 결속됩니다. Receipt의
+구현자 신원은 workflow 실행 계정이 아니라 보호된 결정에서 가져오고, 외부 검증기는
+이를 실제 AIMS PR 작성자와 비교합니다.
 
 ## 독립 Check 발행
 
@@ -47,7 +46,11 @@ GitHub App 권한은 Pull requests read와 Checks write로 제한합니다. AIMS
    정책을 활성화합니다.
 5. 그 이후에만 서명 receipt와 success Check를 발행할 수 있습니다.
 
-구현 계정은 소유권 이전 후 이 저장소에 쓰기 권한을 가지면 안 됩니다.
+이 프로젝트는 1인 개발 프로젝트입니다. 별도의 인간 Auditor 계정을 요구하지
+않습니다. 동일한 관리자는 명시적인 최종 관리 신뢰점으로 남지만, 구현 workflow와
+구현 agent/session에는 issuer 쓰기 자격 증명, 서명키, App 개인키를 제공하지 않습니다.
+독립성은 두 번째 인간이 아니라 분리된 자동 Auditor session, 보호 환경, 서명 receipt,
+GitHub App source에 고정된 Check로 강제합니다.
 
 ## 공개 저장소인 이유
 

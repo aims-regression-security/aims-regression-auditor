@@ -11,6 +11,8 @@ permissions:
 
 env:
   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+  TRUSTED_APP_REGISTRATION_OWNER: aims-regression-security
+  TRUSTED_CANDIDATE_REPOSITORY: aim2nasa/aims
   TRUSTED_CHECK_NAME: Regression Auditor / trusted-verifier
 
 jobs:
@@ -28,6 +30,7 @@ jobs:
           REQUESTED_REPOSITORY: ${{ github.event.client_payload.repository }}
         shell: bash
         run: |
+          [[ "$EXPECTED_REPOSITORY" == "$TRUSTED_CANDIDATE_REPOSITORY" ]]
           [[ "$REQUESTED_REPOSITORY" == "$EXPECTED_REPOSITORY" ]]
           [[ "$PR_NUMBER" =~ ^[1-9][0-9]*$ ]]
 
@@ -37,10 +40,34 @@ jobs:
         with:
           app-id: ${{ vars.AIMS_REGRESSION_VERIFIER_APP_ID }}
           private-key: ${{ secrets.AIMS_REGRESSION_VERIFIER_APP_PRIVATE_KEY }}
-          owner: wonderboy-kwak
+          owner: aim2nasa
           repositories: aims
           permission-checks: write
           permission-pull-requests: read
+
+      - name: Validate security-app identity and installation scope
+        env:
+          APP_ID: ${{ vars.AIMS_REGRESSION_VERIFIER_APP_ID }}
+          APP_SLUG: ${{ steps.app-token.outputs.app-slug }}
+          EXPECTED_REPOSITORY: ${{ vars.AIMS_REGRESSION_CANDIDATE_REPOSITORY }}
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
+        shell: bash
+        run: |
+          IFS=$'\t' read -r ACTUAL_APP_ID ACTUAL_APP_SLUG ACTUAL_APP_OWNER < <(
+            gh api "apps/$APP_SLUG" \
+              --jq '[.id, .slug, .owner.login] | @tsv'
+          )
+          [[ "$ACTUAL_APP_ID" == "$APP_ID" ]]
+          [[ "$ACTUAL_APP_SLUG" == "$APP_SLUG" ]]
+          [[ "$ACTUAL_APP_OWNER" == "$TRUSTED_APP_REGISTRATION_OWNER" ]]
+          [[ "$EXPECTED_REPOSITORY" == "$TRUSTED_CANDIDATE_REPOSITORY" ]]
+
+          IFS=$'\t' read -r SCOPED_REPOSITORY_COUNT SCOPED_REPOSITORY < <(
+            gh api installation/repositories \
+              --jq '[.total_count, (.repositories | if length == 1 then .[0].full_name else "" end)] | @tsv'
+          )
+          [[ "$SCOPED_REPOSITORY_COUNT" == "1" ]]
+          [[ "$SCOPED_REPOSITORY" == "$EXPECTED_REPOSITORY" ]]
 
       - name: Resolve authoritative PR coordinates through GitHub API
         id: pr
@@ -76,6 +103,7 @@ jobs:
 
       - name: Validate trust activation binding
         env:
+          ACTUAL_APP_SLUG: ${{ steps.app-token.outputs.app-slug }}
           AIMS_REGRESSION_VERIFIER_APP_ID: ${{ vars.AIMS_REGRESSION_VERIFIER_APP_ID }}
         shell: bash
         run: |
@@ -93,6 +121,15 @@ jobs:
           assert activation.get("requiredCheckName") == (
               "Regression Auditor / trusted-verifier"
           )
+          assert activation.get("candidateRepository") == os.environ[
+              "TRUSTED_CANDIDATE_REPOSITORY"
+          ]
+          assert activation.get("requiredCheckAppOwner") == os.environ[
+              "TRUSTED_APP_REGISTRATION_OWNER"
+          ]
+          assert activation.get("requiredCheckAppSlug") == os.environ[
+              "ACTUAL_APP_SLUG"
+          ]
           if policy.get("provisioned") is True:
               assert activation.get("state") == "ACTIVE"
               assert activation.get("requiredCheckIntegrationId") == int(

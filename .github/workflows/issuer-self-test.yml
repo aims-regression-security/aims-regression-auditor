@@ -62,8 +62,16 @@ jobs:
           assert "actions/create-github-app-token@bcd2ba49218906704ab6c1aa796996da409d3eb1" in verifier
           assert "permission-checks: write" in verifier
           assert "permission-pull-requests: read" in verifier
-          assert "owner: wonderboy-kwak" in verifier
-          assert "owner: aim2nasa" not in verifier
+          assert "owner: aim2nasa" in verifier
+          assert "owner: wonderboy-kwak" not in verifier
+          assert "TRUSTED_APP_REGISTRATION_OWNER: aims-regression-security" in verifier
+          assert "TRUSTED_CANDIDATE_REPOSITORY: aim2nasa/aims" in verifier
+          assert "Validate security-app identity and installation scope" in verifier
+          assert 'gh api "apps/$APP_SLUG"' in verifier
+          assert "gh api installation/repositories" in verifier
+          assert "requiredCheckAppOwner" in verifier
+          assert "requiredCheckAppSlug" in verifier
+          assert "steps.app-token.outputs.app-slug" in verifier
           assert 'repos/$EXPECTED_REPOSITORY/pulls/$PR_NUMBER' in verifier
           assert "Validate trust activation binding" in verifier
           assert "requiredCheckIntegrationId" in verifier
@@ -103,14 +111,15 @@ jobs:
               "state": "BOOTSTRAP_LOCKED",
               "requiredCheckName": "Regression Auditor / trusted-verifier",
           }
-          assert len(policy["issuers"]) == 1
-          issuer = policy["issuers"][0]
-          assert issuer["issuer"] == "github-environment:regression-auditor"
-          assert issuer["algorithm"] == "ed25519"
-          assert issuer["maxValiditySeconds"] == 600
-          public_key = base64.b64decode(
-              issuer["publicKeys"]["primary-2026-07"],
-              validate=True,
-          )
-          Ed25519PublicKey.from_public_bytes(public_key)
+          assert policy["activation"] == {
+              "state": "BOOTSTRAP_LOCKED",
+              "issuerRepository": (
+                  "aims-regression-security/aims-regression-auditor"
+              ),
+              "candidateRepository": "aim2nasa/aims",
+              "requiredCheckName": "Regression Auditor / trusted-verifier",
+              "requiredCheckAppOwner": "aims-regression-security",
+              "requiredCheckAppSlug": "aims-regression-auditor-security",
+          }
+          assert policy["issuers"] == []
           PY

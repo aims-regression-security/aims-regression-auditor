@@ -630,6 +630,11 @@ def load_trust_context(
     candidate_repository = text(activation.get("candidateRepository"))
     reviewer_identity = text(activation.get("activationReviewerIdentity"))
     integration_id = activation.get("requiredCheckIntegrationId")
+    expected_reviewer_identity = (
+        f"github-app-id:{integration_id}"
+        if type(integration_id) is int and integration_id > 0
+        else ""
+    )
     raw_activation_evidence = activation.get("evidence")
     activation_evidence = string_list(raw_activation_evidence)
     repositories = (issuer_repository, candidate_repository)
@@ -643,8 +648,7 @@ def load_trust_context(
             or any(not part for part in repository.split("/"))
             for repository in repositories
         )
-        or not reviewer_identity.startswith("github-user-id:")
-        or not reviewer_identity.removeprefix("github-user-id:").isdigit()
+        or reviewer_identity != expected_reviewer_identity
         or not isinstance(raw_activation_evidence, list)
         or not activation_evidence
         or len(activation_evidence) != len(raw_activation_evidence)
