@@ -72,6 +72,7 @@ def issue_receipt(
     issuer: str,
     key_id: str,
     implementation_identity: str,
+    decision_reviewer_identity: str,
     private_key_b64: str,
     ttl_seconds: int,
     now: int | None = None,
@@ -86,6 +87,7 @@ def issue_receipt(
         "repository": repository,
         "key-id": key_id,
         "implementation-identity": implementation_identity,
+        "decision-reviewer-identity": decision_reviewer_identity,
         "decision": decision_path,
     }
     missing = [name for name, value in required_values.items() if not value.strip()]
@@ -179,12 +181,22 @@ def issue_receipt(
         raise ValueError("protected Auditor decision verdict가 PASS가 아닙니다.")
     auditor_identity = gate.text(decision.get("auditorIdentity"))
     auditor_session_id = gate.text(decision.get("auditorSessionId"))
+    protected_reviewer_identity = gate.text(
+        decision.get("decisionReviewerIdentity")
+    )
     reviewed_files = gate.string_list(decision.get("reviewedFiles"))
     evidence = gate.string_list(decision.get("evidence"))
     if not auditor_identity or not auditor_session_id or not reviewed_files or not evidence:
         raise ValueError("protected Auditor decision의 identity/session/evidence가 불완전합니다.")
     if implementation_identity == auditor_identity:
         raise ValueError("implementation identity와 Auditor identity는 달라야 합니다.")
+    if (
+        protected_reviewer_identity != decision_reviewer_identity
+        or decision_reviewer_identity == implementation_identity
+    ):
+        raise ValueError(
+            "protected decision reviewer identity가 실제 승인 reviewer와 일치하지 않습니다."
+        )
     if gate.text(subject_auditor.get("agentId")) != auditor_identity:
         raise ValueError("protected Auditor identity가 subject agentId와 일치하지 않습니다.")
     decision_issued_at = decision.get("issuedAt")
@@ -238,6 +250,7 @@ def issue_receipt(
         "auditorIdentity": auditor_identity,
         "implementationIdentity": implementation_identity,
         "auditorSessionId": auditor_session_id,
+        "decisionReviewerIdentity": decision_reviewer_identity,
         "implementationRole": "independent",
         "verdict": "PASS",
         "issuer": issuer,
@@ -295,6 +308,7 @@ def parse_args(argv: list[str]) -> argparse.Namespace:
     parser.add_argument("--issuer", required=True)
     parser.add_argument("--key-id", required=True)
     parser.add_argument("--implementation-identity", required=True)
+    parser.add_argument("--decision-reviewer-identity", required=True)
     parser.add_argument("--ttl-seconds", type=int, default=600)
     return parser.parse_args(argv)
 
@@ -317,6 +331,7 @@ def main(argv: list[str] | None = None) -> int:
             issuer=args.issuer,
             key_id=args.key_id,
             implementation_identity=args.implementation_identity,
+            decision_reviewer_identity=args.decision_reviewer_identity,
             private_key_b64=private_key,
             ttl_seconds=args.ttl_seconds,
         )

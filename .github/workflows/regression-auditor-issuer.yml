@@ -24,6 +24,7 @@ on:
 
 permissions:
   contents: read
+  pull-requests: read
 
 env:
   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
@@ -43,6 +44,52 @@ jobs:
           path: issuer
           fetch-depth: 1
           persist-credentials: false
+
+      - name: Bind decision to a distinct approved GitHub reviewer
+        id: decision-review
+        env:
+          GH_TOKEN: ${{ github.token }}
+          AUDITOR_DECISION: ${{ inputs.auditor_decision }}
+          IMPLEMENTATION_IDENTITY: github-user-id:${{ github.actor_id }}
+        shell: bash
+        run: |
+          if [[ ! "$AUDITOR_DECISION" =~ ^decisions/[A-Za-z0-9._/-]+\.json$ ]] || \
+             [[ "$AUDITOR_DECISION" == *".."* ]]; then
+            echo "auditor_decision must be a safe decisions/*.json path" >&2
+            exit 2
+          fi
+          DECISION_COMMIT="$(git -C issuer log -1 --format=%H -- "$AUDITOR_DECISION")"
+          if [[ -z "$DECISION_COMMIT" ]]; then
+            echo "protected decision commit was not found" >&2
+            exit 2
+          fi
+          DECISION_PR="$(gh api \
+            -H 'Accept: application/vnd.github+json' \
+            "repos/$GITHUB_REPOSITORY/commits/$DECISION_COMMIT/pulls" \
+            --jq '[.[] | select(.merged_at != null)] | first | .number // empty')"
+          if [[ -z "$DECISION_PR" ]]; then
+            echo "protected decision must be introduced by a merged PR" >&2
+            exit 2
+          fi
+          DECISION_REVIEWER_IDENTITY="$(
+            python -c 'import json,sys; print(json.load(open(sys.argv[1], encoding="utf-8")).get("decisionReviewerIdentity", ""))' \
+              "issuer/$AUDITOR_DECISION"
+          )"
+          if [[ ! "$DECISION_REVIEWER_IDENTITY" =~ ^github-user-id:[0-9]+$ ]] || \
+             [[ "$DECISION_REVIEWER_IDENTITY" == "$IMPLEMENTATION_IDENTITY" ]]; then
+            echo "decision reviewer must be a distinct GitHub user id" >&2
+            exit 2
+          fi
+          REVIEWER_ID="${DECISION_REVIEWER_IDENTITY#github-user-id:}"
+          REVIEW_STATE="$(gh api \
+            -H 'Accept: application/vnd.github+json' \
+            "repos/$GITHUB_REPOSITORY/pulls/$DECISION_PR/reviews" \
+            --jq "[.[] | select(.user.id == $REVIEWER_ID)] | sort_by(.submitted_at) | last | .state // empty")"
+          if [[ "$REVIEW_STATE" != "APPROVED" ]]; then
+            echo "decision PR lacks a current APPROVED review from the bound reviewer" >&2
+            exit 2
+          fi
+          echo "reviewer_identity=$DECISION_REVIEWER_IDENTITY" >> "$GITHUB_OUTPUT"
 
       - name: Validate protected candidate configuration
         env:
@@ -90,6 +137,7 @@ jobs:
           AIMS_REGRESSION_AUDITOR_ED25519_PRIVATE_KEY_B64: ${{ secrets.AIMS_REGRESSION_AUDITOR_ED25519_PRIVATE_KEY_B64 }}
           AIMS_CANDIDATE_REPOSITORY: ${{ vars.AIMS_REGRESSION_CANDIDATE_REPOSITORY }}
           AUDITOR_DECISION: ${{ inputs.auditor_decision }}
+          DECISION_REVIEWER_IDENTITY: ${{ steps.decision-review.outputs.reviewer_identity }}
           SUBJECT_RECEIPT: ${{ inputs.subject_receipt }}
           OUTPUT_RECEIPT: ${{ inputs.output_receipt }}
         run: |
@@ -100,6 +148,7 @@ jobs:
             --subject "$SUBJECT_RECEIPT" \
             --output "$OUTPUT_RECEIPT" \
             --decision "$AUDITOR_DECISION" \
+            --decision-reviewer-identity "$DECISION_REVIEWER_IDENTITY" \
             --repository "$AIMS_CANDIDATE_REPOSITORY" \
             --issuer "github-environment:regression-auditor" \
             --key-id "primary-2026-07" \

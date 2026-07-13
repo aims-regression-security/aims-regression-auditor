@@ -936,6 +936,9 @@ def validate_auditor_receipt(
         }
         auditor_identity = text(auditor.get("auditorIdentity"))
         implementation_identity = text(auditor.get("implementationIdentity"))
+        decision_reviewer_identity = text(
+            auditor.get("decisionReviewerIdentity")
+        )
         expected_implementation_identity = text(
             trust_context.get("implementationIdentity")
         )
@@ -986,6 +989,13 @@ def validate_auditor_receipt(
             errors.append(f"{path}: [AUDITOR_TRUST:IDENTITY_NOT_INDEPENDENT]")
         elif text(auditor.get("agentId")) != auditor_identity:
             errors.append(f"{path}: [AUDITOR_TRUST:AUDITOR_IDENTITY_MISMATCH]")
+        if (
+            not decision_reviewer_identity
+            or decision_reviewer_identity == implementation_identity
+        ):
+            errors.append(
+                f"{path}: [AUDITOR_TRUST:DECISION_REVIEWER_NOT_INDEPENDENT]"
+            )
         if (
             expected_implementation_identity
             and implementation_identity != expected_implementation_identity

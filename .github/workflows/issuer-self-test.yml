@@ -1,0 +1,70 @@
+name: Issuer Self Test
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
+jobs:
+  self-test:
+    name: Issuer Self Test
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+
+    steps:
+      - name: Checkout protected issuer
+        uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6
+        with:
+          fetch-depth: 1
+          persist-credentials: false
+
+      - name: Setup Python
+        uses: actions/setup-python@ece7cb06caefa5fff74198d8649806c4678c61a1 # v6
+        with:
+          python-version: '3.13'
+
+      - name: Install pinned verifier dependency
+        run: >-
+          python -m pip install --disable-pip-version-check --no-cache-dir
+          --only-binary=:all: --require-hashes
+          -r .github/regression-auditor-requirements.txt
+
+      - name: Compile protected verifier
+        run: >-
+          python -m py_compile
+          scripts/regression_auditor_check.py
+          scripts/regression_auditor_issue.py
+          scripts/regression_evidence_runner.py
+
+      - name: Validate authoritative trust policy
+        shell: bash
+        run: |
+          python - <<'PY'
+          import base64
+          import json
+          from pathlib import Path
+
+          from cryptography.hazmat.primitives.asymmetric.ed25519 import Ed25519PublicKey
+
+          policy = json.loads(
+              Path(".github/regression-auditor-trust.json").read_text(encoding="utf-8")
+          )
+          assert policy["schema"] == "aims.regression_auditor_trust.v1"
+          assert policy["provisioned"] is True
+          assert len(policy["issuers"]) == 1
+          issuer = policy["issuers"][0]
+          assert issuer["issuer"] == "github-environment:regression-auditor"
+          assert issuer["algorithm"] == "ed25519"
+          assert issuer["maxValiditySeconds"] == 600
+          public_key = base64.b64decode(
+              issuer["publicKeys"]["primary-2026-07"],
+              validate=True,
+          )
+          Ed25519PublicKey.from_public_bytes(public_key)
+          PY
