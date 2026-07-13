@@ -31,3 +31,8 @@ immutable PR coordinates to this repository. This repository verifies the
 signed receipt and publishes `Regression Auditor / trusted-verifier` through a
 separately owned GitHub App with Checks write permission. AIMS branch rules pin
 the required check source to that App.
+
+The trust policy stays `provisioned: false` until independent ownership, App
+installation, dispatch credentials, signed receipt issuance, and the pinned AIMS
+required check have all passed their repository-write probes. Activation is a
+separate reviewed PR.

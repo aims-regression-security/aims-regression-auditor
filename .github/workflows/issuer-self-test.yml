@@ -76,7 +76,7 @@ jobs:
               Path(".github/regression-auditor-trust.json").read_text(encoding="utf-8")
           )
           assert policy["schema"] == "aims.regression_auditor_trust.v1"
-          assert policy["provisioned"] is True
+          assert policy["provisioned"] is False
           assert len(policy["issuers"]) == 1
           issuer = policy["issuers"][0]
           assert issuer["issuer"] == "github-environment:regression-auditor"

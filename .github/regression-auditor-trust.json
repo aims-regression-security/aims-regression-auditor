@@ -1,6 +1,6 @@
 {
   "schema": "aims.regression_auditor_trust.v1",
-  "provisioned": true,
+  "provisioned": false,
   "issuers": [
     {
       "issuer": "github-environment:regression-auditor",
