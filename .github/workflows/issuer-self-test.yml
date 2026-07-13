@@ -54,6 +54,9 @@ jobs:
           verifier = Path(".github/workflows/regression-auditor-verify.yml").read_text(
               encoding="utf-8"
           )
+          attestation = Path(
+              ".github/workflows/regression-auditor-key-attestation.yml"
+          ).read_text(encoding="utf-8")
           assert "environment: regression-auditor" in issuer
           assert 'get("implementationIdentity", "")' in issuer
           assert "steps.decision-review.outputs.implementation_identity" in issuer
@@ -90,6 +93,18 @@ jobs:
           assert "fetch-depth: 0" in issuer_checkout
           assert "/check-runs" in verifier
           assert "statuses: write" not in verifier
+          assert "workflow_dispatch:" in attestation
+          assert "expected_public_key_b64:" in attestation
+          assert "environment: regression-auditor" in attestation
+          assert "AIMS_REGRESSION_AUDITOR_ED25519_PRIVATE_KEY_B64" in attestation
+          assert "Ed25519PrivateKey.from_private_bytes" in attestation
+          assert "Encoding.Raw" in attestation
+          assert "PublicFormat.Raw" in attestation
+          assert "hmac.compare_digest" in attestation
+          assert "Signing public key attestation PASS" in attestation
+          assert "::add-mask::" in attestation
+          assert "print(private" not in attestation
+          assert "print(actual" not in attestation
           PY
 
       - name: Validate authoritative trust policy
