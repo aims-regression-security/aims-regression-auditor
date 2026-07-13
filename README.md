@@ -17,10 +17,12 @@ ref and dispatch it with those secrets. AIMS code is read as untrusted input and
 is never executed by the verifier.
 
 Every `decisions/*.json` change must be introduced by a pull request and
-approved by a GitHub reviewer whose numeric user ID differs from the
-implementation workflow actor. The issuer verifies that merged review through
-the GitHub API before using the signing key. A decision therefore cannot become
-authoritative merely by claiming an independent identity in JSON.
+approved by a GitHub reviewer whose numeric user ID differs from the decision's
+bound implementation identity. The issuer verifies that merged review through
+the GitHub API before using the signing key. The receipt copies implementation
+identity from the protected decision, not from the security account that starts
+the issuer workflow, and the external verifier later compares it with the actual
+AIMS PR author returned by GitHub.
 
 The personal private-repository plan does not provide environment required
 reviewers. Independence is fail-closed through default-branch pull-request

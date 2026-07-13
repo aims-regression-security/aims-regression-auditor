@@ -51,7 +51,6 @@ jobs:
           GH_TOKEN: ${{ github.token }}
           AUDITOR_DECISION: ${{ inputs.auditor_decision }}
           DEFAULT_BRANCH: ${{ github.event.repository.default_branch }}
-          IMPLEMENTATION_IDENTITY: github-user-id:${{ github.actor_id }}
         shell: bash
         run: |
           if [[ ! "$AUDITOR_DECISION" =~ ^decisions/[A-Za-z0-9._/-]+\.json$ ]] || \
@@ -77,8 +76,13 @@ jobs:
             python -c 'import json,sys; print(json.load(open(sys.argv[1], encoding="utf-8")).get("decisionReviewerIdentity", ""))' \
               "issuer/$AUDITOR_DECISION"
           )"
+          DECISION_IMPLEMENTATION_IDENTITY="$(
+            python -c 'import json,sys; print(json.load(open(sys.argv[1], encoding="utf-8")).get("implementationIdentity", ""))' \
+              "issuer/$AUDITOR_DECISION"
+          )"
           if [[ ! "$DECISION_REVIEWER_IDENTITY" =~ ^github-user-id:[0-9]+$ ]] || \
-             [[ "$DECISION_REVIEWER_IDENTITY" == "$IMPLEMENTATION_IDENTITY" ]]; then
+             [[ ! "$DECISION_IMPLEMENTATION_IDENTITY" =~ ^github-actor-id:[0-9]+$ ]] || \
+             [[ "${DECISION_REVIEWER_IDENTITY#github-user-id:}" == "${DECISION_IMPLEMENTATION_IDENTITY#github-actor-id:}" ]]; then
             echo "decision reviewer must be a distinct GitHub user id" >&2
             exit 2
           fi
@@ -92,6 +96,7 @@ jobs:
             exit 2
           fi
           echo "reviewer_identity=$DECISION_REVIEWER_IDENTITY" >> "$GITHUB_OUTPUT"
+          echo "implementation_identity=$DECISION_IMPLEMENTATION_IDENTITY" >> "$GITHUB_OUTPUT"
 
       - name: Validate protected candidate configuration
         env:
@@ -154,7 +159,7 @@ jobs:
             --repository "$AIMS_CANDIDATE_REPOSITORY" \
             --issuer "github-environment:regression-auditor" \
             --key-id "primary-2026-07" \
-            --implementation-identity "github-actor-id:${{ github.actor_id }}" \
+            --implementation-identity "${{ steps.decision-review.outputs.implementation_identity }}" \
             --ttl-seconds 600
 
       - name: Upload signed receipt only

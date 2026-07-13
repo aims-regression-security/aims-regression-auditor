@@ -55,6 +55,9 @@ jobs:
               encoding="utf-8"
           )
           assert "environment: regression-auditor" in issuer
+          assert 'get("implementationIdentity", "")' in issuer
+          assert "steps.decision-review.outputs.implementation_identity" in issuer
+          assert 'github-actor-id:${{ github.actor_id }}' not in issuer
           assert "repository_dispatch:" in verifier
           assert "actions/create-github-app-token@bcd2ba49218906704ab6c1aa796996da409d3eb1" in verifier
           assert "permission-checks: write" in verifier

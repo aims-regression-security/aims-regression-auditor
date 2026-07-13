@@ -490,6 +490,14 @@ def text(value: Any) -> str:
     return value.strip() if isinstance(value, str) else ""
 
 
+def github_numeric_identity(value: str) -> str:
+    for prefix in ("github-actor-id:", "github-user-id:"):
+        if value.startswith(prefix):
+            identity = value.removeprefix(prefix)
+            return identity if identity.isdigit() else ""
+    return ""
+
+
 def string_list(value: Any) -> list[str]:
     if isinstance(value, str) and value.strip():
         return [value.strip()]
@@ -622,7 +630,8 @@ def load_trust_context(
     candidate_repository = text(activation.get("candidateRepository"))
     reviewer_identity = text(activation.get("activationReviewerIdentity"))
     integration_id = activation.get("requiredCheckIntegrationId")
-    activation_evidence = string_list(activation.get("evidence"))
+    raw_activation_evidence = activation.get("evidence")
+    activation_evidence = string_list(raw_activation_evidence)
     repositories = (issuer_repository, candidate_repository)
     if (
         text(activation.get("state")) != ACTIVE_TRUST_STATE
@@ -636,8 +645,9 @@ def load_trust_context(
         )
         or not reviewer_identity.startswith("github-user-id:")
         or not reviewer_identity.removeprefix("github-user-id:").isdigit()
+        or not isinstance(raw_activation_evidence, list)
         or not activation_evidence
-        or len(activation_evidence) != len(activation.get("evidence", []))
+        or len(activation_evidence) != len(raw_activation_evidence)
         or any(
             token in json.dumps(activation, ensure_ascii=False).lower()
             for token in FORBIDDEN_TOKENS
@@ -1030,9 +1040,16 @@ def validate_auditor_receipt(
             errors.append(f"{path}: [AUDITOR_TRUST:IDENTITY_NOT_INDEPENDENT]")
         elif text(auditor.get("agentId")) != auditor_identity:
             errors.append(f"{path}: [AUDITOR_TRUST:AUDITOR_IDENTITY_MISMATCH]")
+        implementation_user_id = github_numeric_identity(implementation_identity)
+        reviewer_user_id = github_numeric_identity(decision_reviewer_identity)
         if (
             not decision_reviewer_identity
             or decision_reviewer_identity == implementation_identity
+            or (
+                implementation_user_id
+                and reviewer_user_id
+                and implementation_user_id == reviewer_user_id
+            )
         ):
             errors.append(
                 f"{path}: [AUDITOR_TRUST:DECISION_REVIEWER_NOT_INDEPENDENT]"
