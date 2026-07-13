@@ -10,8 +10,11 @@ The default branch contains:
 - the protected receipt issuer and verifier implementation;
 - independently reviewed, candidate-bound decisions under `decisions/`.
 
-The signing key and the read-only AIMS deploy key are GitHub environment
-secrets. AIMS code is never copied into this repository.
+The signing key, read-only AIMS deploy key, and security GitHub App private key
+are GitHub environment secrets. The `regression-auditor` environment permits
+only the `main` branch, so a collaborator cannot modify a workflow on another
+ref and dispatch it with those secrets. AIMS code is read as untrusted input and
+is never executed by the verifier.
 
 Every `decisions/*.json` change must be introduced by a pull request and
 approved by a GitHub reviewer whose numeric user ID differs from the
@@ -22,4 +25,9 @@ authoritative merely by claiming an independent identity in JSON.
 The personal private-repository plan does not provide environment required
 reviewers. Independence is fail-closed through default-branch pull-request
 protection and a distinct security reviewer account instead.
-Protected Regression Auditor issuer and verifier trust root for AIMS
+
+The AIMS-side workflow has no status/check write permission. It only dispatches
+immutable PR coordinates to this repository. This repository verifies the
+signed receipt and publishes `Regression Auditor / trusted-verifier` through a
+separately owned GitHub App with Checks write permission. AIMS branch rules pin
+the required check source to that App.

@@ -7,6 +7,7 @@ on:
 
 permissions:
   contents: read
+  deployments: read
 
 env:
   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
@@ -41,6 +42,36 @@ jobs:
           scripts/regression_auditor_check.py
           scripts/regression_auditor_issue.py
           scripts/regression_evidence_runner.py
+
+      - name: Validate protected workflow contracts
+        shell: bash
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+
+          issuer = Path(".github/workflows/regression-auditor-issuer.yml").read_text(
+              encoding="utf-8"
+          )
+          verifier = Path(".github/workflows/regression-auditor-verify.yml").read_text(
+              encoding="utf-8"
+          )
+          assert "environment: regression-auditor" in issuer
+          assert "repository_dispatch:" in verifier
+          assert "actions/create-github-app-token@bcd2ba49218906704ab6c1aa796996da409d3eb1" in verifier
+          assert "permission-checks: write" in verifier
+          assert "/check-runs" in verifier
+          assert "statuses: write" not in verifier
+          PY
+
+      - name: Validate main-only issuer environment
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          gh api "repos/$GITHUB_REPOSITORY/environments/regression-auditor" | \
+            python -c 'import json,sys; value=json.load(sys.stdin); policy=value.get("deployment_branch_policy") or {}; assert policy == {"protected_branches": False, "custom_branch_policies": True}'
+          gh api "repos/$GITHUB_REPOSITORY/environments/regression-auditor/deployment-branch-policies" | \
+            python -c 'import json,sys; value=json.load(sys.stdin); policies=value.get("branch_policies", []); assert len(policies) == 1 and policies[0].get("name") == "main" and policies[0].get("type") == "branch"'
 
       - name: Validate authoritative trust policy
         shell: bash
