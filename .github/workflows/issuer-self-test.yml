@@ -42,6 +42,56 @@ jobs:
           scripts/regression_auditor_issue.py
           scripts/regression_evidence_runner.py
 
+      - name: Validate protected workflow contracts
+        shell: bash
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+
+          issuer = Path(".github/workflows/regression-auditor-issuer.yml").read_text(
+              encoding="utf-8"
+          )
+          verifier = Path(".github/workflows/regression-auditor-verify.yml").read_text(
+              encoding="utf-8"
+          )
+          assert "environment: regression-auditor" in issuer
+          assert 'get("implementationIdentity", "")' in issuer
+          assert "steps.decision-review.outputs.implementation_identity" in issuer
+          assert 'github-actor-id:${{ github.actor_id }}' not in issuer
+          assert "repository_dispatch:" in verifier
+          assert "actions/create-github-app-token@bcd2ba49218906704ab6c1aa796996da409d3eb1" in verifier
+          assert "permission-checks: write" in verifier
+          assert "permission-pull-requests: read" in verifier
+          assert "owner: aim2nasa" in verifier
+          assert "owner: wonderboy-kwak" not in verifier
+          assert "TRUSTED_APP_REGISTRATION_OWNER: aims-regression-security" in verifier
+          assert "TRUSTED_CANDIDATE_REPOSITORY: aim2nasa/aims" in verifier
+          assert "Validate security-app identity and installation scope" in verifier
+          assert 'gh api "apps/$APP_SLUG"' in verifier
+          assert "gh api installation/repositories" in verifier
+          assert "requiredCheckAppOwner" in verifier
+          assert "requiredCheckAppSlug" in verifier
+          assert "steps.app-token.outputs.app-slug" in verifier
+          assert 'repos/$EXPECTED_REPOSITORY/pulls/$PR_NUMBER' in verifier
+          assert "Validate trust activation binding" in verifier
+          assert "requiredCheckIntegrationId" in verifier
+          assert "BOOTSTRAP_LOCKED" in verifier
+          assert "github.event.client_payload.base_sha" not in verifier
+          assert "github.event.client_payload.head_sha" not in verifier
+          assert "github.event.client_payload.implementation_user_id" not in verifier
+          assert 'cat-file -e "${BASE_SHA}^{commit}"' in verifier
+          assert 'cat-file -e "${HEAD_SHA}^{commit}"' in verifier
+          assert 'merge-base "$BASE_SHA" "$HEAD_SHA"' in verifier
+          assert '"$BASE_SHA...$HEAD_SHA" > "$changed_files_path"' in verifier
+          assert "mapfile -d '' changed_files < <(" not in verifier
+          issuer_checkout = issuer.split(
+              "Checkout trusted issuer from default branch", 1
+          )[1].split("Bind decision to a distinct approved GitHub reviewer", 1)[0]
+          assert "fetch-depth: 0" in issuer_checkout
+          assert "/check-runs" in verifier
+          assert "statuses: write" not in verifier
+          PY
+
       - name: Validate authoritative trust policy
         shell: bash
         run: |
@@ -56,15 +106,20 @@ jobs:
               Path(".github/regression-auditor-trust.json").read_text(encoding="utf-8")
           )
           assert policy["schema"] == "aims.regression_auditor_trust.v1"
-          assert policy["provisioned"] is True
-          assert len(policy["issuers"]) == 1
-          issuer = policy["issuers"][0]
-          assert issuer["issuer"] == "github-environment:regression-auditor"
-          assert issuer["algorithm"] == "ed25519"
-          assert issuer["maxValiditySeconds"] == 600
-          public_key = base64.b64decode(
-              issuer["publicKeys"]["primary-2026-07"],
-              validate=True,
-          )
-          Ed25519PublicKey.from_public_bytes(public_key)
+          assert policy["provisioned"] is False
+          assert policy["activation"] == {
+              "state": "BOOTSTRAP_LOCKED",
+              "requiredCheckName": "Regression Auditor / trusted-verifier",
+          }
+          assert policy["activation"] == {
+              "state": "BOOTSTRAP_LOCKED",
+              "issuerRepository": (
+                  "aims-regression-security/aims-regression-auditor"
+              ),
+              "candidateRepository": "aim2nasa/aims",
+              "requiredCheckName": "Regression Auditor / trusted-verifier",
+              "requiredCheckAppOwner": "aims-regression-security",
+              "requiredCheckAppSlug": "aims-regression-auditor-security",
+          }
+          assert policy["issuers"] == []
           PY

@@ -42,15 +42,16 @@ jobs:
         with:
           ref: ${{ github.event.repository.default_branch }}
           path: issuer
-          fetch-depth: 1
+          fetch-depth: 0
           persist-credentials: false
 
-      - name: Bind decision to a distinct approved GitHub reviewer
+      - name: Bind decision to the automated Auditor App identity
         id: decision-review
         env:
+          EXPECTED_AUDITOR_REVIEWER: github-app-id:${{ vars.AIMS_REGRESSION_VERIFIER_APP_ID }}
           GH_TOKEN: ${{ github.token }}
           AUDITOR_DECISION: ${{ inputs.auditor_decision }}
-          IMPLEMENTATION_IDENTITY: github-user-id:${{ github.actor_id }}
+          DEFAULT_BRANCH: ${{ github.event.repository.default_branch }}
         shell: bash
         run: |
           if [[ ! "$AUDITOR_DECISION" =~ ^decisions/[A-Za-z0-9._/-]+\.json$ ]] || \
@@ -65,31 +66,40 @@ jobs:
           fi
           DECISION_PR="$(gh api \
             -H 'Accept: application/vnd.github+json' \
-            "repos/$GITHUB_REPOSITORY/commits/$DECISION_COMMIT/pulls" \
-            --jq '[.[] | select(.merged_at != null)] | first | .number // empty')"
+            "repos/$GITHUB_REPOSITORY/commits/$DECISION_COMMIT/pulls" | \
+            python -c 'import json,sys; branch=sys.argv[1]; prs=[p for p in json.load(sys.stdin) if p.get("merged_at") and p.get("base", {}).get("ref") == branch]; print(prs[0]["number"] if len(prs) == 1 else "")' \
+              "$DEFAULT_BRANCH")"
           if [[ -z "$DECISION_PR" ]]; then
-            echo "protected decision must be introduced by a merged PR" >&2
+            echo "protected decision must be introduced by one merged default-branch PR" >&2
             exit 2
           fi
           DECISION_REVIEWER_IDENTITY="$(
             python -c 'import json,sys; print(json.load(open(sys.argv[1], encoding="utf-8")).get("decisionReviewerIdentity", ""))' \
               "issuer/$AUDITOR_DECISION"
           )"
-          if [[ ! "$DECISION_REVIEWER_IDENTITY" =~ ^github-user-id:[0-9]+$ ]] || \
-             [[ "$DECISION_REVIEWER_IDENTITY" == "$IMPLEMENTATION_IDENTITY" ]]; then
-            echo "decision reviewer must be a distinct GitHub user id" >&2
-            exit 2
-          fi
-          REVIEWER_ID="${DECISION_REVIEWER_IDENTITY#github-user-id:}"
-          REVIEW_STATE="$(gh api \
-            -H 'Accept: application/vnd.github+json' \
-            "repos/$GITHUB_REPOSITORY/pulls/$DECISION_PR/reviews" \
-            --jq "[.[] | select(.user.id == $REVIEWER_ID)] | sort_by(.submitted_at) | last | .state // empty")"
-          if [[ "$REVIEW_STATE" != "APPROVED" ]]; then
-            echo "decision PR lacks a current APPROVED review from the bound reviewer" >&2
+          DECISION_IMPLEMENTATION_IDENTITY="$(
+            python -c 'import json,sys; print(json.load(open(sys.argv[1], encoding="utf-8")).get("implementationIdentity", ""))' \
+              "issuer/$AUDITOR_DECISION"
+          )"
+          DECISION_AUDITOR_IDENTITY="$(
+            python -c 'import json,sys; print(json.load(open(sys.argv[1], encoding="utf-8")).get("auditorIdentity", ""))' \
+              "issuer/$AUDITOR_DECISION"
+          )"
+          DECISION_AUDITOR_SESSION_ID="$(
+            python -c 'import json,sys; print(json.load(open(sys.argv[1], encoding="utf-8")).get("auditorSessionId", ""))' \
+              "issuer/$AUDITOR_DECISION"
+          )"
+          if [[ ! "$EXPECTED_AUDITOR_REVIEWER" =~ ^github-app-id:[1-9][0-9]*$ ]] || \
+             [[ "$DECISION_REVIEWER_IDENTITY" != "$EXPECTED_AUDITOR_REVIEWER" ]] || \
+             [[ ! "$DECISION_IMPLEMENTATION_IDENTITY" =~ ^github-actor-id:[0-9]+$ ]] || \
+             [[ ! "$DECISION_AUDITOR_IDENTITY" =~ ^regression-auditor-agent:[A-Za-z0-9._-]+$ ]] || \
+             [[ -z "$DECISION_AUDITOR_SESSION_ID" ]] || \
+             [[ "$DECISION_AUDITOR_IDENTITY" == "$DECISION_IMPLEMENTATION_IDENTITY" ]]; then
+            echo "decision must be bound to the automated Auditor App and an independent Auditor agent session" >&2
             exit 2
           fi
           echo "reviewer_identity=$DECISION_REVIEWER_IDENTITY" >> "$GITHUB_OUTPUT"
+          echo "implementation_identity=$DECISION_IMPLEMENTATION_IDENTITY" >> "$GITHUB_OUTPUT"
 
       - name: Validate protected candidate configuration
         env:
@@ -152,7 +162,7 @@ jobs:
             --repository "$AIMS_CANDIDATE_REPOSITORY" \
             --issuer "github-environment:regression-auditor" \
             --key-id "primary-2026-07" \
-            --implementation-identity "github-actor-id:${{ github.actor_id }}" \
+            --implementation-identity "${{ steps.decision-review.outputs.implementation_identity }}" \
             --ttl-seconds 600
 
       - name: Upload signed receipt only

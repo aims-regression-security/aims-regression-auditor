@@ -1,14 +1,13 @@
 {
   "schema": "aims.regression_auditor_trust.v1",
-  "provisioned": true,
-  "issuers": [
-    {
-      "issuer": "github-environment:regression-auditor",
-      "algorithm": "ed25519",
-      "maxValiditySeconds": 600,
-      "publicKeys": {
-        "primary-2026-07": "K9AtutedAtClpS7tL2CxEZrhhL/T9C0HjwRhB+erxz0="
-      }
-    }
-  ]
+  "provisioned": false,
+  "activation": {
+    "state": "BOOTSTRAP_LOCKED",
+    "issuerRepository": "aims-regression-security/aims-regression-auditor",
+    "candidateRepository": "aim2nasa/aims",
+    "requiredCheckName": "Regression Auditor / trusted-verifier",
+    "requiredCheckAppOwner": "aims-regression-security",
+    "requiredCheckAppSlug": "aims-regression-auditor-security"
+  },
+  "issuers": []
 }

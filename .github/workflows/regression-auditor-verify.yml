@@ -1,0 +1,246 @@
+name: Regression Auditor External Trusted Verifier
+
+run-name: Verify AIMS pull request #${{ github.event.client_payload.pull_request_number }}
+
+on:
+  repository_dispatch:
+    types: [regression-auditor-verify]
+
+permissions:
+  contents: read
+
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+  TRUSTED_APP_REGISTRATION_OWNER: aims-regression-security
+  TRUSTED_CANDIDATE_REPOSITORY: aim2nasa/aims
+  TRUSTED_CHECK_NAME: Regression Auditor / trusted-verifier
+
+jobs:
+  verify:
+    name: Protected external verification
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    environment: regression-auditor
+
+    steps:
+      - name: Validate dispatch request
+        env:
+          EXPECTED_REPOSITORY: ${{ vars.AIMS_REGRESSION_CANDIDATE_REPOSITORY }}
+          PR_NUMBER: ${{ github.event.client_payload.pull_request_number }}
+          REQUESTED_REPOSITORY: ${{ github.event.client_payload.repository }}
+        shell: bash
+        run: |
+          [[ "$EXPECTED_REPOSITORY" == "$TRUSTED_CANDIDATE_REPOSITORY" ]]
+          [[ "$REQUESTED_REPOSITORY" == "$EXPECTED_REPOSITORY" ]]
+          [[ "$PR_NUMBER" =~ ^[1-9][0-9]*$ ]]
+
+      - name: Create security-app check token
+        id: app-token
+        uses: actions/create-github-app-token@bcd2ba49218906704ab6c1aa796996da409d3eb1 # v3.2.0
+        with:
+          app-id: ${{ vars.AIMS_REGRESSION_VERIFIER_APP_ID }}
+          private-key: ${{ secrets.AIMS_REGRESSION_VERIFIER_APP_PRIVATE_KEY }}
+          owner: aim2nasa
+          repositories: aims
+          permission-checks: write
+          permission-pull-requests: read
+
+      - name: Validate security-app identity and installation scope
+        env:
+          APP_ID: ${{ vars.AIMS_REGRESSION_VERIFIER_APP_ID }}
+          APP_SLUG: ${{ steps.app-token.outputs.app-slug }}
+          EXPECTED_REPOSITORY: ${{ vars.AIMS_REGRESSION_CANDIDATE_REPOSITORY }}
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
+        shell: bash
+        run: |
+          IFS=$'\t' read -r ACTUAL_APP_ID ACTUAL_APP_SLUG ACTUAL_APP_OWNER < <(
+            gh api "apps/$APP_SLUG" \
+              --jq '[.id, .slug, .owner.login] | @tsv'
+          )
+          [[ "$ACTUAL_APP_ID" == "$APP_ID" ]]
+          [[ "$ACTUAL_APP_SLUG" == "$APP_SLUG" ]]
+          [[ "$ACTUAL_APP_OWNER" == "$TRUSTED_APP_REGISTRATION_OWNER" ]]
+          [[ "$EXPECTED_REPOSITORY" == "$TRUSTED_CANDIDATE_REPOSITORY" ]]
+
+          IFS=$'\t' read -r SCOPED_REPOSITORY_COUNT SCOPED_REPOSITORY < <(
+            gh api installation/repositories \
+              --jq '[.total_count, (.repositories | if length == 1 then .[0].full_name else "" end)] | @tsv'
+          )
+          [[ "$SCOPED_REPOSITORY_COUNT" == "1" ]]
+          [[ "$SCOPED_REPOSITORY" == "$EXPECTED_REPOSITORY" ]]
+
+      - name: Resolve authoritative PR coordinates through GitHub API
+        id: pr
+        env:
+          EXPECTED_BASE_BRANCH: ${{ vars.AIMS_REGRESSION_CANDIDATE_DEFAULT_BRANCH }}
+          EXPECTED_REPOSITORY: ${{ vars.AIMS_REGRESSION_CANDIDATE_REPOSITORY }}
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
+          PR_NUMBER: ${{ github.event.client_payload.pull_request_number }}
+        shell: bash
+        run: |
+          IFS=$'\t' read -r STATE BASE_REPOSITORY BASE_BRANCH BASE_SHA HEAD_REPOSITORY HEAD_SHA IMPLEMENTATION_USER_ID < <(
+            gh api "repos/$EXPECTED_REPOSITORY/pulls/$PR_NUMBER" \
+              --jq '[.state, .base.repo.full_name, .base.ref, .base.sha, .head.repo.full_name, .head.sha, (.user.id | tostring)] | @tsv'
+          )
+          [[ "$STATE" == "open" ]]
+          [[ "$BASE_REPOSITORY" == "$EXPECTED_REPOSITORY" ]]
+          [[ "$HEAD_REPOSITORY" == "$EXPECTED_REPOSITORY" ]]
+          [[ "$BASE_BRANCH" == "$EXPECTED_BASE_BRANCH" ]]
+          [[ "$BASE_SHA" =~ ^[0-9a-f]{40}$ ]]
+          [[ "$HEAD_SHA" =~ ^[0-9a-f]{40}$ ]]
+          [[ "$IMPLEMENTATION_USER_ID" =~ ^[0-9]+$ ]]
+          echo "base_sha=$BASE_SHA" >> "$GITHUB_OUTPUT"
+          echo "head_sha=$HEAD_SHA" >> "$GITHUB_OUTPUT"
+          echo "implementation_user_id=$IMPLEMENTATION_USER_ID" >> "$GITHUB_OUTPUT"
+
+      - name: Checkout protected verifier from issuer default branch
+        uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6
+        with:
+          ref: ${{ github.event.repository.default_branch }}
+          path: issuer
+          fetch-depth: 1
+          persist-credentials: false
+
+      - name: Validate trust activation binding
+        env:
+          ACTUAL_APP_SLUG: ${{ steps.app-token.outputs.app-slug }}
+          AIMS_REGRESSION_VERIFIER_APP_ID: ${{ vars.AIMS_REGRESSION_VERIFIER_APP_ID }}
+        shell: bash
+        run: |
+          python - <<'PY'
+          import json
+          import os
+          from pathlib import Path
+
+          policy = json.loads(
+              Path("issuer/.github/regression-auditor-trust.json").read_text(
+                  encoding="utf-8"
+              )
+          )
+          activation = policy.get("activation", {})
+          assert activation.get("requiredCheckName") == (
+              "Regression Auditor / trusted-verifier"
+          )
+          assert activation.get("candidateRepository") == os.environ[
+              "TRUSTED_CANDIDATE_REPOSITORY"
+          ]
+          assert activation.get("requiredCheckAppOwner") == os.environ[
+              "TRUSTED_APP_REGISTRATION_OWNER"
+          ]
+          assert activation.get("requiredCheckAppSlug") == os.environ[
+              "ACTUAL_APP_SLUG"
+          ]
+          if policy.get("provisioned") is True:
+              assert activation.get("state") == "ACTIVE"
+              assert activation.get("requiredCheckIntegrationId") == int(
+                  os.environ["AIMS_REGRESSION_VERIFIER_APP_ID"]
+              )
+          else:
+              assert activation.get("state") == "BOOTSTRAP_LOCKED"
+          PY
+
+      - name: Checkout exact AIMS candidate as read-only input
+        uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6
+        with:
+          repository: ${{ vars.AIMS_REGRESSION_CANDIDATE_REPOSITORY }}
+          ref: ${{ steps.pr.outputs.head_sha }}
+          path: candidate
+          ssh-key: ${{ secrets.AIMS_REGRESSION_CANDIDATE_READ_SSH_KEY }}
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Require exact authoritative PR head
+        env:
+          HEAD_SHA: ${{ steps.pr.outputs.head_sha }}
+        shell: bash
+        run: |
+          test "$(git -C candidate rev-parse HEAD)" = "$HEAD_SHA"
+
+      - name: Setup Python
+        uses: actions/setup-python@ece7cb06caefa5fff74198d8649806c4678c61a1 # v6
+        with:
+          python-version: '3.13'
+
+      - name: Install protected verifier dependencies
+        run: >-
+          python -m pip install --disable-pip-version-check --no-cache-dir
+          --only-binary=:all: --require-hashes
+          -r issuer/.github/regression-auditor-requirements.txt
+
+      - name: Verify with protected issuer code
+        id: verify
+        env:
+          AIMS_REGRESSION_AUDITOR_TRUST_ROOT: ${{ github.workspace }}/issuer
+          AIMS_IMPLEMENTATION_IDENTITY: github-actor-id:${{ steps.pr.outputs.implementation_user_id }}
+          BASE_SHA: ${{ steps.pr.outputs.base_sha }}
+          HEAD_SHA: ${{ steps.pr.outputs.head_sha }}
+        shell: bash
+        run: |
+          set +e
+          changed_files_path=""
+          diff_error=""
+          if ! changed_files_path="$(mktemp)"; then
+            diff_error="Authoritative PR diff buffer could not be created"
+          else
+            trap 'rm -f "$changed_files_path"' EXIT
+            if ! git -C candidate cat-file -e "${BASE_SHA}^{commit}"; then
+              diff_error="Authoritative PR base commit is unavailable"
+            elif ! git -C candidate cat-file -e "${HEAD_SHA}^{commit}"; then
+              diff_error="Authoritative PR head commit is unavailable"
+            elif ! git -C candidate merge-base "$BASE_SHA" "$HEAD_SHA" >/dev/null; then
+              diff_error="Authoritative PR commits have no common history"
+            elif ! git -C candidate diff --name-only -z \
+              "$BASE_SHA...$HEAD_SHA" > "$changed_files_path"; then
+              diff_error="Authoritative PR diff could not be derived"
+            fi
+          fi
+          if [[ -n "$diff_error" ]]; then
+            exit_code=2
+          else
+            mapfile -d '' changed_files < "$changed_files_path"
+            python issuer/scripts/regression_auditor_check.py \
+              --root candidate \
+              --mode commit \
+              --files "${changed_files[@]}"
+            exit_code=$?
+          fi
+          set -e
+          echo "exit_code=$exit_code" >> "$GITHUB_OUTPUT"
+          if [[ "$exit_code" -eq 0 ]]; then
+            echo "conclusion=success" >> "$GITHUB_OUTPUT"
+            echo "summary=Protected signed receipt verified" >> "$GITHUB_OUTPUT"
+          elif [[ -n "$diff_error" ]]; then
+            echo "conclusion=failure" >> "$GITHUB_OUTPUT"
+            echo "summary=$diff_error" >> "$GITHUB_OUTPUT"
+          else
+            echo "conclusion=failure" >> "$GITHUB_OUTPUT"
+            echo "summary=Regression Auditor gate blocked this candidate" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Publish security-app check on exact candidate SHA
+        if: always() && steps.app-token.outputs.token != ''
+        env:
+          CANDIDATE_REPOSITORY: ${{ vars.AIMS_REGRESSION_CANDIDATE_REPOSITORY }}
+          CONCLUSION: ${{ steps.verify.outputs.conclusion || 'failure' }}
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
+          HEAD_SHA: ${{ steps.pr.outputs.head_sha }}
+          SUMMARY: ${{ steps.verify.outputs.summary || 'Protected verifier infrastructure failed' }}
+        shell: bash
+        run: |
+          gh api --method POST \
+            -H 'Accept: application/vnd.github+json' \
+            "repos/$CANDIDATE_REPOSITORY/check-runs" \
+            -f name="$TRUSTED_CHECK_NAME" \
+            -f head_sha="$HEAD_SHA" \
+            -f status=completed \
+            -f conclusion="$CONCLUSION" \
+            -f details_url="$GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID" \
+            -f 'output[title]=Regression Auditor gate' \
+            -f "output[summary]=$SUMMARY"
+
+      - name: Enforce verifier result
+        if: always()
+        env:
+          EXIT_CODE: ${{ steps.verify.outputs.exit_code || '2' }}
+        shell: bash
+        run: exit "$EXIT_CODE"

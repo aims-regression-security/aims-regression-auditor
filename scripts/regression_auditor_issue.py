@@ -46,6 +46,14 @@ def read_object(path: Path) -> dict[str, Any]:
     return value
 
 
+def github_numeric_identity(value: str) -> str:
+    for prefix in ("github-actor-id:", "github-user-id:"):
+        if value.startswith(prefix):
+            identity = value.removeprefix(prefix)
+            return identity if identity.isdigit() else ""
+    return ""
+
+
 def load_private_key(encoded_key: str):
     try:
         from cryptography.hazmat.primitives.asymmetric.ed25519 import (
@@ -181,18 +189,38 @@ def issue_receipt(
         raise ValueError("protected Auditor decision verdict가 PASS가 아닙니다.")
     auditor_identity = gate.text(decision.get("auditorIdentity"))
     auditor_session_id = gate.text(decision.get("auditorSessionId"))
+    protected_implementation_identity = gate.text(
+        decision.get("implementationIdentity")
+    )
     protected_reviewer_identity = gate.text(
         decision.get("decisionReviewerIdentity")
     )
     reviewed_files = gate.string_list(decision.get("reviewedFiles"))
     evidence = gate.string_list(decision.get("evidence"))
-    if not auditor_identity or not auditor_session_id or not reviewed_files or not evidence:
+    if (
+        not auditor_identity
+        or not auditor_session_id
+        or not protected_implementation_identity
+        or not reviewed_files
+        or not evidence
+    ):
         raise ValueError("protected Auditor decision의 identity/session/evidence가 불완전합니다.")
+    if protected_implementation_identity != implementation_identity:
+        raise ValueError(
+            "protected decision implementation identity가 issuer 입력과 일치하지 않습니다."
+        )
     if implementation_identity == auditor_identity:
         raise ValueError("implementation identity와 Auditor identity는 달라야 합니다.")
+    implementation_user_id = github_numeric_identity(implementation_identity)
+    reviewer_user_id = github_numeric_identity(decision_reviewer_identity)
     if (
         protected_reviewer_identity != decision_reviewer_identity
         or decision_reviewer_identity == implementation_identity
+        or (
+            implementation_user_id
+            and reviewer_user_id
+            and implementation_user_id == reviewer_user_id
+        )
     ):
         raise ValueError(
             "protected decision reviewer identity가 실제 승인 reviewer와 일치하지 않습니다."

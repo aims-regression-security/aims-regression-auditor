@@ -31,6 +31,8 @@ WORK_CLASSIFICATION_PREFIX = "docs/regression-work/"
 REPORT_PREFIX = "docs/ace-reports/"
 TRUST_POLICY_PATH = ".github/regression-auditor-trust.json"
 TRUST_ROOT_ENV = "AIMS_REGRESSION_AUDITOR_TRUST_ROOT"
+TRUSTED_CHECK_NAME = "Regression Auditor / trusted-verifier"
+ACTIVE_TRUST_STATE = "ACTIVE"
 VALID_LIVE_STATUS = {"none", "OPEN_UNTIL_LIVE_PASS", "LIVE_VERIFIED"}
 VALID_WORK_KINDS = {
     "bugfix",
@@ -488,6 +490,14 @@ def text(value: Any) -> str:
     return value.strip() if isinstance(value, str) else ""
 
 
+def github_numeric_identity(value: str) -> str:
+    for prefix in ("github-actor-id:", "github-user-id:"):
+        if value.startswith(prefix):
+            identity = value.removeprefix(prefix)
+            return identity if identity.isdigit() else ""
+    return ""
+
+
 def string_list(value: Any) -> list[str]:
     if isinstance(value, str) and value.strip():
         return [value.strip()]
@@ -610,6 +620,48 @@ def load_trust_context(
         )
         return context
 
+    activation = policy.get("activation")
+    if not isinstance(activation, dict):
+        context["policyError"] = (
+            f"{TRUST_POLICY_PATH}: activation metadata가 없습니다."
+        )
+        return context
+    issuer_repository = text(activation.get("issuerRepository"))
+    candidate_repository = text(activation.get("candidateRepository"))
+    reviewer_identity = text(activation.get("activationReviewerIdentity"))
+    integration_id = activation.get("requiredCheckIntegrationId")
+    expected_reviewer_identity = (
+        f"github-app-id:{integration_id}"
+        if type(integration_id) is int and integration_id > 0
+        else ""
+    )
+    raw_activation_evidence = activation.get("evidence")
+    activation_evidence = string_list(raw_activation_evidence)
+    repositories = (issuer_repository, candidate_repository)
+    if (
+        text(activation.get("state")) != ACTIVE_TRUST_STATE
+        or text(activation.get("requiredCheckName")) != TRUSTED_CHECK_NAME
+        or type(integration_id) is not int
+        or integration_id <= 0
+        or any(
+            repository.count("/") != 1
+            or any(not part for part in repository.split("/"))
+            for repository in repositories
+        )
+        or reviewer_identity != expected_reviewer_identity
+        or not isinstance(raw_activation_evidence, list)
+        or not activation_evidence
+        or len(activation_evidence) != len(raw_activation_evidence)
+        or any(
+            token in json.dumps(activation, ensure_ascii=False).lower()
+            for token in FORBIDDEN_TOKENS
+        )
+    ):
+        context["policyError"] = (
+            f"{TRUST_POLICY_PATH}: activation metadata가 유효하지 않습니다."
+        )
+        return context
+
     raw_issuers = policy.get("issuers")
     if not isinstance(raw_issuers, list) or not raw_issuers:
         context["policyError"] = f"{TRUST_POLICY_PATH}: issuers가 없습니다."
@@ -689,6 +741,9 @@ def load_trust_context(
             "trustedIssuers": set(issuer_policies),
             "maxValiditySecondsByIssuer": max_validity_by_issuer,
             "verifier": verifier,
+            "activation": activation,
+            "requiredCheckIntegrationId": integration_id,
+            "requiredCheckName": TRUSTED_CHECK_NAME,
         }
     )
     return context
@@ -989,9 +1044,16 @@ def validate_auditor_receipt(
             errors.append(f"{path}: [AUDITOR_TRUST:IDENTITY_NOT_INDEPENDENT]")
         elif text(auditor.get("agentId")) != auditor_identity:
             errors.append(f"{path}: [AUDITOR_TRUST:AUDITOR_IDENTITY_MISMATCH]")
+        implementation_user_id = github_numeric_identity(implementation_identity)
+        reviewer_user_id = github_numeric_identity(decision_reviewer_identity)
         if (
             not decision_reviewer_identity
             or decision_reviewer_identity == implementation_identity
+            or (
+                implementation_user_id
+                and reviewer_user_id
+                and implementation_user_id == reviewer_user_id
+            )
         ):
             errors.append(
                 f"{path}: [AUDITOR_TRUST:DECISION_REVIEWER_NOT_INDEPENDENT]"
