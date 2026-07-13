@@ -1,6 +1,6 @@
 name: Regression Auditor External Trusted Verifier
 
-run-name: Verify AIMS candidate ${{ github.event.client_payload.head_sha }}
+run-name: Verify AIMS pull request #${{ github.event.client_payload.pull_request_number }}
 
 on:
   repository_dispatch:
@@ -21,19 +21,15 @@ jobs:
     environment: regression-auditor
 
     steps:
-      - name: Validate immutable dispatch coordinates
+      - name: Validate dispatch request
         env:
-          BASE_SHA: ${{ github.event.client_payload.base_sha }}
-          CANDIDATE_REPOSITORY: ${{ github.event.client_payload.repository }}
           EXPECTED_REPOSITORY: ${{ vars.AIMS_REGRESSION_CANDIDATE_REPOSITORY }}
-          HEAD_SHA: ${{ github.event.client_payload.head_sha }}
-          IMPLEMENTATION_USER_ID: ${{ github.event.client_payload.implementation_user_id }}
+          PR_NUMBER: ${{ github.event.client_payload.pull_request_number }}
+          REQUESTED_REPOSITORY: ${{ github.event.client_payload.repository }}
         shell: bash
         run: |
-          [[ "$CANDIDATE_REPOSITORY" == "$EXPECTED_REPOSITORY" ]]
-          [[ "$BASE_SHA" =~ ^[0-9a-f]{40}$ ]]
-          [[ "$HEAD_SHA" =~ ^[0-9a-f]{40}$ ]]
-          [[ "$IMPLEMENTATION_USER_ID" =~ ^[0-9]+$ ]]
+          [[ "$REQUESTED_REPOSITORY" == "$EXPECTED_REPOSITORY" ]]
+          [[ "$PR_NUMBER" =~ ^[1-9][0-9]*$ ]]
 
       - name: Create security-app check token
         id: app-token
@@ -44,6 +40,31 @@ jobs:
           owner: aim2nasa
           repositories: aims
           permission-checks: write
+          permission-pull-requests: read
+
+      - name: Resolve authoritative PR coordinates through GitHub API
+        id: pr
+        env:
+          EXPECTED_BASE_BRANCH: ${{ vars.AIMS_REGRESSION_CANDIDATE_DEFAULT_BRANCH }}
+          EXPECTED_REPOSITORY: ${{ vars.AIMS_REGRESSION_CANDIDATE_REPOSITORY }}
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
+          PR_NUMBER: ${{ github.event.client_payload.pull_request_number }}
+        shell: bash
+        run: |
+          IFS=$'\t' read -r STATE BASE_REPOSITORY BASE_BRANCH BASE_SHA HEAD_REPOSITORY HEAD_SHA IMPLEMENTATION_USER_ID < <(
+            gh api "repos/$EXPECTED_REPOSITORY/pulls/$PR_NUMBER" \
+              --jq '[.state, .base.repo.full_name, .base.ref, .base.sha, .head.repo.full_name, .head.sha, (.user.id | tostring)] | @tsv'
+          )
+          [[ "$STATE" == "open" ]]
+          [[ "$BASE_REPOSITORY" == "$EXPECTED_REPOSITORY" ]]
+          [[ "$HEAD_REPOSITORY" == "$EXPECTED_REPOSITORY" ]]
+          [[ "$BASE_BRANCH" == "$EXPECTED_BASE_BRANCH" ]]
+          [[ "$BASE_SHA" =~ ^[0-9a-f]{40}$ ]]
+          [[ "$HEAD_SHA" =~ ^[0-9a-f]{40}$ ]]
+          [[ "$IMPLEMENTATION_USER_ID" =~ ^[0-9]+$ ]]
+          echo "base_sha=$BASE_SHA" >> "$GITHUB_OUTPUT"
+          echo "head_sha=$HEAD_SHA" >> "$GITHUB_OUTPUT"
+          echo "implementation_user_id=$IMPLEMENTATION_USER_ID" >> "$GITHUB_OUTPUT"
 
       - name: Checkout protected verifier from issuer default branch
         uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6
@@ -53,28 +74,50 @@ jobs:
           fetch-depth: 1
           persist-credentials: false
 
+      - name: Validate trust activation binding
+        env:
+          AIMS_REGRESSION_VERIFIER_APP_ID: ${{ vars.AIMS_REGRESSION_VERIFIER_APP_ID }}
+        shell: bash
+        run: |
+          python - <<'PY'
+          import json
+          import os
+          from pathlib import Path
+
+          policy = json.loads(
+              Path("issuer/.github/regression-auditor-trust.json").read_text(
+                  encoding="utf-8"
+              )
+          )
+          activation = policy.get("activation", {})
+          assert activation.get("requiredCheckName") == (
+              "Regression Auditor / trusted-verifier"
+          )
+          if policy.get("provisioned") is True:
+              assert activation.get("state") == "ACTIVE"
+              assert activation.get("requiredCheckIntegrationId") == int(
+                  os.environ["AIMS_REGRESSION_VERIFIER_APP_ID"]
+              )
+          else:
+              assert activation.get("state") == "BOOTSTRAP_LOCKED"
+          PY
+
       - name: Checkout exact AIMS candidate as read-only input
         uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6
         with:
           repository: ${{ vars.AIMS_REGRESSION_CANDIDATE_REPOSITORY }}
-          ref: ${{ github.event.client_payload.head_sha }}
+          ref: ${{ steps.pr.outputs.head_sha }}
           path: candidate
           ssh-key: ${{ secrets.AIMS_REGRESSION_CANDIDATE_READ_SSH_KEY }}
           fetch-depth: 0
           persist-credentials: false
 
-      - name: Require one signed commit over the exact PR base
+      - name: Require exact authoritative PR head
         env:
-          BASE_SHA: ${{ github.event.client_payload.base_sha }}
-          HEAD_SHA: ${{ github.event.client_payload.head_sha }}
+          HEAD_SHA: ${{ steps.pr.outputs.head_sha }}
         shell: bash
         run: |
           test "$(git -C candidate rev-parse HEAD)" = "$HEAD_SHA"
-          read -r -a commit_line <<< "$(git -C candidate rev-list --parents -n 1 "$HEAD_SHA")"
-          if [[ "${#commit_line[@]}" -ne 2 ]] || [[ "${commit_line[1]}" != "$BASE_SHA" ]]; then
-            echo "candidate must be one signed commit whose only parent is the exact PR base" >&2
-            exit 2
-          fi
 
       - name: Setup Python
         uses: actions/setup-python@ece7cb06caefa5fff74198d8649806c4678c61a1 # v6
@@ -91,9 +134,9 @@ jobs:
         id: verify
         env:
           AIMS_REGRESSION_AUDITOR_TRUST_ROOT: ${{ github.workspace }}/issuer
-          AIMS_IMPLEMENTATION_IDENTITY: github-actor-id:${{ github.event.client_payload.implementation_user_id }}
-          BASE_SHA: ${{ github.event.client_payload.base_sha }}
-          HEAD_SHA: ${{ github.event.client_payload.head_sha }}
+          AIMS_IMPLEMENTATION_IDENTITY: github-actor-id:${{ steps.pr.outputs.implementation_user_id }}
+          BASE_SHA: ${{ steps.pr.outputs.base_sha }}
+          HEAD_SHA: ${{ steps.pr.outputs.head_sha }}
         shell: bash
         run: |
           set +e
@@ -118,10 +161,10 @@ jobs:
       - name: Publish security-app check on exact candidate SHA
         if: always() && steps.app-token.outputs.token != ''
         env:
-          CANDIDATE_REPOSITORY: ${{ github.event.client_payload.repository }}
+          CANDIDATE_REPOSITORY: ${{ vars.AIMS_REGRESSION_CANDIDATE_REPOSITORY }}
           CONCLUSION: ${{ steps.verify.outputs.conclusion || 'failure' }}
           GH_TOKEN: ${{ steps.app-token.outputs.token }}
-          HEAD_SHA: ${{ github.event.client_payload.head_sha }}
+          HEAD_SHA: ${{ steps.pr.outputs.head_sha }}
           SUMMARY: ${{ steps.verify.outputs.summary || 'Protected verifier infrastructure failed' }}
         shell: bash
         run: |

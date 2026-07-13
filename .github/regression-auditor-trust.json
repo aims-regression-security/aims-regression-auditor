@@ -1,6 +1,10 @@
 {
   "schema": "aims.regression_auditor_trust.v1",
   "provisioned": false,
+  "activation": {
+    "state": "BOOTSTRAP_LOCKED",
+    "requiredCheckName": "Regression Auditor / trusted-verifier"
+  },
   "issuers": [
     {
       "issuer": "github-environment:regression-auditor",

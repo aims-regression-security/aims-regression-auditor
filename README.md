@@ -26,13 +26,18 @@ The personal private-repository plan does not provide environment required
 reviewers. Independence is fail-closed through default-branch pull-request
 protection and a distinct security reviewer account instead.
 
-The AIMS-side workflow has no status/check write permission. It only dispatches
-immutable PR coordinates to this repository. This repository verifies the
-signed receipt and publishes `Regression Auditor / trusted-verifier` through a
-separately owned GitHub App with Checks write permission. AIMS branch rules pin
-the required check source to that App.
+The AIMS-side workflow has no status/check write permission. It dispatches only
+the expected repository and pull-request number. The separately owned GitHub
+App reads that pull request from GitHub, derives the actual base SHA, head SHA,
+repository, base branch, and author identity, then verifies the complete PR
+delta. Caller-supplied SHA or identity fields are not accepted. The App has
+Checks write and Pull requests read permission, and AIMS branch rules pin the
+required check source to that App.
 
-The trust policy stays `provisioned: false` until independent ownership, App
-installation, dispatch credentials, signed receipt issuance, and the pinned AIMS
-required check have all passed their repository-write probes. Activation is a
-separate reviewed PR.
+The bootstrap order is fixed. First, merge the infrastructure with
+`provisioned: false`; install the App; prove that the App can publish a failure
+Check while trust is locked; and pin that App source in the AIMS ruleset. Next,
+an independently reviewed activation PR changes the trust policy to true and
+records the App integration ID and activation evidence. Only then may the
+issuer create a signed receipt and the App publish a success Check. The
+implementation account must have read-only or no issuer access after transfer.

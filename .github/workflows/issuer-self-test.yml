@@ -58,6 +58,15 @@ jobs:
           assert "repository_dispatch:" in verifier
           assert "actions/create-github-app-token@bcd2ba49218906704ab6c1aa796996da409d3eb1" in verifier
           assert "permission-checks: write" in verifier
+          assert "permission-pull-requests: read" in verifier
+          assert 'repos/$EXPECTED_REPOSITORY/pulls/$PR_NUMBER' in verifier
+          assert "Validate trust activation binding" in verifier
+          assert "requiredCheckIntegrationId" in verifier
+          assert "BOOTSTRAP_LOCKED" in verifier
+          assert "github.event.client_payload.base_sha" not in verifier
+          assert "github.event.client_payload.head_sha" not in verifier
+          assert "github.event.client_payload.implementation_user_id" not in verifier
+          assert 'diff --name-only -z "$BASE_SHA" "$HEAD_SHA"' in verifier
           assert "/check-runs" in verifier
           assert "statuses: write" not in verifier
           PY
@@ -77,6 +86,10 @@ jobs:
           )
           assert policy["schema"] == "aims.regression_auditor_trust.v1"
           assert policy["provisioned"] is False
+          assert policy["activation"] == {
+              "state": "BOOTSTRAP_LOCKED",
+              "requiredCheckName": "Regression Auditor / trusted-verifier",
+          }
           assert len(policy["issuers"]) == 1
           issuer = policy["issuers"][0]
           assert issuer["issuer"] == "github-environment:regression-auditor"
