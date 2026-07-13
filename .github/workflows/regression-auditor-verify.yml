@@ -37,7 +37,7 @@ jobs:
         with:
           app-id: ${{ vars.AIMS_REGRESSION_VERIFIER_APP_ID }}
           private-key: ${{ secrets.AIMS_REGRESSION_VERIFIER_APP_PRIVATE_KEY }}
-          owner: aim2nasa
+          owner: wonderboy-kwak
           repositories: aims
           permission-checks: write
           permission-pull-requests: read

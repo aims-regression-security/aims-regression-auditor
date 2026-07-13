@@ -62,6 +62,8 @@ jobs:
           assert "actions/create-github-app-token@bcd2ba49218906704ab6c1aa796996da409d3eb1" in verifier
           assert "permission-checks: write" in verifier
           assert "permission-pull-requests: read" in verifier
+          assert "owner: wonderboy-kwak" in verifier
+          assert "owner: aim2nasa" not in verifier
           assert 'repos/$EXPECTED_REPOSITORY/pulls/$PR_NUMBER' in verifier
           assert "Validate trust activation binding" in verifier
           assert "requiredCheckIntegrationId" in verifier
