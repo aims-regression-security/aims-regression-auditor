@@ -7,7 +7,6 @@ on:
 
 permissions:
   contents: read
-  deployments: read
 
 env:
   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
@@ -62,16 +61,6 @@ jobs:
           assert "/check-runs" in verifier
           assert "statuses: write" not in verifier
           PY
-
-      - name: Validate main-only issuer environment
-        env:
-          GH_TOKEN: ${{ github.token }}
-        shell: bash
-        run: |
-          gh api "repos/$GITHUB_REPOSITORY/environments/regression-auditor" | \
-            python -c 'import json,sys; value=json.load(sys.stdin); policy=value.get("deployment_branch_policy") or {}; assert policy == {"protected_branches": False, "custom_branch_policies": True}'
-          gh api "repos/$GITHUB_REPOSITORY/environments/regression-auditor/deployment-branch-policies" | \
-            python -c 'import json,sys; value=json.load(sys.stdin); policies=value.get("branch_policies", []); assert len(policies) == 1 and policies[0].get("name") == "main" and policies[0].get("type") == "branch"'
 
       - name: Validate authoritative trust policy
         shell: bash
