@@ -1,0 +1,68 @@
+name: Bootstrap Verifier Read Key
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+  CANDIDATE_REPOSITORY: aim2nasa/aims
+  DEPLOY_KEY_TITLE: aims-trusted-verifier-read-2026-07
+
+jobs:
+  bootstrap:
+    name: Generate verifier read key once
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+
+    steps:
+      - name: Checkout issuer default branch
+        uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6
+        with:
+          fetch-depth: 1
+          persist-credentials: true
+
+      - name: Generate issuer read-only deploy key
+        shell: bash
+        run: |
+          ssh-keygen -q -t ed25519 -N '' -C "$DEPLOY_KEY_TITLE" \
+            -f "$RUNNER_TEMP/issuer-read"
+
+      - name: Install key on issuer and candidate repositories
+        env:
+          GH_TOKEN: ${{ secrets.AIMS_AUDITOR_BOOTSTRAP_ADMIN_TOKEN }}
+        shell: bash
+        run: |
+          existing_ids="$(gh api "repos/$GITHUB_REPOSITORY/keys" \
+            --jq ".[] | select(.title == \"$DEPLOY_KEY_TITLE\") | .id")"
+          for key_id in $existing_ids; do
+            gh api --method DELETE "repos/$GITHUB_REPOSITORY/keys/$key_id"
+          done
+          gh api --method POST "repos/$GITHUB_REPOSITORY/keys" \
+            -f title="$DEPLOY_KEY_TITLE" \
+            -f key="$(cat "$RUNNER_TEMP/issuer-read.pub")" \
+            -F read_only=true
+          gh secret set AIMS_REGRESSION_AUDITOR_TRUST_READ_SSH_KEY \
+            --repo "$CANDIDATE_REPOSITORY" \
+            < "$RUNNER_TEMP/issuer-read"
+
+      - name: Remove bootstrap workflow
+        shell: bash
+        run: |
+          rm .github/workflows/bootstrap-verifier-read-key.yml
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add .github/workflows/bootstrap-verifier-read-key.yml
+          git commit -m "verifier 읽기 키 bootstrap 제거"
+          git push origin HEAD:main
+
+      - name: Remove one-time bootstrap credential
+        if: always()
+        env:
+          GH_TOKEN: ${{ secrets.AIMS_AUDITOR_BOOTSTRAP_ADMIN_TOKEN }}
+        shell: bash
+        run: |
+          gh secret delete AIMS_AUDITOR_BOOTSTRAP_ADMIN_TOKEN \
+            --repo "$GITHUB_REPOSITORY" || true
