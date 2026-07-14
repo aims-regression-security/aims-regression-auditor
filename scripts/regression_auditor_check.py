@@ -328,16 +328,27 @@ def candidate_audit_context(
             )
         candidate_digest = git_files_digest(root, candidate_files)
     else:
+        explicit_files = bool(files)
         base_commit_sha = run_git_at(root, ["rev-parse", "HEAD^"])
-        changed = run_git_at(
-            root,
-            ["diff", "--name-only", "-z", base_commit_sha, "HEAD"],
-        )
-        candidate_files = sorted(
-            normalize(path)
-            for path in changed.split("\0")
-            if path and normalize(path) != excluded_receipt
-        )
+        env_base_sha = normalize(os.environ.get("BASE_SHA", ""))
+        if explicit_files and len(env_base_sha) == 40 and all(
+            character in "0123456789abcdefABCDEF" for character in env_base_sha
+        ):
+            try:
+                run_git_at(root, ["cat-file", "-e", f"{env_base_sha}^{{commit}}"])
+                base_commit_sha = env_base_sha
+            except RuntimeError:
+                pass
+        if not explicit_files:
+            changed = run_git_at(
+                root,
+                ["diff", "--name-only", "-z", base_commit_sha, "HEAD"],
+            )
+            candidate_files = sorted(
+                normalize(path)
+                for path in changed.split("\0")
+                if path and normalize(path) != excluded_receipt
+            )
         if excluded_receipt:
             with tempfile.TemporaryDirectory(prefix="aims-auditor-tree-") as temporary:
                 temporary_index = Path(temporary) / "index"
