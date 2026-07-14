@@ -62,6 +62,9 @@ jobs:
           assert 'get("pullRequestBaseSha", "")' in issuer
           assert "candidate_base_sha=$DECISION_CANDIDATE_BASE_SHA" in issuer
           assert "BASE_SHA: ${{ steps.decision-review.outputs.candidate_base_sha }}" in issuer
+          assert "Fetch protected PR base for full-delta binding" in issuer
+          assert 'git -C candidate fetch --no-tags --depth=1 origin "$BASE_SHA"' in issuer
+          assert 'git -C candidate cat-file -e "${BASE_SHA}^{commit}"' in issuer
           assert "steps.decision-review.outputs.implementation_identity" in issuer
           assert 'github-actor-id:${{ github.actor_id }}' not in issuer
           assert "repository_dispatch:" in verifier

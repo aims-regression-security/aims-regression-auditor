@@ -141,6 +141,15 @@ jobs:
         run: |
           test "$(git -C candidate rev-parse HEAD)" = "$CANDIDATE_REF"
 
+      - name: Fetch protected PR base for full-delta binding
+        env:
+          BASE_SHA: ${{ steps.decision-review.outputs.candidate_base_sha }}
+        run: |
+          if [[ -n "$BASE_SHA" ]]; then
+            git -C candidate fetch --no-tags --depth=1 origin "$BASE_SHA"
+            git -C candidate cat-file -e "${BASE_SHA}^{commit}"
+          fi
+
       - name: Setup Python
         uses: actions/setup-python@ece7cb06caefa5fff74198d8649806c4678c61a1 # v6
         with:
