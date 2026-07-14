@@ -59,6 +59,9 @@ jobs:
           ).read_text(encoding="utf-8")
           assert "environment: regression-auditor" in issuer
           assert 'get("implementationIdentity", "")' in issuer
+          assert 'get("pullRequestBaseSha", "")' in issuer
+          assert "candidate_base_sha=$DECISION_CANDIDATE_BASE_SHA" in issuer
+          assert "BASE_SHA: ${{ steps.decision-review.outputs.candidate_base_sha }}" in issuer
           assert "steps.decision-review.outputs.implementation_identity" in issuer
           assert 'github-actor-id:${{ github.actor_id }}' not in issuer
           assert "repository_dispatch:" in verifier
