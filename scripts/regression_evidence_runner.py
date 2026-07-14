@@ -231,6 +231,13 @@ def _pytest_arguments(command: list[str]) -> list[str]:
     return command[3:]
 
 
+def _portable_cwd(value: str | Path) -> str:
+    raw = str(value)
+    if re.match(r"^[A-Za-z]:[\\/]", raw):
+        return _normalize(raw)
+    return _normalize(str(Path(raw).resolve()))
+
+
 def _hardened_pytest_command(command: list[str]) -> list[str]:
     pytest_arguments = _pytest_arguments(command)
     if not pytest_arguments:
@@ -680,6 +687,7 @@ def validate_evidence(
     post_root: str | Path,
     *,
     expected_metadata: dict[str, Any],
+    source_root: str | Path | None = None,
 ) -> dict[str, Any]:
     """Validate runner evidence with stable machine-readable rejection codes."""
     if not isinstance(evidence, dict) or evidence.get("schema") != EVIDENCE_SCHEMA:
@@ -691,17 +699,19 @@ def validate_evidence(
     if not all(isinstance(item, dict) for item in (execution, harness, pre_fix, post_fix)):
         return _result(False, "EVIDENCE_STRUCTURE_INVALID")
 
-    pre = Path(pre_root).resolve()
-    post = Path(post_root).resolve()
+    pre_cwd = _portable_cwd(pre_root)
+    post_cwd = _portable_cwd(post_root)
+    pre = Path(source_root).resolve() if source_root is not None else Path(pre_root).resolve()
+    post = Path(source_root).resolve() if source_root is not None else Path(post_root).resolve()
     command = execution.get("command")
     if not isinstance(command, list) or command != pre_fix.get("command") or command != post_fix.get("command"):
         return _result(False, "COMMAND_MISMATCH")
     bound_harness_path = _normalize(harness.get("path", ""))
     if not _command_targets_harness(command, bound_harness_path):
         return _result(False, "COMMAND_MISMATCH")
-    if execution.get("preCwd") != str(pre) or execution.get("postCwd") != str(post):
+    if _normalize(str(execution.get("preCwd"))) != pre_cwd or _normalize(str(execution.get("postCwd"))) != post_cwd:
         return _result(False, "CWD_MISMATCH")
-    if pre_fix.get("cwd") != str(pre) or post_fix.get("cwd") != str(post):
+    if _normalize(str(pre_fix.get("cwd"))) != pre_cwd or _normalize(str(post_fix.get("cwd"))) != post_cwd:
         return _result(False, "CWD_MISMATCH")
     timeout = execution.get("timeoutSeconds")
     if type(timeout) is not int or timeout <= 0:

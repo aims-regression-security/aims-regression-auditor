@@ -1191,6 +1191,7 @@ def validate_runner_evidence(
                 text(execution.get("preCwd")),
                 text(execution.get("postCwd")),
                 expected_metadata=expected_metadata,
+                source_root=root,
             )
         except Exception as exc:
             return None, [f"[RUNNER_EVIDENCE:VALIDATOR_ERROR] {exc}"]
