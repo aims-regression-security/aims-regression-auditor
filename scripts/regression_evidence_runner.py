@@ -223,7 +223,10 @@ def _pytest_arguments(command: list[str]) -> list[str]:
     if resolved is None:
         discovered = shutil.which(command[0])
         resolved = Path(discovered).resolve() if discovered else None
-    if resolved is None or resolved != Path(sys.executable).resolve():
+    if resolved is not None and resolved == Path(sys.executable).resolve():
+        return command[3:]
+    executable_name = _normalize(command[0]).rsplit("/", 1)[-1].lower()
+    if not re.fullmatch(r"python(?:\d+(?:\.\d+)?)?(?:\.exe)?", executable_name):
         return []
     return command[3:]
 
