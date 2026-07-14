@@ -1,0 +1,23 @@
+{
+  "schema": "aims.regression_auditor_decision.v1",
+  "verdict": "PASS",
+  "repository": "aim2nasa/aims",
+  "candidateCommitSha": "7c1746600670c4ede1ea40349930d0b447578f43",
+  "candidateTreeSha": "0018772b873b03a95d05b7acfb4d71ab8495dc84",
+  "baseCommitSha": "1a4fed50dc9d6f4c73d9e571171b64347f526825",
+  "pullRequestBaseSha": "d3e0f54d7999a0440d9ed1c5421ecf7c8df8ea19",
+  "subjectReceipt": "docs/regression-audits/2026-07-15_issue242-ocr-timeout-budget.json",
+  "subjectReceiptSha256": "33433ec9d87e81ebc6502adafcbe4f4f69ed71bfe1911940ec9aeefd2cb25b4a",
+  "auditorIdentity": "regression-auditor-agent:019f591d-1065-7411-bb5a-0d48b039f473-issue242-second",
+  "auditorSessionId": "019f591d-1065-7411-bb5a-0d48b039f473-issue242-second-v2",
+  "implementationIdentity": "github-actor-id:26228531",
+  "decisionReviewerIdentity": "github-app-id:4291228",
+  "issuedAt": 1784071605,
+  "expiresAt": 1784072505,
+  "evidence": [
+    "Issue #242 v6 candidate includes the AutoClicker VERSION file that the local pre-commit gate advances for AC code changes.",
+    "The signed candidate still preserves the same fail-first proof: the live-failed 50/40/3 state can exceed the 100 second logical OCR budget.",
+    "The same regression harness passes after bounding runtime policy to parent 35 seconds, child 30 seconds, and two attempts.",
+    "liveOnlyStatus remains OPEN_UNTIL_LIVE_PASS, so issue close and release PASS stay blocked until installed AC live verification confirms the policy."
+  ]
+}
