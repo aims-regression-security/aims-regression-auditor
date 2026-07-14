@@ -1,0 +1,36 @@
+{
+  "schema": "aims.regression_auditor_decision.v1",
+  "verdict": "PASS",
+  "repository": "aim2nasa/aims",
+  "candidateCommitSha": "09121e6972d77a7c0da1eb69d9ae351d5d722fe3",
+  "candidateTreeSha": "23c2122c002f253ba47af07f785cf60da1cd6554",
+  "pullRequestBaseSha": "c2aaa80defb6ac0253da619bf9b27bebdc20988a",
+  "subjectReceipt": "docs/regression-audits/2026-07-14_issue248-ac-metdo-browser-confirm-popup.json",
+  "subjectReceiptSha256": "470a62617fefe929b273c981c98f95fedfbfc4e7fdb3ab74c742fd1f5b1c6ec5",
+  "auditorIdentity": "regression-auditor-agent:019f5e9d-7a5a-7922-866e-30860635ef9f",
+  "auditorSessionId": "019f5e9d-7a5a-7922-866e-30860635ef9f",
+  "implementationIdentity": "github-actor-id:26228531",
+  "decisionReviewerIdentity": "github-app-id:4291228",
+  "issuedAt": 1784035404,
+  "expiresAt": 1784036004,
+  "reviewedFiles": [
+    "tools/auto_clicker_v2/gui_main.py",
+    "tools/auto_clicker_v2/tests/test_issue248_browser_confirm_popup.py",
+    "docs/plans/2026-07-14_issue248-ac-metdo-browser-confirm-popup.md",
+    "docs/requirements/requirements-log.md",
+    "docs/ace-reports/2026-07-14_issue248-ac-metdo-browser-confirm-popup.md",
+    "docs/e2e-matrices/2026-07-14_issue248-ac-metdo-browser-confirm-popup.json",
+    "docs/regression-evidence/2026-07-14_issue248-ac-metdo-browser-confirm-popup.json",
+    "docs/ace-reports/assets/issue248-browser-confirm-popup/2026-07-14/pre-fix.junit.xml",
+    "docs/ace-reports/assets/issue248-browser-confirm-popup/2026-07-14/post-fix.junit.xml",
+    "docs/regression-work/2026-07-14_issue248-ac-metdo-browser-confirm-popup.json",
+    "docs/regression-audits/2026-07-14_issue248-ac-metdo-browser-confirm-popup.json"
+  ],
+  "evidence": [
+    "수동 시작 브라우저 확인 팝업 회귀는 기존 상태에서 동일 하네스 7개 중 assertion 실패 6개와 실행 오류 0개로 재현됐다.",
+    "수정 후 같은 하네스와 같은 명령으로 7개가 모두 통과했고 관련 화면 사전 확인 테스트 30개도 통과했다.",
+    "구조화 실행 증거는 accepted true, code VALID이며 staged behavior digest 59f1fb139f6a7b86d29cde9d32910f7eb7af127731f2fc11118071a39d266887에 결속됐다.",
+    "실사용 전용 항목은 none이며 MetDO 서버 데이터나 로그인 세션 없이 실제 수동 시작 콜백과 상태 조합으로 완전 재현된다.",
+    "독립 Regression Auditor는 전체 staged 후보를 재검수하고 차단 항목 없이 PASS로 판정했다."
+  ]
+}
