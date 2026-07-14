@@ -1546,6 +1546,19 @@ def receipts_for_files(files: list[str]) -> list[str]:
     return [path for path in files if is_audit_receipt(path)]
 
 
+def receipt_work_classification(
+    root: Path,
+    path: str,
+    *,
+    staged: bool,
+) -> tuple[str, str | None]:
+    receipt, error = read_json(root, path, staged=staged)
+    if error:
+        return "", error
+    assert receipt is not None
+    return text(receipt.get("workClassification")), None
+
+
 def needs_commit_gate(
     files: list[str],
     force: bool,
@@ -1578,34 +1591,89 @@ def check(
     behavior_digest = staged_files_digest(behavior_files, root=root) if staged else ""
     classifications = work_classifications_for_files(files)
     work_classification_path = ""
+    classification_bindings: dict[str, tuple[list[str], str, str]] = {}
 
     if mode == "commit" and classifications:
-        if len(classifications) != 1:
+        if staged and len(classifications) != 1:
             return (
                 False,
                 "[REGRESSION AUDITOR GATE] BLOCK: staged work에는 정확히 하나의 "
                 f"{WORK_CLASSIFICATION_PREFIX}*.json work classification이 필요합니다.",
             )
-        work_classification_path = classifications[0]
-        declared_files, declared_error = declared_work_files(
-            root,
-            classifications[0],
-            staged=staged,
-        )
-        if declared_error:
-            return False, f"[REGRESSION AUDITOR GATE] BLOCK:\n  - {declared_error}"
-        missing_recognized = sorted(set(recognized_behavior_files) - set(declared_files))
-        unstaged_declared = sorted(set(declared_files) - normalized_files)
+
+        declared_by_classification: dict[str, list[str]] = {}
         binding_errors: list[str] = []
-        if missing_recognized:
-            binding_errors.append(
-                "work classification이 staged behavior files를 누락했습니다: "
-                + ", ".join(missing_recognized)
+        for classification_path in classifications:
+            declared_files, declared_error = declared_work_files(
+                root,
+                classification_path,
+                staged=staged,
             )
+            if declared_error:
+                binding_errors.append(declared_error)
+                continue
+
+            declared_by_classification[classification_path] = declared_files
+            declared_digest = (
+                staged_files_digest(declared_files, root=root)
+                if staged
+                else git_files_digest(root, declared_files)
+            )
+            classification_bindings[classification_path] = (
+                declared_files,
+                declared_digest,
+                "",
+            )
+
+        if binding_errors:
+            return (
+                False,
+                "[REGRESSION AUDITOR GATE] BLOCK:\n"
+                + "\n".join(f"  - {error}" for error in binding_errors),
+            )
+
+        covering_classifications = [
+            path
+            for path, declared_files in declared_by_classification.items()
+            if sorted(declared_files) == recognized_behavior_files
+        ]
+        if staged:
+            work_classification_path = classifications[0]
+        elif len(classifications) > 1:
+            if len(covering_classifications) != 1:
+                detail = (
+                    "없습니다."
+                    if not covering_classifications
+                    else "여러 개입니다."
+                )
+                return (
+                    False,
+                    "[REGRESSION AUDITOR GATE] BLOCK: PR 전체 behavior 변경을 덮는 "
+                    f"work classification이 {detail}",
+                )
+            work_classification_path = covering_classifications[0]
+        else:
+            work_classification_path = classifications[0]
+
+        if work_classification_path:
+            behavior_files, behavior_digest, _ = classification_bindings[
+                work_classification_path
+            ]
+        else:
+            behavior_files = []
+            behavior_digest = ""
+
+        unstaged_declared = sorted(set(behavior_files) - normalized_files)
+        missing_recognized = sorted(set(recognized_behavior_files) - set(behavior_files))
         if unstaged_declared:
             binding_errors.append(
-                "stagedBehaviorFiles에 staged 변경이 아닌 경로가 있습니다: "
+                f"{work_classification_path}: stagedBehaviorFiles에 staged/PR 변경이 아닌 경로가 있습니다: "
                 + ", ".join(unstaged_declared)
+            )
+        if missing_recognized:
+            binding_errors.append(
+                "work classification이 staged/PR behavior files를 누락했습니다: "
+                + ", ".join(missing_recognized)
             )
         if binding_errors:
             return (
@@ -1613,21 +1681,35 @@ def check(
                 "[REGRESSION AUDITOR GATE] BLOCK:\n"
                 + "\n".join(f"  - {error}" for error in binding_errors),
             )
-        behavior_files = declared_files
-        behavior_digest = staged_files_digest(behavior_files, root=root) if staged else ""
-        work_kind, classification_errors = validate_work_classification(
-            root,
-            classifications[0],
-            behavior_files,
-            behavior_digest,
-            staged=staged,
-        )
-        if classification_errors:
+
+        if work_classification_path:
+            work_kind, classification_errors = validate_work_classification(
+                root,
+                work_classification_path,
+                behavior_files,
+                behavior_digest,
+                staged=staged,
+            )
+            binding_errors.extend(classification_errors)
+            classification_bindings[work_classification_path] = (
+                behavior_files,
+                behavior_digest,
+                work_kind,
+            )
+
+        if binding_errors:
             return (
                 False,
                 "[REGRESSION AUDITOR GATE] BLOCK:\n"
-                + "\n".join(f"  - {error}" for error in classification_errors),
+                + "\n".join(f"  - {error}" for error in binding_errors),
             )
+
+        if work_classification_path:
+            behavior_files, behavior_digest, work_kind = classification_bindings[
+                work_classification_path
+            ]
+        else:
+            work_kind = "verification-gate"
         if not needs_commit_gate(files, force, work_kind=work_kind):
             return (
                 True,
@@ -1651,7 +1733,50 @@ def check(
         )
 
     errors: list[str] = []
+    if mode == "commit" and not staged and work_classification_path:
+        filtered_receipts: list[str] = []
+        for receipt in receipts:
+            receipt_classification, receipt_error = receipt_work_classification(
+                root,
+                receipt,
+                staged=staged,
+            )
+            if receipt_error:
+                errors.append(receipt_error)
+            elif receipt_classification == work_classification_path:
+                filtered_receipts.append(receipt)
+        if not errors:
+            if not filtered_receipts:
+                errors.append(
+                    f"{work_classification_path}: PR 전체 behavior 변경을 덮는 "
+                    "Regression Auditor subject receipt가 없습니다."
+                )
+            else:
+                receipts = filtered_receipts
+
     for receipt in receipts:
+        receipt_classification_path = work_classification_path
+        receipt_behavior_files = behavior_files
+        receipt_behavior_digest = behavior_digest
+        if mode == "commit" and classifications and not work_classification_path:
+            receipt_classification_path, receipt_error = receipt_work_classification(
+                root,
+                receipt,
+                staged=staged,
+            )
+            if receipt_error:
+                errors.append(receipt_error)
+                continue
+            if receipt_classification_path not in classification_bindings:
+                errors.append(
+                    f"{receipt}: workClassification이 현재 staged/PR classification에 없습니다."
+                )
+                continue
+            (
+                receipt_behavior_files,
+                receipt_behavior_digest,
+                _,
+            ) = classification_bindings[receipt_classification_path]
         errors.extend(validate_receipt(
             root,
             receipt,
@@ -1659,10 +1784,10 @@ def check(
             staged=staged,
             issue=issue,
             release_tag=release_tag,
-            behavior_files=behavior_files,
-            behavior_digest=behavior_digest,
+            behavior_files=receipt_behavior_files,
+            behavior_digest=receipt_behavior_digest,
             trust_context=trust_context,
-            work_classification_path=work_classification_path,
+            work_classification_path=receipt_classification_path,
             changed_files=sorted(normalized_files),
         ))
 
