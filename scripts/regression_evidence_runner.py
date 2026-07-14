@@ -218,17 +218,34 @@ def _pytest_observation(exit_code: int, stdout: str, stderr: str) -> tuple[int, 
 def _pytest_arguments(command: list[str]) -> list[str]:
     if len(command) < 3 or command[1:3] != ["-m", "pytest"]:
         return []
-    executable = Path(command[0])
-    resolved = executable.resolve() if executable.is_absolute() else None
-    if resolved is None:
-        discovered = shutil.which(command[0])
-        resolved = Path(discovered).resolve() if discovered else None
-    if resolved is not None and resolved == Path(sys.executable).resolve():
-        return command[3:]
-    executable_name = _normalize(command[0]).rsplit("/", 1)[-1].lower()
-    if not re.fullmatch(r"python(?:\d+(?:\.\d+)?)?(?:\.exe)?", executable_name):
+    if not _is_python_executable(command[0]):
         return []
     return command[3:]
+
+
+def _is_python_executable(value: str) -> bool:
+    executable = Path(value)
+    resolved = executable.resolve() if executable.is_absolute() else None
+    if resolved is None:
+        discovered = shutil.which(value)
+        resolved = Path(discovered).resolve() if discovered else None
+    if resolved is not None and resolved == Path(sys.executable).resolve():
+        return True
+    executable_name = _normalize(value).rsplit("/", 1)[-1].lower()
+    return re.fullmatch(r"python(?:\d+(?:\.\d+)?)?(?:\.exe)?", executable_name) is not None
+
+
+def _is_hardened_pytest_effective_command(
+    command: list[str],
+    effective_command: list[str],
+) -> bool:
+    hardened_command = _hardened_pytest_command(command)
+    return (
+        bool(hardened_command)
+        and len(effective_command) == len(hardened_command)
+        and _is_python_executable(str(effective_command[0]))
+        and effective_command[1:] == hardened_command[1:]
+    )
 
 
 def _portable_cwd(value: str | Path) -> str:
@@ -657,11 +674,9 @@ def _phase_matches_observation(phase: dict[str, Any]) -> dict[str, Any] | None:
         return None
     if not isinstance(command, list) or not isinstance(effective_command, list):
         return None
-    hardened_command = _hardened_pytest_command(command)
     valid_execution = (
         execution_mode == "hardened-pytest-bootstrap"
-        and effective_command == hardened_command
-        and bool(hardened_command)
+        and _is_hardened_pytest_effective_command(command, effective_command)
     ) or (
         execution_mode == "injected-direct" and effective_command == command
     )
