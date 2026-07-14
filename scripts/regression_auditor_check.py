@@ -1594,13 +1594,6 @@ def check(
     classification_bindings: dict[str, tuple[list[str], str, str]] = {}
 
     if mode == "commit" and classifications:
-        if staged and len(classifications) != 1:
-            return (
-                False,
-                "[REGRESSION AUDITOR GATE] BLOCK: staged work에는 정확히 하나의 "
-                f"{WORK_CLASSIFICATION_PREFIX}*.json work classification이 필요합니다.",
-            )
-
         declared_by_classification: dict[str, list[str]] = {}
         binding_errors: list[str] = []
         for classification_path in classifications:
@@ -1637,9 +1630,7 @@ def check(
             for path, declared_files in declared_by_classification.items()
             if sorted(declared_files) == recognized_behavior_files
         ]
-        if staged:
-            work_classification_path = classifications[0]
-        elif len(classifications) > 1:
+        if len(classifications) > 1:
             if len(covering_classifications) != 1:
                 detail = (
                     "없습니다."
@@ -1648,7 +1639,7 @@ def check(
                 )
                 return (
                     False,
-                    "[REGRESSION AUDITOR GATE] BLOCK: PR 전체 behavior 변경을 덮는 "
+                    "[REGRESSION AUDITOR GATE] BLOCK: staged/PR 전체 behavior 변경을 덮는 "
                     f"work classification이 {detail}",
                 )
             work_classification_path = covering_classifications[0]
