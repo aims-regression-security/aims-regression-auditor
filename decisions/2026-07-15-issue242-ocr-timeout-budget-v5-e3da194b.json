@@ -1,0 +1,39 @@
+{
+  "schema": "aims.regression_auditor_decision.v1",
+  "verdict": "PASS",
+  "repository": "aim2nasa/aims",
+  "candidateCommitSha": "e3da194b6726be05f318821ff8cd6d72e1f61de9",
+  "candidateTreeSha": "f415b1354b86c6ad53b358caf03d21a0e2bfc8d8",
+  "subjectReceipt": "docs/regression-audits/2026-07-15_issue242-ocr-timeout-budget.json",
+  "subjectReceiptSha256": "c73a2d83a16f2378a9c2ccd782b4ace939464b0bf613b60391b24d7dbc6ab776",
+  "auditorIdentity": "regression-auditor-agent:019f591d-1065-7411-bb5a-0d48b039f473-issue242-second",
+  "auditorSessionId": "019f591d-1065-7411-bb5a-0d48b039f473-issue242-second-v1",
+  "implementationIdentity": "github-actor-id:26228531",
+  "decisionReviewerIdentity": "github-app-id:4291228",
+  "issuedAt": 1784070696,
+  "expiresAt": 1784071596,
+  "reviewedFiles": [
+    "tools/MetContract.sikuli/MetContract.py",
+    "tools/MetContract.sikuli/poc/ocr_single.py",
+    "tools/auto_clicker_v2/tests/test_issue242_ocr_timeout_regression.py",
+    "tools/auto_clicker_v2/tests/test_met_contract_packaged_ocr.py",
+    "tools/auto_clicker_v2/tests/test_window_interference_static.py",
+    "tools/metdo_reader/read_customer.py",
+    "tools/metdo_reader/tests/test_ocr_proxy_auth.py",
+    "docs/requirements/requirements-log.md",
+    "docs/ace-reports/2026-07-15_issue242-ocr-timeout-budget.md",
+    "docs/e2e-matrices/2026-07-15_issue242-ocr-timeout-budget.json",
+    "docs/regression-evidence/2026-07-15_issue242-ocr-timeout-budget.json",
+    "docs/regression-work/2026-07-15_issue242-ocr-timeout-budget.json",
+    "docs/regression-audits/2026-07-15_issue242-ocr-timeout-budget.json"
+  ],
+  "evidence": [
+    "Issue #242 second candidate e3da194b6726be05f318821ff8cd6d72e1f61de9 is bound to the live-failed OCR timeout budget regression.",
+    "The same harness fails four assertions against the 50/40/3 state that allowed total_elapsed=120.88s in the rejected AC 0.3.18 live run.",
+    "The same harness passes four tests after bounding the policy to parent 35 seconds, child 30 seconds, and two attempts.",
+    "Staged behavior digest 5194ec9e8a1e07dfed018392dfaffcc17f0a921b74368d9e2b427969574daedb is bound to the product and harness files.",
+    "Runner evidence SHA-256 f9666eb5230bcce03d43dbdd24ace8f3210b8e5d3d1cead6475e85c090f1b785 returned accepted true with code VALID.",
+    "Related suite passed 140 tests and Python compilation passed for the two runtime entrypoints.",
+    "liveOnlyStatus OPEN_UNTIL_LIVE_PASS blocks issue close and release PASS until installed AC live verification confirms the 35/30/2 policy."
+  ]
+}
