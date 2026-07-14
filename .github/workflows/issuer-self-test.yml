@@ -75,6 +75,7 @@ jobs:
           assert "owner: wonderboy-kwak" not in verifier
           assert "TRUSTED_APP_REGISTRATION_OWNER: aims-regression-security" in verifier
           assert "TRUSTED_CANDIDATE_REPOSITORY: aim2nasa/aims" in verifier
+          assert "AIMS_REPOSITORY_ID: ${{ vars.AIMS_REGRESSION_CANDIDATE_REPOSITORY }}" in verifier
           assert "Validate security-app identity and installation scope" in verifier
           assert 'gh api "apps/$APP_SLUG"' in verifier
           assert "gh api installation/repositories" in verifier
