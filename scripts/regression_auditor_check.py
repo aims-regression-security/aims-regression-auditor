@@ -331,7 +331,7 @@ def candidate_audit_context(
         explicit_files = bool(files)
         base_commit_sha = run_git_at(root, ["rev-parse", "HEAD^"])
         env_base_sha = normalize(os.environ.get("BASE_SHA", ""))
-        if explicit_files and len(env_base_sha) == 40 and all(
+        if len(env_base_sha) == 40 and all(
             character in "0123456789abcdefABCDEF" for character in env_base_sha
         ):
             try:
