@@ -238,6 +238,7 @@ jobs:
         id: verify
         env:
           AIMS_REGRESSION_AUDITOR_TRUST_ROOT: ${{ github.workspace }}/issuer
+          AIMS_REPOSITORY_ID: ${{ vars.AIMS_REGRESSION_CANDIDATE_REPOSITORY }}
           AIMS_IMPLEMENTATION_IDENTITY: github-actor-id:${{ steps.pr.outputs.implementation_user_id }}
           BASE_SHA: ${{ steps.pr.outputs.base_sha }}
           HEAD_SHA: ${{ steps.pr.outputs.head_sha }}
