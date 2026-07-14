@@ -2,7 +2,7 @@
   "schema": "aims.regression_auditor_decision.v1",
   "verdict": "PASS",
   "repository": "aim2nasa/aims",
-  "candidateCommitSha": "dd13acfd72defacdba655df15dcbb5232715ae21",
+  "candidateCommitSha": "8cb47abfc4114374607cf598e68a4050b4725862",
   "candidateTreeSha": "6b6b8ec3374fc53c1a34e20bb72e334e30ccc4d2",
   "subjectReceipt": "docs/regression-audits/2026-07-14_regression-live-verification-gate-pr246-aggregate.json",
   "subjectReceiptSha256": "23d59160d532c58f892ab382d63c7a2bcfd5446617f4354cbdf6bd6a2cda0be7",
@@ -10,8 +10,8 @@
   "auditorSessionId": "019f5e9d-7a5a-7922-866e-30860635ef9f",
   "implementationIdentity": "github-actor-id:26228531",
   "decisionReviewerIdentity": "github-app-id:4291228",
-  "issuedAt": 1784004543,
-  "expiresAt": 1784005443,
+  "issuedAt": 1784004843,
+  "expiresAt": 1784005743,
   "reviewedFiles": [
     "AGENTS.md",
     "CLAUDE.md",
@@ -49,7 +49,7 @@
   ],
   "evidence": [
     "Protected verifier patch requires one full-cover aggregate classification for PR-level checks.",
-    "Candidate dd13acfd72defacdba655df15dcbb5232715ae21 contains aggregate subject receipt for PR #246.",
+    "Candidate 8cb47abfc4114374607cf598e68a4050b4725862 is based directly on origin/main and contains the full PR #246 aggregate subject receipt.",
     "Subject receipt SHA-256 23d59160d532c58f892ab382d63c7a2bcfd5446617f4354cbdf6bd6a2cda0be7 is bound to candidate tree 6b6b8ec3374fc53c1a34e20bb72e334e30ccc4d2.",
     "Runner evidence is valid and bound to PR aggregate behavior digest 1a0b600295cea653074ccda9786663f14c9ac2cbf6f0b3f0668bd3cf29b216bb."
   ]
