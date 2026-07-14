@@ -10,8 +10,8 @@
   "auditorSessionId": "019f5e9d-7a5a-7922-866e-30860635ef9f",
   "implementationIdentity": "github-actor-id:26228531",
   "decisionReviewerIdentity": "github-app-id:4291228",
-  "issuedAt": 1784001012,
-  "expiresAt": 1784001852,
+  "issuedAt": 1784001951,
+  "expiresAt": 1784002791,
   "reviewedFiles": [
     "AGENTS.md",
     "CLAUDE.md",
