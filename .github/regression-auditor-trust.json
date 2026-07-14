@@ -7,17 +7,21 @@
     "candidateRepository": "aim2nasa/aims",
     "requiredCheckName": "Regression Auditor / trusted-verifier",
     "requiredCheckAppOwner": "aims-regression-security",
+    "requiredCheckIntegrationId": 4291228,
     "requiredCheckAppSlug": "aims-regression-auditor-security",
-    "activationEvidence": {
-      "signingKeyAttestationRun": "29294785570",
-      "decisionPr": "https://github.com/aims-regression-security/aims-regression-auditor/pull/6",
-      "auditorDecision": "decisions/2026-07-14-batch2-ea2ec558.json"
-    }
+    "activationReviewerIdentity": "github-app-id:4291228",
+    "evidence": [
+      "Signing key attestation run 29294785570 passed for primary-2026-07.",
+      "Auditor decision PR https://github.com/aims-regression-security/aims-regression-auditor/pull/6 was merged before activation.",
+      "Auditor decision path decisions/2026-07-14-batch2-ea2ec558.json is present on the issuer default branch."
+    ]
   },
   "issuers": [
     {
       "issuer": "github-environment:regression-auditor",
       "keyId": "primary-2026-07",
+      "algorithm": "ed25519",
+      "maxValiditySeconds": 600,
       "publicKeys": {
         "primary-2026-07": "WpClQNlzFh5gNzTCRfLd2Zn9y4vTbZiayc+hwRu1phg="
       }
