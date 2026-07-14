@@ -5,13 +5,13 @@
   "candidateCommitSha": "2732d570787d45848addfd959a94535b9fe334c3",
   "candidateTreeSha": "593255edd736dd4b5e6ab78cd508f1e985527bd0",
   "subjectReceipt": "docs/regression-audits/2026-07-14_regression-live-verification-gate-pr246-aggregate.json",
-  "subjectReceiptSha256": "cd311020fb575b3fc906741b2415b5b0c417634f4f84f782dfd890b34ca58a4a",
+  "subjectReceiptSha256": "65607161a45fa0da317e1d8b7a80ab2857404e1bf7da1fb181f1033e4d4480a3",
   "auditorIdentity": "regression-auditor-agent:019f5e9d-7a5a-7922-866e-30860635ef9f",
   "auditorSessionId": "019f5e9d-7a5a-7922-866e-30860635ef9f",
   "implementationIdentity": "github-actor-id:26228531",
   "decisionReviewerIdentity": "github-app-id:4291228",
-  "issuedAt": 1784005356,
-  "expiresAt": 1784006256,
+  "issuedAt": 1784005535,
+  "expiresAt": 1784006435,
   "reviewedFiles": [
     "AGENTS.md",
     "CLAUDE.md",
@@ -50,7 +50,7 @@
   "evidence": [
     "Protected verifier patch requires one full-cover aggregate classification for staged and PR-level checks.",
     "Candidate 2732d570787d45848addfd959a94535b9fe334c3 is based directly on origin/main and contains the full PR #246 aggregate subject receipt.",
-    "Subject receipt SHA-256 cd311020fb575b3fc906741b2415b5b0c417634f4f84f782dfd890b34ca58a4a is bound to candidate tree 593255edd736dd4b5e6ab78cd508f1e985527bd0.",
+    "Subject receipt SHA-256 65607161a45fa0da317e1d8b7a80ab2857404e1bf7da1fb181f1033e4d4480a3 is computed from the immutable candidate blob and bound to candidate tree 593255edd736dd4b5e6ab78cd508f1e985527bd0.",
     "Runner evidence is valid and bound to PR aggregate behavior digest 7de2d68a9c687822c88c2608bb11ed7c2c882a45790d85d2dd41955053843f75."
   ]
 }
