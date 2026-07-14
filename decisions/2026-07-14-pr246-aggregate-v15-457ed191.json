@@ -51,5 +51,6 @@
     "Candidate 457ed191200fb0fd0369b45c2061603f1e73db32 contains the updated aggregate work classification, runner evidence, and audit subject bound to digest 18d6bdcf38c2caf4752c72fb45e1ba72eafff1fe657c7017d422b9094dd90c6e.",
     "Subject receipt SHA-256 b9d1fcc071be365469dca7502c5ac6a0051b76b78e35cc70d5427564223c4452 is the canonical subject hash excluding the auditorReceipt field.",
     "Runner evidence is valid and demonstrates fail-first FAIL before the audit-context fix and post-fix PASS after the same harness."
-  ]
+  ],
+  "pullRequestBaseSha": "d6094582d5497c381d2f5999f11dde3e7d1adb38"
 }
