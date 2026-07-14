@@ -1,0 +1,42 @@
+{
+  "schema": "aims.regression_auditor_decision.v1",
+  "verdict": "PASS",
+  "repository": "aim2nasa/aims",
+  "candidateCommitSha": "9cc29627fbbb468a95d4bbc800bc49e9096bd1b3",
+  "candidateTreeSha": "055942380182d25826c20758de93ba5e506006d8",
+  "subjectReceipt": "docs/regression-audits/2026-07-15_issue242-ocr-timeout-budget.json",
+  "subjectReceiptSha256": "03d0be35ff190fce6f394735d4c5f08805e9538262ce02241d3f88201e431940",
+  "auditorIdentity": "regression-auditor-agent:019f591d-1065-7411-bb5a-0d48b039f473-issue242-second",
+  "auditorSessionId": "019f591d-1065-7411-bb5a-0d48b039f473-issue242-second-v5",
+  "implementationIdentity": "github-actor-id:26228531",
+  "decisionReviewerIdentity": "github-app-id:4291228",
+  "issuedAt": 1784072999,
+  "expiresAt": 1784073899,
+  "reviewedFiles": [
+    ".husky/pre-commit",
+    "tools/MetContract.sikuli/MetContract.py",
+    "tools/MetContract.sikuli/poc/ocr_single.py",
+    "tools/auto_clicker_v2/VERSION",
+    "tools/auto_clicker_v2/tests/test_issue242_ocr_timeout_regression.py",
+    "tools/auto_clicker_v2/tests/test_met_contract_packaged_ocr.py",
+    "tools/auto_clicker_v2/tests/test_window_interference_static.py",
+    "tools/metdo_reader/read_customer.py",
+    "tools/metdo_reader/tests/test_ocr_proxy_auth.py",
+    "docs/requirements/requirements-log.md",
+    "docs/ace-reports/2026-07-15_issue242-ocr-timeout-budget.md",
+    "docs/e2e-matrices/2026-07-15_issue242-ocr-timeout-budget.json",
+    "docs/regression-evidence/2026-07-15_issue242-ocr-timeout-budget.json",
+    "docs/regression-work/2026-07-15_issue242-ocr-timeout-budget.json",
+    "docs/regression-audits/2026-07-15_issue242-ocr-timeout-budget.json"
+  ],
+  "evidence": [
+    "Issue #242 v10 candidate 9cc29627fbbb468a95d4bbc800bc49e9096bd1b3 includes AutoClicker VERSION 0.3.20 and the pre-commit hook compatibility fix.",
+    "The same harness fails four assertions against the 50/40/3 state that allowed total_elapsed=120.88s in the rejected AC 0.3.18 live run.",
+    "The same harness passes four tests after bounding the policy to parent 35 seconds, child 30 seconds, and two attempts.",
+    "Staged behavior digest d2a31c6b5b20a6d73da43d9389ab660e8c07e1736b51f4446dd2e549c3feb550 is bound to the product, harness, and pre-commit compatibility files.",
+    "Runner evidence staged blob SHA-256 2d3b6b85cedaa8b264e71c706d2763655d07ba3044db3d7c109382ed3fa35c41 is recorded in the subject receipt.",
+    "Related suite passed 140 tests and Python compilation passed for the two runtime entrypoints after the hook compatibility update.",
+    "The pre-commit hook now skips AutoClicker auto-version bump when tools/auto_clicker_v2/VERSION is already staged, preventing signed-candidate mutation while preserving normal auto-bump behavior.",
+    "liveOnlyStatus OPEN_UNTIL_LIVE_PASS blocks issue close and release PASS until installed AC live verification confirms the 35/30/2 policy."
+  ]
+}
