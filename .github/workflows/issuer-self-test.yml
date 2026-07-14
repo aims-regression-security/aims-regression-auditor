@@ -121,16 +121,47 @@ jobs:
               Path(".github/regression-auditor-trust.json").read_text(encoding="utf-8")
           )
           assert policy["schema"] == "aims.regression_auditor_trust.v1"
-          assert policy["provisioned"] is False
-          assert policy["activation"] == {
-              "state": "BOOTSTRAP_LOCKED",
-              "issuerRepository": (
-                  "aims-regression-security/aims-regression-auditor"
-              ),
-              "candidateRepository": "aim2nasa/aims",
-              "requiredCheckName": "Regression Auditor / trusted-verifier",
-              "requiredCheckAppOwner": "aims-regression-security",
-              "requiredCheckAppSlug": "aims-regression-auditor-security",
-          }
-          assert policy["issuers"] == []
+          activation = policy["activation"]
+          assert activation["issuerRepository"] == (
+              "aims-regression-security/aims-regression-auditor"
+          )
+          assert activation["candidateRepository"] == "aim2nasa/aims"
+          assert activation["requiredCheckName"] == (
+              "Regression Auditor / trusted-verifier"
+          )
+          assert activation["requiredCheckAppOwner"] == "aims-regression-security"
+          assert activation["requiredCheckAppSlug"] == (
+              "aims-regression-auditor-security"
+          )
+
+          if policy["provisioned"]:
+              assert activation["state"] == "ACTIVE"
+              assert activation["requiredCheckIntegrationId"] == 4291228
+              assert activation["activationReviewerIdentity"] == "github-app-id:4291228"
+              evidence = activation["evidence"]
+              assert isinstance(evidence, list) and evidence
+              assert all(isinstance(item, str) and item.strip() for item in evidence)
+              serialized = json.dumps(activation, ensure_ascii=False).lower()
+              assert all(
+                  token not in serialized
+                  for token in ("pending", "todo", "미실행", "예정", "나중에 확인")
+              )
+
+              issuers = policy["issuers"]
+              assert isinstance(issuers, list) and len(issuers) == 1
+              issuer = issuers[0]
+              assert issuer["issuer"] == "github-environment:regression-auditor"
+              assert issuer["algorithm"] == "ed25519"
+              assert issuer["maxValiditySeconds"] == 600
+              public_keys = issuer["publicKeys"]
+              assert set(public_keys) == {"primary-2026-07"}
+              raw_public_key = base64.b64decode(
+                  public_keys["primary-2026-07"],
+                  validate=True,
+              )
+              assert len(raw_public_key) == 32
+              Ed25519PublicKey.from_public_bytes(raw_public_key)
+          else:
+              assert activation["state"] == "BOOTSTRAP_LOCKED"
+              assert policy["issuers"] == []
           PY
