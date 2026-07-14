@@ -1,0 +1,37 @@
+{
+  "schema": "aims.regression_auditor_decision.v1",
+  "verdict": "PASS",
+  "repository": "aim2nasa/aims",
+  "candidateCommitSha": "0cf0b868fbf6824dc22ccc9d3211fc1ab7b196d5",
+  "candidateTreeSha": "75755503ada0a32860b05fcc350f18fb6ef6bc12",
+  "subjectReceipt": "docs/regression-audits/2026-07-14_regression-live-verification-gate-pr246-repository-id-binding.json",
+  "subjectReceiptSha256": "05b4d563fcf1d9a598c167d29232c142835fee183802d53dc890c2dcb1ba0d74",
+  "auditorIdentity": "regression-auditor-agent:019f5e9d-7a5a-7922-866e-30860635ef9f",
+  "auditorSessionId": "019f5e9d-7a5a-7922-866e-30860635ef9f",
+  "implementationIdentity": "github-actor-id:26228531",
+  "decisionReviewerIdentity": "github-app-id:4291228",
+  "issuedAt": 1784019619,
+  "expiresAt": 1784020219,
+  "reviewedFiles": [
+    "AGENTS.md",
+    "CLAUDE.md",
+    "docs/AI_PHILOSOPHY.md",
+    "docs/AI_WORKFLOW.md",
+    "docs/AI_LESSONS.md",
+    "docs/requirements/regression-auditor-agent.md",
+    "docs/plans/2026-07-13_regression-live-verification-gate-remediation.md",
+    "docs/requirements/requirements-log.md",
+    "docs/e2e-matrices/2026-07-14_regression-live-verification-gate-pr246-repository-id-binding.json",
+    "docs/regression-work/2026-07-14_regression-live-verification-gate-pr246-repository-id-binding.json",
+    "docs/regression-audits/2026-07-14_regression-live-verification-gate-pr246-repository-id-binding.json",
+    "docs/regression-evidence/2026-07-14_regression-live-verification-gate-pr246-repository-id-binding.json",
+    ".github/regression-auditor-external-verifier.yml",
+    "scripts/tests/test_regression_auditor_provisioning.py"
+  ],
+  "evidence": [
+    "Verifier repository identity binding harness failed against the previous external verifier contract without AIMS_REPOSITORY_ID and passed after binding it to the candidate repository variable.",
+    "Candidate 0cf0b868fbf6824dc22ccc9d3211fc1ab7b196d5 contains the staged AIMS subject receipt, requirement log, E2E matrix, plan addendum, and repository identity binding fix.",
+    "Subject receipt SHA-256 05b4d563fcf1d9a598c167d29232c142835fee183802d53dc890c2dcb1ba0d74 is the canonical subject hash excluding the auditorReceipt field.",
+    "Runner evidence is valid and bound to staged behavior digest b309ae0ed995dde7428b0a482a452bfbb6f62c26a4b7076586b8384616a0e84a."
+  ]
+}
