@@ -163,7 +163,7 @@ jobs:
             --issuer "github-environment:regression-auditor" \
             --key-id "primary-2026-07" \
             --implementation-identity "${{ steps.decision-review.outputs.implementation_identity }}" \
-            --ttl-seconds 900
+            --ttl-seconds 600
 
       - name: Upload signed receipt only
         uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f # v7.0.0
