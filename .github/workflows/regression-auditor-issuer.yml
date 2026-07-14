@@ -133,7 +133,7 @@ jobs:
           path: candidate
           ssh-key: ${{ secrets.AIMS_REGRESSION_CANDIDATE_READ_SSH_KEY }}
           fetch-depth: 0
-          persist-credentials: false
+          persist-credentials: true
 
       - name: Require exact immutable candidate SHA
         env:
