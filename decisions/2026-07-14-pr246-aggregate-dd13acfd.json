@@ -2,16 +2,16 @@
   "schema": "aims.regression_auditor_decision.v1",
   "verdict": "PASS",
   "repository": "aim2nasa/aims",
-  "candidateCommitSha": "3cb32345851a0eb5422f9e26e891155a8babca10",
-  "candidateTreeSha": "789fff49df9dff555e518b41a53ff31b82119142",
+  "candidateCommitSha": "748038b118c9a8a6233c4702bec4bd6414766b73",
+  "candidateTreeSha": "5da2d25ba0d04443857c329d3cfbb7afc48c4142",
   "subjectReceipt": "docs/regression-audits/2026-07-14_regression-live-verification-gate-pr246-aggregate.json",
-  "subjectReceiptSha256": "85f71778a59085357b681d0f44b3d1881e6c4c81b2456ffa3900721a60a4450b",
+  "subjectReceiptSha256": "a5e377cc5e782c18ca8608029eefe6a8158a95776a00419216ed08ab224e50a5",
   "auditorIdentity": "regression-auditor-agent:019f5e9d-7a5a-7922-866e-30860635ef9f",
   "auditorSessionId": "019f5e9d-7a5a-7922-866e-30860635ef9f",
   "implementationIdentity": "github-actor-id:26228531",
   "decisionReviewerIdentity": "github-app-id:4291228",
-  "issuedAt": 1784007636,
-  "expiresAt": 1784008536,
+  "issuedAt": 1784009369,
+  "expiresAt": 1784010269,
   "reviewedFiles": [
     "AGENTS.md",
     "CLAUDE.md",
@@ -49,8 +49,8 @@
   ],
   "evidence": [
     "Protected verifier patch requires one full-cover aggregate classification for staged and PR-level checks and filters historical partial receipts when an aggregate receipt is present.",
-    "Candidate 3cb32345851a0eb5422f9e26e891155a8babca10 is based directly on origin/main and contains the full PR #246 aggregate subject receipt.",
-    "Subject receipt SHA-256 85f71778a59085357b681d0f44b3d1881e6c4c81b2456ffa3900721a60a4450b is the canonical issuer subject hash excluding auditorReceipt and is bound to candidate tree 789fff49df9dff555e518b41a53ff31b82119142.",
-    "Runner evidence is valid and bound to PR aggregate behavior digest 497f054cc63153e46d0d54124c71fe7e16d295df66996ad4ed49ee65df3f2c67."
+    "Candidate 748038b118c9a8a6233c4702bec4bd6414766b73 is based directly on origin/main and contains the full PR #246 aggregate subject receipt.",
+    "Subject receipt SHA-256 a5e377cc5e782c18ca8608029eefe6a8158a95776a00419216ed08ab224e50a5 is the canonical issuer subject hash excluding auditorReceipt and is bound to candidate tree 5da2d25ba0d04443857c329d3cfbb7afc48c4142.",
+    "Runner evidence is valid and bound to PR aggregate behavior digest fce4a35e7f1cfa909d1ea698353ffbadd75a73b3e78d55e011fc94132242c7ac."
   ]
 }
