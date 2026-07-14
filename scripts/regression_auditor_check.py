@@ -598,6 +598,30 @@ def auditor_signature_payload(auditor: dict[str, Any]) -> bytes:
     ).encode("utf-8")
 
 
+def audit_bundle_mismatch_detail(
+    actual: Any,
+    expected: dict[str, Any] | None,
+) -> str:
+    if not isinstance(actual, dict) or not isinstance(expected, dict):
+        return "non-object"
+    mismatched = [
+        key
+        for key in sorted(set(actual) | set(expected))
+        if actual.get(key) != expected.get(key)
+    ]
+    if not mismatched:
+        return "unknown"
+    details: list[str] = []
+    for key in mismatched[:8]:
+        details.append(
+            f"{key}: expected={sha256_json_value(expected.get(key))[:12]} "
+            f"actual={sha256_json_value(actual.get(key))[:12]}"
+        )
+    if len(mismatched) > 8:
+        details.append(f"... +{len(mismatched) - 8} fields")
+    return "; ".join(details)
+
+
 def load_trust_context(
     root: Path,
     *,
@@ -1036,7 +1060,13 @@ def validate_auditor_receipt(
             trust_context.get("requiresAuditBundle") is True
             and auditor.get("auditBundle") != expected_audit_bundle
         ):
-            errors.append(f"{path}: [AUDITOR_TRUST:AUDIT_BUNDLE_MISMATCH]")
+            detail = audit_bundle_mismatch_detail(
+                auditor.get("auditBundle"),
+                expected_audit_bundle,
+            )
+            errors.append(
+                f"{path}: [AUDITOR_TRUST:AUDIT_BUNDLE_MISMATCH] {detail}"
+            )
         if trust_context.get("requiresDecision") is True:
             decision_path = text(auditor.get("auditorDecision"))
             decision_digest = text(auditor.get("auditorDecisionSha256"))
