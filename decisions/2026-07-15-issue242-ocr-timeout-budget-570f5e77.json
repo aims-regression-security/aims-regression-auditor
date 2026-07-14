@@ -1,0 +1,40 @@
+{
+  "schema": "aims.regression_auditor_decision.v1",
+  "verdict": "PASS",
+  "repository": "aim2nasa/aims",
+  "candidateCommitSha": "570f5e776cfc9461b3ee6dda0830aba911036043",
+  "candidateTreeSha": "5f945715ddd6ff02286e61fe8d996bf4ec375fb1",
+  "pullRequestBaseSha": "d3e0f54d7999a0440d9ed1c5421ecf7c8df8ea19",
+  "subjectReceipt": "docs/regression-audits/2026-07-15_issue242-ocr-timeout-budget.json",
+  "subjectReceiptSha256": "34bd208a1f06afb893700a4afe15c419a571042fc4d2246b0252f3f54d6f4fba",
+  "auditorIdentity": "regression-auditor-agent:019f591d-1065-7411-bb5a-0d48b039f473-issue242",
+  "auditorSessionId": "019f591d-1065-7411-bb5a-0d48b039f473-issue242",
+  "implementationIdentity": "github-actor-id:26228531",
+  "decisionReviewerIdentity": "github-app-id:4291228",
+  "issuedAt": 1784057781,
+  "expiresAt": 1784058681,
+  "reviewedFiles": [
+    "tools/MetContract.sikuli/MetContract.py",
+    "tools/MetContract.sikuli/poc/ocr_single.py",
+    "tools/auto_clicker_v2/tests/test_issue242_ocr_timeout_regression.py",
+    "tools/auto_clicker_v2/tests/test_met_contract_packaged_ocr.py",
+    "tools/auto_clicker_v2/tests/test_window_interference_static.py",
+    "tools/metdo_reader/read_customer.py",
+    "tools/metdo_reader/tests/test_ocr_proxy_auth.py",
+    "docs/requirements/requirements-log.md",
+    "docs/ace-reports/2026-07-15_issue242-ocr-timeout-budget.md",
+    "docs/e2e-matrices/2026-07-15_issue242-ocr-timeout-budget.json",
+    "docs/regression-evidence/2026-07-15_issue242-ocr-timeout-budget.json",
+    "docs/regression-work/2026-07-15_issue242-ocr-timeout-budget.json",
+    "docs/regression-audits/2026-07-15_issue242-ocr-timeout-budget.json"
+  ],
+  "evidence": [
+    "Issue #242 후보 570f5e776cfc9461b3ee6dda0830aba911036043은 OCR timeout budget 회귀 수정과 전용 하네스를 포함한다.",
+    "수정 전 격리 상태에서 동일 하네스 3개가 모두 assertion FAIL로 기존 160/140초 회귀를 검출했다.",
+    "수정 후 같은 하네스와 같은 명령은 3개 모두 PASS했고 harness closure 901dffd18f55bdd5c65ce7061d2f6975cdc17850b3950d19a0616bc95f7d43c2에 결속됐다.",
+    "staged behavior digest 5bd8338e09a663e8576ade1b67dfb6588b745d15a33b4021350d6e7aec5377d2는 제품 timeout 상수와 세 테스트 파일 변경을 포함한다.",
+    "runner evidence staged SHA-256 5e976fc915781236f255ccb472b3e5b02aba6d2d2afb7cf6d30c96c19e2c9949는 공식 validator에서 accepted true와 code VALID를 반환했다.",
+    "독립 Regression Auditor는 server 30초, child 40초, parent 50초 순서와 packaged child 기본값 40초를 검수했다.",
+    "liveOnlyStatus OPEN_UNTIL_LIVE_PASS가 설정되어 설치된 AC live policy 로그 확인 전까지 #242 issue close와 release PASS를 차단한다."
+  ]
+}
