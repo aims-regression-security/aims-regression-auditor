@@ -1,10 +1,18 @@
 name: Regression Auditor External Trusted Verifier
 
-run-name: Verify AIMS pull request #${{ github.event.client_payload.pull_request_number }}
+run-name: Verify AIMS pull request candidates
 
 on:
   repository_dispatch:
     types: [regression-auditor-verify]
+  workflow_dispatch:
+    inputs:
+      pull_request_number:
+        description: Optional AIMS pull request number; empty verifies all open PRs
+        required: false
+        type: string
+  schedule:
+    - cron: '*/5 * * * *'
 
 permissions:
   contents: read
@@ -16,22 +24,81 @@ env:
   TRUSTED_CHECK_NAME: Regression Auditor / trusted-verifier
 
 jobs:
+  select-candidates:
+    name: Select AIMS pull requests
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    environment: regression-auditor
+    outputs:
+      matrix: ${{ steps.select.outputs.matrix }}
+
+    steps:
+      - name: Create security-app discovery token
+        id: app-token
+        uses: actions/create-github-app-token@bcd2ba49218906704ab6c1aa796996da409d3eb1 # v3.2.0
+        with:
+          app-id: ${{ vars.AIMS_REGRESSION_VERIFIER_APP_ID }}
+          private-key: ${{ secrets.AIMS_REGRESSION_VERIFIER_APP_PRIVATE_KEY }}
+          owner: aim2nasa
+          repositories: aims
+          permission-pull-requests: read
+
+      - name: Select requested or open pull requests
+        id: select
+        env:
+          DISPATCH_PR_NUMBER: ${{ github.event.client_payload.pull_request_number }}
+          EVENT_NAME: ${{ github.event_name }}
+          EXPECTED_REPOSITORY: ${{ vars.AIMS_REGRESSION_CANDIDATE_REPOSITORY }}
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
+          MANUAL_PR_NUMBER: ${{ inputs.pull_request_number }}
+          REQUESTED_REPOSITORY: ${{ github.event.client_payload.repository }}
+        shell: bash
+        run: |
+          [[ "$EXPECTED_REPOSITORY" == "$TRUSTED_CANDIDATE_REPOSITORY" ]]
+
+          selected_pr=""
+          if [[ "$EVENT_NAME" == "repository_dispatch" ]]; then
+            [[ "$REQUESTED_REPOSITORY" == "$EXPECTED_REPOSITORY" ]]
+            selected_pr="$DISPATCH_PR_NUMBER"
+          elif [[ "$EVENT_NAME" == "workflow_dispatch" ]]; then
+            selected_pr="$MANUAL_PR_NUMBER"
+          elif [[ "$EVENT_NAME" != "schedule" ]]; then
+            echo "unsupported verifier event: $EVENT_NAME" >&2
+            exit 2
+          fi
+
+          if [[ -n "$selected_pr" ]]; then
+            [[ "$selected_pr" =~ ^[1-9][0-9]*$ ]]
+            matrix="$(
+              printf '{"include":[{"pull_request_number":%s}]}' "$selected_pr"
+            )"
+          else
+            matrix="$(
+              gh api "repos/$EXPECTED_REPOSITORY/pulls?state=open&per_page=100" \
+                --jq '{include: [.[] | {pull_request_number: .number}]}' | jq -c .
+            )"
+          fi
+
+          echo "matrix=$matrix" >> "$GITHUB_OUTPUT"
+
   verify:
     name: Protected external verification
+    needs: select-candidates
     runs-on: ubuntu-24.04
     timeout-minutes: 10
     environment: regression-auditor
+    strategy:
+      fail-fast: false
+      matrix: ${{ fromJSON(needs.select-candidates.outputs.matrix) }}
 
     steps:
       - name: Validate dispatch request
         env:
           EXPECTED_REPOSITORY: ${{ vars.AIMS_REGRESSION_CANDIDATE_REPOSITORY }}
-          PR_NUMBER: ${{ github.event.client_payload.pull_request_number }}
-          REQUESTED_REPOSITORY: ${{ github.event.client_payload.repository }}
+          PR_NUMBER: ${{ matrix.pull_request_number }}
         shell: bash
         run: |
           [[ "$EXPECTED_REPOSITORY" == "$TRUSTED_CANDIDATE_REPOSITORY" ]]
-          [[ "$REQUESTED_REPOSITORY" == "$EXPECTED_REPOSITORY" ]]
           [[ "$PR_NUMBER" =~ ^[1-9][0-9]*$ ]]
 
       - name: Create security-app check token
@@ -75,7 +142,7 @@ jobs:
           EXPECTED_BASE_BRANCH: ${{ vars.AIMS_REGRESSION_CANDIDATE_DEFAULT_BRANCH }}
           EXPECTED_REPOSITORY: ${{ vars.AIMS_REGRESSION_CANDIDATE_REPOSITORY }}
           GH_TOKEN: ${{ steps.app-token.outputs.token }}
-          PR_NUMBER: ${{ github.event.client_payload.pull_request_number }}
+          PR_NUMBER: ${{ matrix.pull_request_number }}
         shell: bash
         run: |
           IFS=$'\t' read -r STATE BASE_REPOSITORY BASE_BRANCH BASE_SHA HEAD_REPOSITORY HEAD_SHA IMPLEMENTATION_USER_ID < <(
