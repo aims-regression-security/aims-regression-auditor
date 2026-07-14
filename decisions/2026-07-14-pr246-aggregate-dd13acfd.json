@@ -2,16 +2,16 @@
   "schema": "aims.regression_auditor_decision.v1",
   "verdict": "PASS",
   "repository": "aim2nasa/aims",
-  "candidateCommitSha": "8cb47abfc4114374607cf598e68a4050b4725862",
-  "candidateTreeSha": "6b6b8ec3374fc53c1a34e20bb72e334e30ccc4d2",
+  "candidateCommitSha": "2732d570787d45848addfd959a94535b9fe334c3",
+  "candidateTreeSha": "593255edd736dd4b5e6ab78cd508f1e985527bd0",
   "subjectReceipt": "docs/regression-audits/2026-07-14_regression-live-verification-gate-pr246-aggregate.json",
-  "subjectReceiptSha256": "23d59160d532c58f892ab382d63c7a2bcfd5446617f4354cbdf6bd6a2cda0be7",
+  "subjectReceiptSha256": "cd311020fb575b3fc906741b2415b5b0c417634f4f84f782dfd890b34ca58a4a",
   "auditorIdentity": "regression-auditor-agent:019f5e9d-7a5a-7922-866e-30860635ef9f",
   "auditorSessionId": "019f5e9d-7a5a-7922-866e-30860635ef9f",
   "implementationIdentity": "github-actor-id:26228531",
   "decisionReviewerIdentity": "github-app-id:4291228",
-  "issuedAt": 1784004843,
-  "expiresAt": 1784005743,
+  "issuedAt": 1784005356,
+  "expiresAt": 1784006256,
   "reviewedFiles": [
     "AGENTS.md",
     "CLAUDE.md",
@@ -48,9 +48,9 @@
     "scripts/tests/test_regression_live_gate_red_team.py"
   ],
   "evidence": [
-    "Protected verifier patch requires one full-cover aggregate classification for PR-level checks.",
-    "Candidate 8cb47abfc4114374607cf598e68a4050b4725862 is based directly on origin/main and contains the full PR #246 aggregate subject receipt.",
-    "Subject receipt SHA-256 23d59160d532c58f892ab382d63c7a2bcfd5446617f4354cbdf6bd6a2cda0be7 is bound to candidate tree 6b6b8ec3374fc53c1a34e20bb72e334e30ccc4d2.",
-    "Runner evidence is valid and bound to PR aggregate behavior digest 1a0b600295cea653074ccda9786663f14c9ac2cbf6f0b3f0668bd3cf29b216bb."
+    "Protected verifier patch requires one full-cover aggregate classification for staged and PR-level checks.",
+    "Candidate 2732d570787d45848addfd959a94535b9fe334c3 is based directly on origin/main and contains the full PR #246 aggregate subject receipt.",
+    "Subject receipt SHA-256 cd311020fb575b3fc906741b2415b5b0c417634f4f84f782dfd890b34ca58a4a is bound to candidate tree 593255edd736dd4b5e6ab78cd508f1e985527bd0.",
+    "Runner evidence is valid and bound to PR aggregate behavior digest 7de2d68a9c687822c88c2608bb11ed7c2c882a45790d85d2dd41955053843f75."
   ]
 }
