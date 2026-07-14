@@ -1,13 +1,26 @@
 {
   "schema": "aims.regression_auditor_trust.v1",
-  "provisioned": false,
+  "provisioned": true,
   "activation": {
-    "state": "BOOTSTRAP_LOCKED",
+    "state": "ACTIVE",
     "issuerRepository": "aims-regression-security/aims-regression-auditor",
     "candidateRepository": "aim2nasa/aims",
     "requiredCheckName": "Regression Auditor / trusted-verifier",
     "requiredCheckAppOwner": "aims-regression-security",
-    "requiredCheckAppSlug": "aims-regression-auditor-security"
+    "requiredCheckAppSlug": "aims-regression-auditor-security",
+    "activationEvidence": {
+      "signingKeyAttestationRun": "29294785570",
+      "decisionPr": "https://github.com/aims-regression-security/aims-regression-auditor/pull/6",
+      "auditorDecision": "decisions/2026-07-14-batch2-ea2ec558.json"
+    }
   },
-  "issuers": []
+  "issuers": [
+    {
+      "issuer": "github-environment:regression-auditor",
+      "keyId": "primary-2026-07",
+      "publicKeys": {
+        "primary-2026-07": "WpClQNlzFh5gNzTCRfLd2Zn9y4vTbZiayc+hwRu1phg="
+      }
+    }
+  ]
 }
