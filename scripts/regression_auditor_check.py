@@ -1724,7 +1724,7 @@ def check(
         )
 
     errors: list[str] = []
-    if mode == "commit" and not staged and work_classification_path:
+    if mode == "commit" and work_classification_path:
         filtered_receipts: list[str] = []
         for receipt in receipts:
             receipt_classification, receipt_error = receipt_work_classification(
