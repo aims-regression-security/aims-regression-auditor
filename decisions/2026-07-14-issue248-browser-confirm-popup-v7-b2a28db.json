@@ -1,0 +1,42 @@
+{
+  "schema": "aims.regression_auditor_decision.v1",
+  "verdict": "PASS",
+  "repository": "aim2nasa/aims",
+  "candidateCommitSha": "b2a28db44124af8a4d828f0754f616c079a456e5",
+  "candidateTreeSha": "dfbc5f86c20894ec34200ae6ea11830b60bc8193",
+  "pullRequestBaseSha": "c2aaa80defb6ac0253da619bf9b27bebdc20988a",
+  "subjectReceipt": "docs/regression-audits/2026-07-14_issue248-ac-metdo-browser-confirm-popup.json",
+  "subjectReceiptSha256": "703d2fc4f3844dace7f5f5d5d28ddf3b0124edd248aeaa729a3b903d38953257",
+  "auditorIdentity": "regression-auditor-agent:019f5e9d-7a5a-7922-866e-30860635ef9f",
+  "auditorSessionId": "6dfe7ea3-4001-4979-8707-ca83bd2f493b",
+  "implementationIdentity": "github-actor-id:26228531",
+  "decisionReviewerIdentity": "github-app-id:4291228",
+  "issuedAt": 1784041943,
+  "expiresAt": 1784042843,
+  "reviewedFiles": [
+    "tools/auto_clicker_v2/VERSION",
+    "tools/auto_clicker_v2/gui_main.py",
+    "tools/auto_clicker_v2/tests/test_gui_settings_visibility_static.py",
+    "tools/auto_clicker_v2/tests/test_issue248_browser_confirm_popup.py",
+    "docs/plans/2026-07-14_issue248-ac-metdo-browser-confirm-popup.md",
+    "docs/requirements/requirements-log.md",
+    "docs/ace-reports/2026-07-14_issue248-ac-metdo-browser-confirm-popup.md",
+    "docs/e2e-matrices/2026-07-14_issue248-ac-metdo-browser-confirm-popup.json",
+    "docs/regression-evidence/2026-07-14_issue248-ac-metdo-browser-confirm-popup.json",
+    "docs/ace-reports/assets/issue248-browser-confirm-popup/2026-07-14/pre-fix.junit.xml",
+    "docs/ace-reports/assets/issue248-browser-confirm-popup/2026-07-14/post-fix.junit.xml",
+    "docs/regression-work/2026-07-14_issue248-ac-metdo-browser-confirm-popup.json",
+    "docs/regression-audits/2026-07-14_issue248-ac-metdo-browser-confirm-popup.json"
+  ],
+  "evidence": [
+    "기존 버그 상태 c2aaa80defb6ac0253da619bf9b27bebdc20988a에서 동일 하네스 12개 중 assertion FAIL 11개, control PASS 1개, error 0개를 확인했다.",
+    "동일 하네스 closure af50a1524cda185be3b96e7a85c94dba1d39ed57b44f50c0aa27f345f5b7454a는 수정 후 12개 모두 PASS했다.",
+    "세 staged behavior 파일은 digest 394b5676e55a7d076de28255f9d87f4ef90d33d074d6a3d3c683b55cd45410b9에 결속됐다.",
+    "staged runner evidence SHA-256 f059ba63de9a8aa335378c080b33a0fe39e9c8f5ac4dfd43d0147ffcff817d59는 공식 validator에서 accepted true와 code VALID를 반환했다.",
+    "독립 Regression Auditor는 수동 시작, browser 및 Windows 실패, 자동 시작 보존, 중복 및 stale 창, 종료와 재확인, M1 및 M2 상태를 검수하고 blocking gap 없이 PASS했다.",
+    "후보 b2a28db44124af8a4d828f0754f616c079a456e5와 최종 구현 571a95e3913d970723b8366dcc6b0bbf34e9de06은 계약대로 동일 parent를 가진 sibling이며 차이는 Auditor receipt 1개뿐이다.",
+    "PR #250의 exact head 1e55bade6323c940afe736153793064085d1f600에서 보호된 Regression Auditor verifier가 성공했다.",
+    "AutoClicker 변경에 따른 VERSION 0.3.17 자동 증가가 최종 후보 트리에 포함됐음을 확인했다.",
+    "이 회귀는 MetDO 서버나 로그인 세션 없이 재현되므로 liveOnlyStatus none이 타당하다."
+  ]
+}
