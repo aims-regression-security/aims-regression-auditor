@@ -1,0 +1,43 @@
+{
+  "schema": "aims.regression_auditor_decision.v1",
+  "verdict": "PASS",
+  "repository": "aim2nasa/aims",
+  "candidateCommitSha": "ba54299f199df487bb9639d57f383cb7f15ac6d9",
+  "candidateTreeSha": "ddc320a91aa5f4ada3e03eefd9d84db8e564b68e",
+  "pullRequestBaseSha": "d3e0f54d7999a0440d9ed1c5421ecf7c8df8ea19",
+  "subjectReceipt": "docs/regression-audits/2026-07-15_issue242-contract-ocr-policy-v3.json",
+  "subjectReceiptSha256": "eb1a1af35b220a6a38a2add5b890a9d176a3325e1751838d75897207aa4aa264",
+  "auditorIdentity": "regression-auditor-agent:019f591d-1065-7411-bb5a-0d48b039f473-issue242-v3",
+  "auditorSessionId": "019f591d-1065-7411-bb5a-0d48b039f473-issue242-v3d-ba54299f",
+  "implementationIdentity": "github-actor-id:26228531",
+  "decisionReviewerIdentity": "github-app-id:4291228",
+  "issuedAt": 1784082730,
+  "expiresAt": 1784083630,
+  "reviewedFiles": [
+    ".husky/pre-commit",
+    "tools/MetContract.sikuli/MetContract.py",
+    "tools/MetContract.sikuli/poc/ocr_single.py",
+    "tools/auto_clicker_v2/tests/test_issue242_ocr_timeout_regression.py",
+    "tools/auto_clicker_v2/tests/test_met_contract_packaged_ocr.py",
+    "tools/auto_clicker_v2/tests/test_window_interference_static.py",
+    "tools/metdo_reader/read_customer.py",
+    "tools/metdo_reader/tests/test_ocr_proxy_auth.py",
+    "docs/requirements/requirements-log.md",
+    "docs/ace-reports/2026-07-15_issue242-contract-ocr-policy-v3.md",
+    "docs/e2e-matrices/2026-07-15_issue242-contract-ocr-policy-v3.json",
+    "docs/regression-evidence/2026-07-15_issue242-contract-ocr-policy-v3.json",
+    "docs/regression-work/2026-07-15_issue242-contract-ocr-policy-v3.json",
+    "docs/regression-audits/2026-07-15_issue242-contract-ocr-policy-v3.json"
+  ],
+  "evidence": [
+    "#242 v3d candidate ba54299f199df487bb9639d57f383cb7f15ac6d9 uses document-parse-260630 plus auto mode for contract-mode OCR.",
+    "The protected performance invariant is per-attempt OCR hard timeout: one OCR API call or one OCR attempt must not exceed 30 seconds.",
+    "The policy does not require the whole logical OCR workflow to finish within 30 seconds, and it does not treat total elapsed time above 100 seconds as an automatic failure.",
+    "Retry is intentionally allowed up to five attempts, so total logical OCR workflow time can exceed 100 seconds while each individual OCR attempt remains bounded to 30 seconds.",
+    "The v3d decision explicitly rejects document-parse-nightly, enhanced mode, 35-second parent timeout, and two-attempt or three-attempt retry policies for this issue.",
+    "Fail-first evidence used baseline b0c7f357912d33d816dddc19947d00a86494d723 and the same harness failed 3 of 7 tests before the fix.",
+    "Post-fix evidence used the same harness and passed 7 of 7 tests after applying document-parse-260630, auto mode, 30-second per-attempt timeout, and five retries.",
+    "Focused verification passed 143 Python tests for AutoClicker OCR policy and related static checks, and the backend OCR proxy Jest suite passed 31 tests.",
+    "liveOnlyStatus OPEN_UNTIL_LIVE_PASS remains required because installed AutoClicker live verification must still confirm the same per-attempt timeout policy in MetDO logs before #242 can close."
+  ]
+}
