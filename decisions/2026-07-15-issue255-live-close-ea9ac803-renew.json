@@ -1,0 +1,42 @@
+{
+  "schema": "aims.regression_auditor_decision.v1",
+  "verdict": "PASS",
+  "repository": "aim2nasa/aims",
+  "candidateCommitSha": "ea9ac803c6552ecf83f78fe1526b6ef253b119d7",
+  "candidateTreeSha": "bb3f9e7b6d73630ac1d5b952226edab90cfae655",
+  "pullRequestBaseSha": "fc7030babaf3d7babfff452562dbfd9617d884c8",
+  "subjectReceipt": "docs/regression-audits/2026-07-15_issue255-contract-ocr-first-row.json",
+  "subjectReceiptSha256": "8f33212929a9a54303983d2cf869a08f82ee866636369279160ce1322cf41c37",
+  "auditorIdentity": "regression-auditor-agent:019f65e0-5310-7c92-8a29-bd50d254ba54",
+  "auditorSessionId": "019f65e0-5310-7c92-8a29-bd50d254ba54-issue255-live-close-renew",
+  "implementationIdentity": "github-actor-id:26228531",
+  "decisionReviewerIdentity": "github-app-id:4291228",
+  "issuedAt": 1784126012,
+  "expiresAt": 1784126912,
+  "reviewedFiles": [
+    "docs/ace-reports/2026-07-15_issue255-contract-ocr-first-row.md",
+    "docs/ace-reports/assets/issue255-contract-ocr-missing-first-row/2026-07-15/live-pass-2137/key-events.log",
+    "docs/ace-reports/assets/issue255-contract-ocr-missing-first-row/2026-07-15/live-pass-2137/live-verification-summary.json",
+    "docs/ace-reports/assets/issue255-contract-ocr-missing-first-row/2026-07-15/live-pass-2137/seq6-metdo-error-modal-redacted.png",
+    "docs/e2e-matrices/2026-07-15_issue255-contract-ocr-first-row.json",
+    "docs/regression-audits/2026-07-15_issue255-contract-ocr-first-row.json",
+    "docs/regression-evidence/2026-07-15_issue255-metdo-modal-navigation.json",
+    "docs/regression-work/2026-07-15_issue255-contract-ocr-first-row.json",
+    "docs/requirements/requirements-log.md",
+    "tools/MetContract.sikuli/MetContract.py",
+    "tools/auto_clicker_v2/VERSION",
+    "tools/auto_clicker_v2/tests/test_window_interference_static.py"
+  ],
+  "evidence": [
+    "#255 후보 커밋 ea9ac803c6552ecf83f78fe1526b6ef253b119d7과 트리 bb3f9e7b6d73630ac1d5b952226edab90cfae655을 고정했다.",
+    "동일 회귀 하네스가 기존 구현에서 assertion 4건 실패하고 수정 구현에서 4건 통과했다.",
+    "관련 정적 회귀 테스트 전체 85건, E2E matrix gate, work gate가 모두 통과했다.",
+    "라이브 검증에서 계약 16건을 수집하고 1번 계약부터 처리를 시작했다.",
+    "청약입력중 상태인 6번 계약의 MetDO 오류 모달을 감지해 확인으로 닫고 7번 계약으로 안전하게 진행했다.",
+    "라이브 결과는 성공 5건, 안전 건너뜀 2건, AC 실패 0건이며 liveOnlyStatus는 LIVE_VERIFIED다.",
+    "staged behavior digest 460a2e4f29828119ae49100f9ec60df80969e50687af391cc856d19acaab27c1과 evidence Git blob SHA-256 b342a4d465ce4a9355fb98f611c303d8ea02f37a94b3ea69c62a2fe277b4a4cd를 subject receipt에 결속했다.",
+    "AC VERSION 변경을 후보 고정 전에 포함해 hook 생성 변경과 최종 후보가 일치하도록 했다.",
+    "독립 Regression Auditor가 fail-first, post-fix, 라이브 의존성 분리, 결속 메타데이터를 재검수하고 PASS로 판정했다.",
+    "게이트 마무리 지연 원인은 제품 이슈와 분리해 aim2nasa/aims #261에 기록했다."
+  ]
+}
