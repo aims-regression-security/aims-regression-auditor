@@ -6,7 +6,7 @@
   "candidateTreeSha": "92f2d09d0dbb01bf284dce41ae7e129dd180043f",
   "pullRequestBaseSha": "afc651a58334a72022a5d0b021d76f4e090cf432",
   "subjectReceipt": "docs/regression-audits/2026-07-15_issue-close-subject-classification-binding.json",
-  "subjectReceiptSha256": "0ecfe65ee1ff2f5ac25c7ec3560fd44f7389f34e6302fccaf5309242e677e2a1",
+  "subjectReceiptSha256": "15fd40939d4102ee5017a013e75da3af776d7d9a596b8b6551c3953e11132c61",
   "auditorIdentity": "regression-auditor-agent:019f6406-55d0-7ea1-b3c2-2cc482900a3b",
   "auditorSessionId": "019f6406-55d0-7ea1-b3c2-2cc482900a3b-issue242-state-binding-v3",
   "implementationIdentity": "github-actor-id:26228531",
