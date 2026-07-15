@@ -1,0 +1,39 @@
+{
+  "schema": "aims.regression_auditor_decision.v1",
+  "verdict": "PASS",
+  "repository": "aim2nasa/aims",
+  "candidateCommitSha": "0ad23a7b035bf6e828a650f8b9d425894b71392c",
+  "candidateTreeSha": "57cc92a16831af58a027d6c95e0ab6e989880d24",
+  "pullRequestBaseSha": "fc7030babaf3d7babfff452562dbfd9617d884c8",
+  "subjectReceipt": "docs/regression-audits/2026-07-15_issue255-contract-ocr-first-row.json",
+  "subjectReceiptSha256": "053e99720f53b31e815d22c45fefb8985d62a529ec3f288adaefc10a17f0654e",
+  "auditorIdentity": "regression-auditor-agent:019f65e0-5310-7c92-8a29-bd50d254ba54",
+  "auditorSessionId": "019f65e0-5310-7c92-8a29-bd50d254ba54-issue255-live-close",
+  "implementationIdentity": "github-actor-id:26228531",
+  "decisionReviewerIdentity": "github-app-id:4291228",
+  "issuedAt": 1784122422,
+  "expiresAt": 1784123322,
+  "reviewedFiles": [
+    "docs/ace-reports/2026-07-15_issue255-contract-ocr-first-row.md",
+    "docs/ace-reports/assets/issue255-contract-ocr-missing-first-row/2026-07-15/live-pass-2137/key-events.log",
+    "docs/ace-reports/assets/issue255-contract-ocr-missing-first-row/2026-07-15/live-pass-2137/live-verification-summary.json",
+    "docs/ace-reports/assets/issue255-contract-ocr-missing-first-row/2026-07-15/live-pass-2137/seq6-metdo-error-modal-redacted.png",
+    "docs/e2e-matrices/2026-07-15_issue255-contract-ocr-first-row.json",
+    "docs/regression-audits/2026-07-15_issue255-contract-ocr-first-row.json",
+    "docs/regression-evidence/2026-07-15_issue255-metdo-modal-navigation.json",
+    "docs/regression-work/2026-07-15_issue255-contract-ocr-first-row.json",
+    "docs/requirements/requirements-log.md",
+    "tools/MetContract.sikuli/MetContract.py",
+    "tools/auto_clicker_v2/tests/test_window_interference_static.py"
+  ],
+  "evidence": [
+    "#255 후보 커밋 0ad23a7b035bf6e828a650f8b9d425894b71392c와 트리 57cc92a16831af58a027d6c95e0ab6e989880d24를 고정했다.",
+    "동일 회귀 하네스가 기존 구현에서 assertion 4건 실패하고 수정 구현에서 4건 통과했다.",
+    "관련 정적 회귀 테스트 전체 85건이 통과했고 구조화 evidence runner가 유효성을 확인했다.",
+    "라이브 검증에서 계약 16건을 수집하고 1번 계약부터 처리를 시작했다.",
+    "청약입력중 상태인 6번 계약의 MetDO 오류 모달을 감지해 확인으로 닫고 7번 계약으로 안전하게 진행했다.",
+    "라이브 결과는 성공 5건, 안전 건너뜀 2건, AC 실패 0건이며 liveOnlyStatus는 LIVE_VERIFIED다.",
+    "staged behavior digest b8a119233c3a45463c3a2d6f9dd5a635e22fc4b842567ede9de4f4358c9c2dad와 evidence Git blob SHA-256 e30eabb4246588b84829dc5068b82b9f73d95b82a0f70c1bdf78da91a07cd722를 subject receipt에 결속했다.",
+    "독립 Regression Auditor가 fail-first, post-fix, 라이브 의존성 분리, 결속 메타데이터를 재검수하고 PASS로 판정했다."
+  ]
+}
