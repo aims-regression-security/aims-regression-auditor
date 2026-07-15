@@ -1,0 +1,37 @@
+{
+  "schema": "aims.regression_auditor_decision.v1",
+  "verdict": "PASS",
+  "repository": "aim2nasa/aims",
+  "candidateCommitSha": "ca10543015d80b4bc28223425933bc3206600524",
+  "candidateTreeSha": "a99d6255d06f5fa6cd0ec5e8dec61918591b595a",
+  "pullRequestBaseSha": "afc651a58334a72022a5d0b021d76f4e090cf432",
+  "subjectReceipt": "docs/regression-audits/2026-07-15_issue-close-subject-classification-binding.json",
+  "subjectReceiptSha256": "15fd40939d4102ee5017a013e75da3af776d7d9a596b8b6551c3953e11132c61",
+  "auditorIdentity": "regression-auditor-agent:019f6406-55d0-7ea1-b3c2-2cc482900a3b",
+  "auditorSessionId": "019f6406-55d0-7ea1-b3c2-2cc482900a3b-issue242-state-binding-v4",
+  "implementationIdentity": "github-actor-id:26228531",
+  "decisionReviewerIdentity": "github-app-id:4291228",
+  "issuedAt": 1784091525,
+  "expiresAt": 1784092425,
+  "reviewedFiles": [
+    "scripts/regression_auditor_check.py",
+    "scripts/tests/test_regression_auditor_check.py",
+    "docs/ace-reports/2026-07-15_issue-close-subject-classification-binding.md",
+    "docs/e2e-matrices/2026-07-15_issue-close-subject-classification-binding.json",
+    "docs/regression-evidence/2026-07-15_issue-close-subject-classification-binding.json",
+    "docs/regression-work/2026-07-15_issue-close-subject-classification-binding.json",
+    "docs/regression-audits/2026-07-15_issue-close-subject-classification-binding.json",
+    "docs/requirements/requirements-log.md"
+  ],
+  "evidence": [
+    "동일 하네스는 수정 전 issue-close subject 작업 분류 결속 누락으로 한 건 실패했고 test error는 없었다.",
+    "수정 후 동일 하네스는 한 건을 수집해 통과했다.",
+    "focused regression auditor tests 네 건은 모두 PASS했다.",
+    "E2E matrix gate는 normal, abnormal, error, recovery와 failure exemption을 포함해 PASS했다.",
+    "runner evidence validator는 VALID를 반환했다.",
+    "실제 #242 issue-close gate는 LIVE_VERIFIED receipt로 PASS했다.",
+    "독립 Regression Auditor는 코드 수정, fail-first 증거, post-fix 증거, live 의존성 분리를 검수했다.",
+    "work gate가 요구하는 ACE report와 requirements log를 staged candidate에 포함했다.",
+    "서명 검증 우회는 발견되지 않았고 signed audit bundle mismatch 차단은 유지된다."
+  ]
+}
