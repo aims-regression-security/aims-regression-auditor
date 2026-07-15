@@ -1,0 +1,34 @@
+{
+  "schema": "aims.regression_auditor_decision.v1",
+  "verdict": "PASS",
+  "repository": "aim2nasa/aims",
+  "candidateCommitSha": "803a507f6cacf3b836f06836d3f11822f081f3a4",
+  "candidateTreeSha": "1dbae08dee737cdb0dd2c61fc760f076644aa1cb",
+  "pullRequestBaseSha": "afc651a58334a72022a5d0b021d76f4e090cf432",
+  "subjectReceipt": "docs/regression-audits/2026-07-15_issue-close-subject-classification-binding.json",
+  "subjectReceiptSha256": "15fd40939d4102ee5017a013e75da3af776d7d9a596b8b6551c3953e11132c61",
+  "auditorIdentity": "regression-auditor-agent:019f6406-55d0-7ea1-b3c2-2cc482900a3b",
+  "auditorSessionId": "019f6406-55d0-7ea1-b3c2-2cc482900a3b-issue242-state-binding-v2",
+  "implementationIdentity": "github-actor-id:26228531",
+  "decisionReviewerIdentity": "github-app-id:4291228",
+  "issuedAt": 1784090165,
+  "expiresAt": 1784091065,
+  "reviewedFiles": [
+    "scripts/regression_auditor_check.py",
+    "scripts/tests/test_regression_auditor_check.py",
+    "docs/ace-reports/2026-07-15_issue-close-subject-classification-binding.md",
+    "docs/e2e-matrices/2026-07-15_issue-close-subject-classification-binding.json",
+    "docs/regression-evidence/2026-07-15_issue-close-subject-classification-binding.json",
+    "docs/regression-work/2026-07-15_issue-close-subject-classification-binding.json",
+    "docs/regression-audits/2026-07-15_issue-close-subject-classification-binding.json"
+  ],
+  "evidence": [
+    "동일 하네스는 수정 전 work classification missing assertion으로 한 건 실패했고 test error는 없었다.",
+    "수정 후 동일 하네스는 한 건을 수집해 통과했다.",
+    "runner evidence validator는 VALID를 반환했다.",
+    "실제 #242 issue-close gate는 LIVE_VERIFIED receipt로 PASS했다.",
+    "독립 Regression Auditor는 blocking gap과 보안 우회를 발견하지 않았다.",
+    "현재 커밋 기준점으로 새 gate 변경 일곱 파일만 candidate 전체 delta에 결속했다.",
+    "live 의존성은 없으며 signed audit bundle mismatch 차단은 유지된다."
+  ]
+}
