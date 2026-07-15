@@ -1,0 +1,35 @@
+{
+  "schema": "aims.regression_auditor_decision.v1",
+  "verdict": "PASS",
+  "repository": "aim2nasa/aims",
+  "candidateCommitSha": "443c09156421a070402a2ac04729ca6f7b8f129d",
+  "candidateTreeSha": "7bfbd5f171c2ea32294dfc6a7df8e3e9b172f2a2",
+  "subjectReceipt": "docs/regression-audits/2026-07-15_issue255-contract-ocr-first-row.json",
+  "subjectReceiptSha256": "65de62172e884fc63560219657ebcb9ee9b7731a16a475ab942c66a5bd54cabf",
+  "auditorIdentity": "regression-auditor-agent:019f64d8-2334-7511-b479-cb4c6f0dfac5",
+  "auditorSessionId": "019f64d8-2334-7511-b479-cb4c6f0dfac5-gini-rereview",
+  "implementationIdentity": "github-actor-id:26228531",
+  "decisionReviewerIdentity": "github-app-id:4291228",
+  "issuedAt": 1784105028,
+  "expiresAt": 1784105928,
+  "reviewedFiles": [
+    "tools/MetContract.sikuli/MetContract.py",
+    "tools/auto_clicker_v2/tests/test_contract_navigation_preflight_regression.py",
+    "docs/requirements/requirements-log.md",
+    "docs/ace-reports/2026-07-15_issue255-contract-ocr-first-row.md",
+    "docs/e2e-matrices/2026-07-15_issue255-contract-ocr-first-row.json",
+    "docs/regression-evidence/2026-07-15_issue255-contract-ocr-first-row.json",
+    "docs/regression-work/2026-07-15_issue255-contract-ocr-first-row.json",
+    "docs/regression-audits/2026-07-15_issue255-contract-ocr-first-row.json"
+  ],
+  "evidence": [
+    "Issue #255 candidate 443c09156421a070402a2ac04729ca6f7b8f129d binds the contract list OCR first-row regression fix to staged tree 7bfbd5f171c2ea32294dfc6a7df8e3e9b172f2a2.",
+    "Gini re-review found the earlier retry-empty rows gap fixed and reported no additional blocking finding.",
+    "The fail-first evidence proves four assertion failures against the old contract OCR path before the fix.",
+    "The same harness passes four issue255 tests after moving the pointer outside the OCR area, retrying first-page rows that start at seq 2 or later, and fail-closing retry-empty rows.",
+    "The related contract navigation preflight suite passes eight tests.",
+    "Staged behavior digest 706f928e1bd426a4c77038744e5e2f092c736224b90bcfa3ce6fcc3b129639aa is bound to MetContract.py and the regression harness.",
+    "Runner evidence Git blob SHA-256 866bb414196a39d442e8fb8220f5c19bcf83d895bded754d91ff69ab7b908330 is recorded in the subject receipt.",
+    "liveOnlyStatus none is correct because this regression is locally verified by unit, integration, static, and state-matrix harnesses."
+  ]
+}
