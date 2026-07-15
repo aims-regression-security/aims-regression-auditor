@@ -1,0 +1,41 @@
+{
+  "schema": "aims.regression_auditor_decision.v1",
+  "verdict": "PASS",
+  "repository": "aim2nasa/aims",
+  "candidateCommitSha": "89a1de4d7749a76a0bfc1b4d453ed7aa04eee941",
+  "candidateTreeSha": "10c7617be96d9589e7694f9b6d9f7061b2a126df",
+  "pullRequestBaseSha": "d3e0f54d7999a0440d9ed1c5421ecf7c8df8ea19",
+  "subjectReceipt": "docs/regression-audits/2026-07-15_issue242-contract-ocr-policy-v3.json",
+  "subjectReceiptSha256": "4eaf4c6c381184204a05624aebe63e260bb8b07ddb4d3e4c88baa08851f20f91",
+  "auditorIdentity": "regression-auditor-agent:019f63c7-afec-7fc3-a60f-d969df19c932",
+  "auditorSessionId": "019f63c7-afec-7fc3-a60f-d969df19c932-issue242-live-close",
+  "implementationIdentity": "github-actor-id:26228531",
+  "decisionReviewerIdentity": "github-app-id:4291228",
+  "issuedAt": 1784085873,
+  "expiresAt": 1784086773,
+  "reviewedFiles": [
+    ".husky/pre-commit",
+    "tools/MetContract.sikuli/MetContract.py",
+    "tools/MetContract.sikuli/poc/ocr_single.py",
+    "tools/auto_clicker_v2/tests/test_issue242_ocr_timeout_regression.py",
+    "tools/auto_clicker_v2/tests/test_met_contract_packaged_ocr.py",
+    "tools/auto_clicker_v2/tests/test_window_interference_static.py",
+    "tools/metdo_reader/read_customer.py",
+    "tools/metdo_reader/tests/test_ocr_proxy_auth.py",
+    "docs/requirements/requirements-log.md",
+    "docs/ace-reports/2026-07-15_issue242-contract-ocr-policy-v3.md",
+    "docs/e2e-matrices/2026-07-15_issue242-contract-ocr-policy-v3.json",
+    "docs/regression-evidence/2026-07-15_issue242-contract-ocr-policy-v3.json",
+    "docs/regression-evidence/2026-07-15_issue242-contract-ocr-policy-v3-live.md",
+    "docs/regression-work/2026-07-15_issue242-contract-ocr-policy-v3.json",
+    "docs/regression-audits/2026-07-15_issue242-contract-ocr-policy-v3.json"
+  ],
+  "evidence": [
+    "기존 상태 b0c7f357에서 동일 하네스 7개 중 3개가 실패했고 오류는 없었다.",
+    "수정 후 같은 명령, 하네스 ID, 하네스 digest로 7개 모두 통과했다.",
+    "설치 AutoClicker 0.3.21 live 로그 네 번 모두 document-parse-260630, auto, maxAttempts=5, parentTimeoutMs=30000, clientTimeoutMs=30000을 출력했다.",
+    "네 OCR attempt는 7.62초, 7.59초, 3.55초, 1.03초로 모두 단일 30초 제한 안에 종료됐다.",
+    "계약목록 순번 1 누락과 첫 페이지 순차 처리 미시작은 별도 이슈 #255로 분리되어 #242 timeout 정책 판정에 포함되지 않는다.",
+    "독립 Regression Auditor는 #242 기술 acceptance를 PASS로 판정했으며 남은 차단 조건은 이 보호 서명 receipt 발급뿐이다."
+  ]
+}
