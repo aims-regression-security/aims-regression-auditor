@@ -1,0 +1,34 @@
+{
+  "schema": "aims.regression_auditor_decision.v1",
+  "verdict": "PASS",
+  "repository": "aim2nasa/aims",
+  "candidateCommitSha": "63fe5467ad7f200c98180aad01092f8bd744cd47",
+  "candidateTreeSha": "3c110a792a48f5b05eda5fdd31817587b79caf23",
+  "subjectReceipt": "docs/regression-audits/2026-07-15_issue255-contract-ocr-first-row.json",
+  "subjectReceiptSha256": "37fe19c32d0c44d5addf66654cae93b0df893f5fa0e34c5039460fa4e9313053",
+  "auditorIdentity": "regression-auditor-agent:019f64b6-d264-7e51-a708-95c3c27dcfda",
+  "auditorSessionId": "019f64b6-d264-7e51-a708-95c3c27dcfda-final",
+  "implementationIdentity": "github-actor-id:26228531",
+  "decisionReviewerIdentity": "github-app-id:4291228",
+  "issuedAt": 1784102556,
+  "expiresAt": 1784103456,
+  "reviewedFiles": [
+    "tools/MetContract.sikuli/MetContract.py",
+    "tools/auto_clicker_v2/tests/test_contract_navigation_preflight_regression.py",
+    "docs/requirements/requirements-log.md",
+    "docs/ace-reports/2026-07-15_issue255-contract-ocr-first-row.md",
+    "docs/e2e-matrices/2026-07-15_issue255-contract-ocr-first-row.json",
+    "docs/regression-evidence/2026-07-15_issue255-contract-ocr-first-row.json",
+    "docs/regression-work/2026-07-15_issue255-contract-ocr-first-row.json",
+    "docs/regression-audits/2026-07-15_issue255-contract-ocr-first-row.json"
+  ],
+  "evidence": [
+    "Issue #255 candidate 63fe5467ad7f200c98180aad01092f8bd744cd47 binds the contract list OCR first-row regression fix to the staged tree 3c110a792a48f5b05eda5fdd31817587b79caf23.",
+    "The fail-first evidence proves three assertion failures against the old contract OCR path before the fix.",
+    "The same harness passes three tests after moving the pointer outside the OCR area and retrying first-page rows that start at seq 2 or later.",
+    "The helper-execution harness verifies seq 2-11 is a retry state and seq 1-10 is not a retry state.",
+    "Staged behavior digest beadf8d505a39f0e68dfd25aca6d408214ff6f9f809c4d84fca66d605acdc204 is bound to MetContract.py and the regression harness.",
+    "Runner evidence Git blob SHA-256 aeb09d0135b7d9da775061c940a62d99de73601f7eac5f84e658d20394d3f4bd is recorded in the subject receipt.",
+    "liveOnlyStatus none is correct because this regression is locally verified by unit, integration, static, and state-matrix harnesses."
+  ]
+}
