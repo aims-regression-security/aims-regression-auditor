@@ -119,6 +119,9 @@ jobs:
           assert "print(actual" not in attestation
           PY
 
+      - name: Validate historical issue-close binding
+        run: python scripts/self_test_historical_issue_close.py
+
       - name: Validate authoritative trust policy
         shell: bash
         run: |
