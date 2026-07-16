@@ -1924,6 +1924,27 @@ def check(
     release_tag: str = "",
     trust_context: dict[str, Any] | None = None,
 ) -> tuple[bool, str]:
+    if mode == "commit":
+        try:
+            gate_policy_path = Path(__file__).with_name("gate_policy_check.py")
+            spec = importlib.util.spec_from_file_location(
+                "aims_gate_policy_check",
+                gate_policy_path,
+            )
+            if spec is None or spec.loader is None:
+                raise ImportError(f"{gate_policy_path} import spec를 만들 수 없습니다.")
+            gate_policy_check = importlib.util.module_from_spec(spec)
+            spec.loader.exec_module(gate_policy_check)
+        except Exception as exc:  # noqa: BLE001 - keep verifier fail-closed.
+            return False, f"[GATE POLICY] BLOCK: gate policy module import failed: {exc}"
+        policy_ok, policy_message = gate_policy_check.check_files(
+            root,
+            files,
+            staged=staged,
+        )
+        if not policy_ok:
+            return False, policy_message
+
     receipts = [normalize(path) for path in explicit_receipts] or receipts_for_files(files)
     normalized_files = {normalize(path) for path in files}
     recognized_behavior_files = sorted(path for path in normalized_files if is_behavior_file(path))

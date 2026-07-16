@@ -1,0 +1,31 @@
+{
+  "schema": "aims.regression_work_classification_decision.v1",
+  "verdict": "PASS",
+  "repository": "aim2nasa/aims",
+  "workClassification": "docs/regression-work/2026-07-16_gate-firewall-risk-tier.json",
+  "workClassificationSha256": "d493eba7fa034c2adf6aea6ee30089893cfc6d6ecaf4a879df417dc0ddc75b82",
+  "workKind": "feature",
+  "stagedBehaviorFiles": [
+    ".husky/pre-commit",
+    "scripts/gate_policy_check.py",
+    "scripts/regression_auditor_check.py",
+    "scripts/tests/test_gate_policy_check.py"
+  ],
+  "stagedBehaviorDigest": "e97e2b2b83090efc886eae41f95d2b86c4c9c2a5911ff0299d1c862a3e5b4c7a",
+  "auditorIdentity": "policy-gate-local-harness",
+  "decisionReviewerIdentity": "github-app-id:4291228",
+  "reviewedFiles": [
+    "docs/regression-work/2026-07-16_gate-firewall-risk-tier.json",
+    ".husky/pre-commit",
+    "scripts/gate_policy_check.py",
+    "scripts/regression_auditor_check.py",
+    "scripts/tests/test_gate_policy_check.py"
+  ],
+  "evidence": [
+    "Gate-only Tier 3 risk manifest was reviewed.",
+    "Policy harness blocks mixed product and gate candidates.",
+    "Policy harness keeps docs-only Tier 0 fast path.",
+    "Local evidence: py -m pytest scripts/tests/test_gate_policy_check.py -q -> 8 passed.",
+    "Local evidence: py -m py_compile scripts/gate_policy_check.py scripts/regression_auditor_check.py -> PASS."
+  ]
+}
