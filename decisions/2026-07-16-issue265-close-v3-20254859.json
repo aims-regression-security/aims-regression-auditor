@@ -1,0 +1,36 @@
+{
+  "verdict": "PASS",
+  "expiresAt": 1784203002,
+  "issuedAt": 1784202102,
+  "reviewedFiles": [
+    "scripts/regression_auditor_check.py",
+    "scripts/tests/test_regression_auditor_check.py",
+    "docs/ace-reports/2026-07-16_issue265-commit-mode-historical-close-binding.md",
+    "docs/e2e-matrices/2026-07-16_issue265-commit-mode-historical-close-binding.json",
+    "docs/quality-gates/2026-07-16_issue265-commit-mode-historical-close-binding.json",
+    "docs/requirements/requirements-log.md",
+    "docs/regression-audits/2026-07-16_issue265-close.json",
+    "docs/regression-audits/auditor-receipts/2026-07-16_issue265-close-auditor-v2.json",
+    "docs/regression-evidence/2026-07-16_issue265-close.json",
+    "docs/regression-work/2026-07-16_issue265-close.json"
+  ],
+  "schema": "aims.regression_auditor_decision.v1",
+  "pullRequestBaseSha": "b75925c945d55cb3684c2908e8970efffa46e7a6",
+  "evidence": [
+    "Candidate 202548593ec6138cfb90c33f18badb9705b90763 and tree 8699f30607584e25e6d959561580acc1ad757aad are fixed for #265 issue-close receipt v3.",
+    "Subject receipt canonical hash d3ac94a9dcd69b61836aabc86ece1197f9643d3896f98145f47cf4ad6d3970c9 matches the v3 close candidate without the signed receipt envelope.",
+    "The v3 subject includes githubAcceptedState for issue-reopened-28065589966 and points at docs/regression-audits/auditor-receipts/2026-07-16_issue265-close-auditor-v3.json.",
+    "Historical behavior binds main commit 90865f9af9580a5b2239d237bfdfaaf1cf4cd4f1 and digest d3916f247f7131e86b2ecfd43e62cf5f00778a21839529fd8434be7e94784297.",
+    "Structured close runner evidence docs/regression-evidence/2026-07-16_issue265-close.json returned accepted=true and code=VALID.",
+    "fast-finish preflight PASS for the issue-close v3 subject before protected issuer submission."
+  ],
+  "repository": "aim2nasa/aims",
+  "subjectReceipt": "docs/regression-audits/2026-07-16_issue265-close.json",
+  "subjectReceiptSha256": "d3ac94a9dcd69b61836aabc86ece1197f9643d3896f98145f47cf4ad6d3970c9",
+  "candidateCommitSha": "202548593ec6138cfb90c33f18badb9705b90763",
+  "auditorIdentity": "regression-auditor-agent:issue265-close-independent",
+  "auditorSessionId": "019f6a3e-issue265-close-v3-20254859",
+  "decisionReviewerIdentity": "github-app-id:4291228",
+  "candidateTreeSha": "8699f30607584e25e6d959561580acc1ad757aad",
+  "implementationIdentity": "github-actor-id:26228531"
+}
