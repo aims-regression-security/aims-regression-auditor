@@ -1,0 +1,31 @@
+{
+  "schema": "aims.regression_auditor_decision.v1",
+  "verdict": "PASS",
+  "repository": "aim2nasa/aims",
+  "candidateCommitSha": "4521f7e10d1831375373da317fab87a6e73112ee",
+  "candidateTreeSha": "ea12dc84ba977a64f8c2fc7d406a887f3240aa63",
+  "pullRequestBaseSha": "08c23eec156505b1dccddbaf6c83bc73b7291644",
+  "subjectReceipt": "docs/regression-audits/2026-07-16_issue253-close-cycle-rebind.json",
+  "subjectReceiptSha256": "4e78872499e26577be05768be77c31852769ce4139945dd32f36af818b97fe14",
+  "auditorIdentity": "regression-auditor-agent:issue253-close-cycle-independent",
+  "auditorSessionId": "issue253-close-cycle-v1-4521f7e1",
+  "implementationIdentity": "github-actor-id:26228531",
+  "decisionReviewerIdentity": "github-app-id:4291228",
+  "issuedAt": 1784188245,
+  "expiresAt": 1784189145,
+  "reviewedFiles": [
+    "scripts/regression_auditor_check.py",
+    "scripts/tests/test_regression_auditor_check.py",
+    "docs/ace-reports/2026-07-16_issue253-close-cycle-rebind.md",
+    "docs/e2e-matrices/2026-07-16_issue253-close-cycle-rebind.json",
+    "docs/regression-evidence/2026-07-16_issue253-close-cycle-rebind.json",
+    "docs/regression-work/2026-07-16_issue253-close-cycle-rebind.json",
+    "docs/regression-audits/2026-07-16_issue253-close-cycle-rebind.json"
+  ],
+  "evidence": [
+    "Candidate 4521f7e10d1831375373da317fab87a6e73112ee and tree ea12dc84ba977a64f8c2fc7d406a887f3240aa63 are bound to issue 253 only.",
+    "The issue-close subject uses historicalBehavior for protected main base 08c23eec156505b1dccddbaf6c83bc73b7291644.",
+    "Structured runner evidence is bound to current-cycle close authorization.",
+    "liveOnlyStatus is none because this is a deterministic issue-close gate binding."
+  ]
+}
