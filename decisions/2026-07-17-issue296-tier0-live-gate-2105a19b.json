@@ -1,0 +1,43 @@
+{
+  "schema": "aims.regression_auditor_decision.v1",
+  "verdict": "PASS",
+  "repository": "aim2nasa/aims",
+  "candidateCommitSha": "2105a19be295ef41cc7789b520baf95ee1d9e090",
+  "candidateTreeSha": "c0fb1f80c8a7c6cad56920095146c8835e1e069b",
+  "pullRequestBaseSha": "e5108d947e1cfff01ec45d18b60ca93b5c0b3988",
+  "subjectReceipt": "docs/regression-audits/2026-07-17_issue296-tier0-live-gate-exemption.json",
+  "subjectReceiptSha256": "9a3b5a884f7297323d88a60ebb08bff6c90cce664cd04c953f176f5029063315",
+  "auditorIdentity": "regression-auditor-agent:issue296-tier0-live-gate-independent-20260717",
+  "auditorSessionId": "019f6a3e-issue296-tier0-live-gate-2105a19b",
+  "implementationIdentity": "github-actor-id:26228531",
+  "decisionReviewerIdentity": "github-app-id:4291228",
+  "issuedAt": 1784219498,
+  "expiresAt": 1784220398,
+  "reviewedFiles": [
+    "docs/DISCUSSION_2026-07-17_tier0_live_gate_conflict.md",
+    "docs/ace-reports/2026-07-17_tier0-live-gate-exemption.md",
+    "docs/e2e-matrices/2026-07-17_tier0-live-gate-exemption.json",
+    "docs/quality-gates/2026-07-17_tier0-live-gate-exemption.json",
+    "docs/regression-audits/2026-07-17_issue296-tier0-live-gate-exemption.json",
+    "docs/regression-evidence/2026-07-17_issue296-tier0-live-gate-exemption.json",
+    "docs/regression-work/2026-07-17_issue296-tier0-live-gate-exemption.json",
+    "docs/requirements/requirements-log.md",
+    "scripts/gate_policy_check.py",
+    "scripts/regression_github_state_gate.py",
+    "scripts/regression_github_state_runtime.py",
+    "scripts/regression_github_state_transport.py",
+    "scripts/tests/test_regression_github_state_signed_binding.py",
+    "scripts/tests/test_regression_live_gate_red_team.py",
+    "scripts/tests/test_tier0_issue_close.py",
+    "scripts/tier0_issue_close.py"
+  ],
+  "evidence": [
+    "Candidate 2105a19be295ef41cc7789b520baf95ee1d9e090 and tree c0fb1f80c8a7c6cad56920095146c8835e1e069b are fixed for #296 Tier 0 live gate binding.",
+    "Subject canonical SHA-256 9a3b5a884f7297323d88a60ebb08bff6c90cce664cd04c953f176f5029063315 matches the envelope-free candidate.",
+    "Behavior digest 64c9af4f44e2b9ec2ceb898961e6dc1d3f1d42f044f3fef885db38b1c5d81a08 covers eight gate and regression-test files.",
+    "Structured runner evidence returned accepted=true and code=VALID with pre-fix AssertionError FAIL and post-fix PASS.",
+    "Actor/comment author and authoritative issue cycle bindings block marker injection and reopen-cycle reuse.",
+    "Focused 53 tests, targeted state/workflow red-team 19 tests, Gate Policy, E2E Matrix, and Work Gate pass.",
+    "External verifier gate-path sync PR #147 and #148 are merged."
+  ]
+}
