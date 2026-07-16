@@ -1,0 +1,36 @@
+{
+  "schema": "aims.regression_work_classification_decision.v1",
+  "verdict": "PASS",
+  "repository": "aim2nasa/aims",
+  "workClassification": "docs/regression-work/2026-07-16_issue265-historical-close-binding.json",
+  "workClassificationSha256": "e69bdb0d86af341038f56b0ed6fe8f7ab46a08d6137338b1deac4c4fd28b1f05",
+  "workKind": "verification-gate",
+  "stagedBehaviorFiles": [
+    "scripts/regression_auditor_check.py",
+    "scripts/regression_gate_fast_finish.py",
+    "scripts/tests/test_issue265_historical_binding_evidence.py",
+    "scripts/tests/test_regression_auditor_check.py",
+    "scripts/tests/test_regression_gate_fast_finish.py"
+  ],
+  "stagedBehaviorDigest": "fb8204b1ff8cc1ab9027f6c3ecb276bce9478cd2c7fa262602d7ddfc87d4eed2",
+  "auditorIdentity": "regression-auditor-agent:issue265-independent",
+  "decisionReviewerIdentity": "github-app-id:4291228",
+  "reviewedFiles": [
+    "docs/regression-work/2026-07-16_issue265-historical-close-binding.json",
+    "scripts/regression_auditor_check.py",
+    "scripts/regression_gate_fast_finish.py",
+    "scripts/tests/test_issue265_historical_binding_evidence.py",
+    "scripts/tests/test_regression_auditor_check.py",
+    "scripts/tests/test_regression_gate_fast_finish.py",
+    "docs/regression-evidence/2026-07-16_issue265-historical-close-binding.json",
+    "docs/ace-reports/2026-07-16_issue265-historical-close-binding.md",
+    "docs/e2e-matrices/2026-07-16_issue265-historical-close-binding.json"
+  ],
+  "evidence": [
+    "The #265 classification canonical SHA-256 excludes protectedDecision and matches the protected decision contract.",
+    "The staged behavior digest matches the declared gate code and test files.",
+    "Structured runner evidence shows the old preflight accepted a binding that final validation would reject, and the fixed preflight rejects it before receipt issuance.",
+    "Protected issuer main includes persistent self-test coverage for historical Git blob binding and new behavior rejection.",
+    "This decision strengthens issue-close binding and does not weaken any gate rule."
+  ]
+}
