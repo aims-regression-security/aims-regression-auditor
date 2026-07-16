@@ -1,0 +1,35 @@
+{
+  "schema": "aims.regression_auditor_decision.v1",
+  "verdict": "PASS",
+  "issuedAt": 1784205671,
+  "expiresAt": 1784206571,
+  "repository": "aim2nasa/aims",
+  "subjectReceipt": "docs/regression-audits/2026-07-16_issue264-close.json",
+  "subjectReceiptSha256": "55a5ae67fd0b7a90b79959c9e316bfc2fb90b8ce687d8c86442c8acd9f1af4ee",
+  "candidateCommitSha": "eb5568472c6ffca5df1ab5dabe235f5aa2a355ec",
+  "candidateTreeSha": "25ae62b5e0346fd91dee2ca3ebd3d11a2b09f1f5",
+  "pullRequestBaseSha": "67f5da8196ce6339f01de6a2e905401048d1cffb",
+  "auditorIdentity": "regression-auditor-agent:issue264-close-independent",
+  "auditorSessionId": "019f6a3e-issue264-close-v3-eb556847",
+  "implementationIdentity": "github-actor-id:26228531",
+  "decisionReviewerIdentity": "github-app-id:4291228",
+  "reviewedFiles": [
+    "scripts/regression_auditor_check.py",
+    "scripts/tests/test_regression_auditor_check.py",
+    "docs/ace-reports/2026-07-16_issue264-regression-auditor-fixtures.md",
+    "docs/e2e-matrices/2026-07-16_issue264-regression-auditor-fixtures.json",
+    "docs/regression-audits/2026-07-16_issue264-close.json",
+    "docs/regression-audits/auditor-receipts/2026-07-16_issue264-close-auditor-v2.json",
+    "docs/regression-evidence/2026-07-16_issue264-close.json",
+    "docs/regression-evidence/fixtures/test_issue264_staged_harness_binding.py",
+    "docs/regression-work/2026-07-16_issue264-close.json"
+  ],
+  "evidence": [
+    "Candidate eb5568472c6ffca5df1ab5dabe235f5aa2a355ec and tree 25ae62b5e0346fd91dee2ca3ebd3d11a2b09f1f5 are fixed for #264 issue-close receipt v3.",
+    "Subject receipt canonical hash 55a5ae67fd0b7a90b79959c9e316bfc2fb90b8ce687d8c86442c8acd9f1af4ee matches the v3 close candidate without the signed receipt envelope.",
+    "The v3 subject includes githubAcceptedState for latest issue cycle issue-reopened-28063492706 and points at docs/regression-audits/auditor-receipts/2026-07-16_issue264-close-auditor-v3.json.",
+    "Historical behavior binds main commit 4451d18f88d8e99580eb872af42b0ec56658b622 and digest 565bb1d8b7dcde5283005b62b485bf95ddf9a8fc6717798aad4a0ced810c1d99.",
+    "Protected verifier was synchronized through PR #137 so historical issue-close binding is applied in commit-mode verification.",
+    "fast-finish preflight PASS for the issue-close v3 subject before protected issuer submission."
+  ]
+}
