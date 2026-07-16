@@ -40,6 +40,7 @@ jobs:
           python -m py_compile
           scripts/regression_auditor_check.py
           scripts/regression_auditor_issue.py
+          scripts/regression_auditor_verify_base.py
           scripts/regression_evidence_runner.py
 
       - name: Validate protected workflow contracts
@@ -89,10 +90,14 @@ jobs:
           assert "github.event.client_payload.base_sha" not in verifier
           assert "github.event.client_payload.head_sha" not in verifier
           assert "github.event.client_payload.implementation_user_id" not in verifier
+          assert "AUTHORITATIVE_BASE_SHA: ${{ steps.pr.outputs.base_sha }}" in verifier
+          assert "regression_auditor_verify_base.py" in verifier
+          assert '--authoritative-base "$AUTHORITATIVE_BASE_SHA"' in verifier
           assert 'cat-file -e "${BASE_SHA}^{commit}"' in verifier
           assert 'cat-file -e "${HEAD_SHA}^{commit}"' in verifier
           assert 'merge-base "$BASE_SHA" "$HEAD_SHA"' in verifier
           assert '"$BASE_SHA...$HEAD_SHA" > "$changed_files_path"' in verifier
+          assert "export BASE_SHA" in verifier
           assert "mapfile -d '' changed_files < <(" not in verifier
           issuer_checkout = issuer.split(
               "Checkout trusted issuer from default branch", 1
