@@ -54,6 +54,49 @@ def github_numeric_identity(value: str) -> str:
     return ""
 
 
+def historical_close_behavior(
+    candidate_root: Path,
+    subject: dict[str, Any],
+    classification: dict[str, Any],
+    candidate_base_sha: str,
+) -> tuple[list[str], str] | None:
+    """Return a verified immutable behavior binding for a post-merge close.
+
+    Historical behavior is permitted only for an issue-close receipt and only
+    when the referenced commit is already an ancestor of the candidate base.
+    It is therefore not treated as a changed candidate file.
+    """
+    binding = subject.get("historicalBehavior")
+    if binding is None:
+        return None
+    if not isinstance(binding, dict) or gate.text(subject.get("mode")) != "issue-close":
+        raise ValueError("historicalBehavior는 issue-close receipt의 object여야 합니다.")
+    post_commit_sha = gate.text(binding.get("postCommitSha")).lower()
+    if len(post_commit_sha) != 40 or any(char not in "0123456789abcdef" for char in post_commit_sha):
+        raise ValueError("historicalBehavior.postCommitSha는 lowercase 40-character SHA여야 합니다.")
+    files = sorted(gate.normalize(path) for path in gate.string_list(binding.get("files")))
+    classified_files = sorted(
+        gate.normalize(path) for path in gate.string_list(classification.get("stagedBehaviorFiles"))
+    )
+    digest = gate.text(binding.get("digest"))
+    if not files or files != classified_files:
+        raise ValueError("historicalBehavior.files가 work classification과 일치하지 않습니다.")
+    if digest != gate.text(classification.get("stagedBehaviorDigest")):
+        raise ValueError("historicalBehavior.digest가 work classification과 일치하지 않습니다.")
+    runner_binding = gate.object_at(subject, "runnerBinding")
+    if gate.text(runner_binding.get("postRef")) != post_commit_sha:
+        raise ValueError("historicalBehavior.postCommitSha가 runnerBinding.postRef와 일치하지 않습니다.")
+    try:
+        gate.run_git_at(candidate_root, ["cat-file", "-e", f"{post_commit_sha}^{{commit}}"])
+        gate.run_git_at(candidate_root, ["merge-base", "--is-ancestor", post_commit_sha, candidate_base_sha])
+        actual_digest = gate.git_files_digest(candidate_root, files, ref=post_commit_sha)
+    except RuntimeError as exc:
+        raise ValueError(f"historicalBehavior immutable ref 검증 실패: {exc}") from exc
+    if actual_digest != digest:
+        raise ValueError("historicalBehavior immutable Git blob digest가 일치하지 않습니다.")
+    return files, digest
+
+
 def load_private_key(encoded_key: str):
     try:
         from cryptography.hazmat.primitives.asymmetric.ed25519 import (
@@ -164,17 +207,50 @@ def issue_receipt(
             behavior_files,
             ref="HEAD",
         )
+        historical = historical_close_behavior(
+            candidate_root,
+            subject,
+            classification,
+            gate.text(candidate_context["baseCommitSha"]),
+        )
+        if historical is not None:
+            behavior_files, behavior_digest = historical
+            explicit_behavior_files = set(behavior_files)
+        if historical is not None and recognized_behavior_files:
+            raise ValueError(
+                "historical issue-close candidate에는 새 behavior 변경이 있으면 안 됩니다: "
+                + ", ".join(sorted(recognized_behavior_files))
+            )
         if not recognized_behavior_files.issubset(explicit_behavior_files):
             raise ValueError(
                 "자동 인식된 candidate behavior 파일이 work classification에서 누락됐습니다."
             )
-        if not explicit_behavior_files.issubset(candidate_files):
+        if historical is None and not explicit_behavior_files.issubset(candidate_files):
             raise ValueError(
                 "work classification behavior manifest에 candidate 변경 외 파일이 있습니다."
             )
-        if recomputed_behavior_digest != behavior_digest:
+        if historical is None and recomputed_behavior_digest != behavior_digest:
             raise ValueError(
                 "candidate staged digest가 work classification과 일치하지 않습니다."
+            )
+        classification_trust_context = gate.load_trust_context(
+            trust_root,
+            staged=False,
+            implementation_identity=implementation_identity,
+            now=int(time.time()) if now is None else now,
+        )
+        _work_kind, classification_errors = gate.validate_work_classification(
+            candidate_root,
+            classification_path,
+            behavior_files,
+            behavior_digest,
+            staged=False,
+            trust_context=classification_trust_context,
+        )
+        if classification_errors:
+            raise ValueError(
+                "work classification protected binding이 유효하지 않습니다: "
+                + " | ".join(classification_errors)
             )
     elif recognized_behavior_files:
         raise ValueError(
