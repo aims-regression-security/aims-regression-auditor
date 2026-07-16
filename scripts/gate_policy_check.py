@@ -60,6 +60,7 @@ GATE_EXACT_PATHS = {
     "scripts/regression_github_state_gate.py",
     "scripts/regression_github_state_marker.py",
     "scripts/regression_live_state_publish.py",
+    "scripts/tier0_issue_close.py",
     "scripts/work_gate_check.py",
 }
 GATE_PREFIXES = (
