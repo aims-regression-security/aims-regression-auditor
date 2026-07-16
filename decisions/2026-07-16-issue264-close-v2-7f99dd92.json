@@ -1,0 +1,35 @@
+{
+  "schema": "aims.regression_auditor_decision.v1",
+  "verdict": "PASS",
+  "issuedAt": 1784204762,
+  "expiresAt": 1784205662,
+  "repository": "aim2nasa/aims",
+  "subjectReceipt": "docs/regression-audits/2026-07-16_issue264-close.json",
+  "subjectReceiptSha256": "a17d8d94c78a86eca5247632a4ce2007ca71392e1b93e74e6920332112d04a5d",
+  "candidateCommitSha": "7f99dd924642208c9e727f4d60e857b1562cc3e0",
+  "candidateTreeSha": "f1e02c88c913bceab02098fbd951e71b88b55a3a",
+  "pullRequestBaseSha": "a6deb8da6b68e8902dcaaec5e70298d698a0ab2e",
+  "auditorIdentity": "regression-auditor-agent:issue264-close-independent",
+  "auditorSessionId": "019f6a3e-issue264-close-v2-7f99dd92",
+  "implementationIdentity": "github-actor-id:26228531",
+  "decisionReviewerIdentity": "github-app-id:4291228",
+  "reviewedFiles": [
+    "scripts/regression_auditor_check.py",
+    "scripts/tests/test_regression_auditor_check.py",
+    "docs/ace-reports/2026-07-16_issue264-regression-auditor-fixtures.md",
+    "docs/e2e-matrices/2026-07-16_issue264-regression-auditor-fixtures.json",
+    "docs/regression-audits/2026-07-16_issue264-close.json",
+    "docs/regression-audits/auditor-receipts/2026-07-16_issue264-close-auditor.json",
+    "docs/regression-evidence/2026-07-16_issue264-close.json",
+    "docs/regression-evidence/fixtures/test_issue264_staged_harness_binding.py",
+    "docs/regression-work/2026-07-16_issue264-close.json"
+  ],
+  "evidence": [
+    "Candidate 7f99dd924642208c9e727f4d60e857b1562cc3e0 and tree f1e02c88c913bceab02098fbd951e71b88b55a3a are fixed for #264 issue-close receipt v2.",
+    "Subject receipt canonical hash a17d8d94c78a86eca5247632a4ce2007ca71392e1b93e74e6920332112d04a5d matches the v2 close candidate without the signed receipt envelope.",
+    "The v2 subject includes githubAcceptedState for latest issue cycle issue-reopened-28063492706 and points at docs/regression-audits/auditor-receipts/2026-07-16_issue264-close-auditor-v2.json.",
+    "Historical behavior binds main commit 4451d18f88d8e99580eb872af42b0ec56658b622 and digest 565bb1d8b7dcde5283005b62b485bf95ddf9a8fc6717798aad4a0ced810c1d99.",
+    "Structured close runner evidence docs/regression-evidence/2026-07-16_issue264-close.json returned accepted=true and code=VALID.",
+    "fast-finish preflight PASS for the issue-close v2 subject before protected issuer submission."
+  ]
+}
