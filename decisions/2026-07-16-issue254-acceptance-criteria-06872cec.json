@@ -1,0 +1,34 @@
+{
+  "schema": "aims.regression_auditor_decision.v1",
+  "verdict": "PASS",
+  "repository": "aim2nasa/aims",
+  "candidateCommitSha": "06872cec73e3eafa29ac5faa438cec3b4e80b7bd",
+  "candidateTreeSha": "5f9cac3d0d9f308a95e5b75ccb9b93246940e3ad",
+  "pullRequestBaseSha": "5895f15c4b77c1895b15c719aa6f1d4b6903b8e2",
+  "subjectReceipt": "docs/regression-audits/2026-07-16_issue254-acceptance-criteria-required.json",
+  "subjectReceiptSha256": "1d912dbefdb8ef88d5d14dc5ed993fb38e9c52cb5ff67fe8a2e6d3a7be71b6b7",
+  "auditorIdentity": "regression-auditor-agent:issue254-independent",
+  "auditorSessionId": "019f68df-b6c9-7702-a2c4-954be36c50f3-issue254-acceptance-criteria-06872cec",
+  "implementationIdentity": "github-actor-id:26228531",
+  "decisionReviewerIdentity": "github-app-id:4291228",
+  "issuedAt": 1784171325,
+  "expiresAt": 1784172225,
+  "reviewedFiles": [
+    "scripts/regression_auditor_check.py",
+    "scripts/tests/test_regression_auditor_check.py",
+    "docs/ace-reports/2026-07-16_issue254-acceptance-criteria-required.md",
+    "docs/e2e-matrices/2026-07-16_issue254-acceptance-criteria-required.json",
+    "docs/regression-audits/2026-07-16_issue254-acceptance-criteria-required.json",
+    "docs/regression-evidence/2026-07-16_issue254-acceptance-criteria-required.json",
+    "docs/regression-work/2026-07-16_issue254-acceptance-criteria-required.json"
+  ],
+  "evidence": [
+    "#254 후보 커밋 06872cec73e3eafa29ac5faa438cec3b4e80b7bd와 트리 5f9cac3d0d9f308a95e5b75ccb9b93246940e3ad를 고정했다.",
+    "기존 validator는 omitted acceptanceCriteria를 허용했고 fail-first harness가 이를 잡았다.",
+    "수정 후 동일 하네스가 통과했고 runner evidence SHA-256 670ef0a86a046022e0d32802834d47847266ac3fdfdd8d1aed297969ceab4f87를 subject receipt에 결속했다.",
+    "staged behavior digest 2d0707d536cc1c115fd832d9a736aad8e3f8a6d537559a7ee703b495120b4892를 subject receipt와 work classification에 결속했다.",
+    "criteria omission, invalid fields, non-PASS status, missing evidence, unbound matrix evidence and state combinations are blocked.",
+    "work gate, E2E matrix gate, staged preflight, syntax check, scoped criteria tests가 통과했다.",
+    "live 없이 검증 가능한 로컬 receipt validation 문제이며 liveOnlyStatus는 none이다."
+  ]
+}
