@@ -240,18 +240,26 @@ jobs:
           AIMS_REGRESSION_AUDITOR_TRUST_ROOT: ${{ github.workspace }}/issuer
           AIMS_REPOSITORY_ID: ${{ vars.AIMS_REGRESSION_CANDIDATE_REPOSITORY }}
           AIMS_IMPLEMENTATION_IDENTITY: github-actor-id:${{ steps.pr.outputs.implementation_user_id }}
-          BASE_SHA: ${{ steps.pr.outputs.base_sha }}
+          AUTHORITATIVE_BASE_SHA: ${{ steps.pr.outputs.base_sha }}
           HEAD_SHA: ${{ steps.pr.outputs.head_sha }}
         shell: bash
         run: |
           set +e
+          BASE_SHA=""
           changed_files_path=""
           diff_error=""
           if ! changed_files_path="$(mktemp)"; then
             diff_error="Authoritative PR diff buffer could not be created"
           else
             trap 'rm -f "$changed_files_path"' EXIT
-            if ! git -C candidate cat-file -e "${BASE_SHA}^{commit}"; then
+            if ! BASE_SHA="$(
+              python issuer/scripts/regression_auditor_verify_base.py \
+                --root candidate \
+                --authoritative-base "$AUTHORITATIVE_BASE_SHA" \
+                --head "$HEAD_SHA"
+            )"; then
+              diff_error="Signed receipt audit base could not be selected"
+            elif ! git -C candidate cat-file -e "${BASE_SHA}^{commit}"; then
               diff_error="Authoritative PR base commit is unavailable"
             elif ! git -C candidate cat-file -e "${HEAD_SHA}^{commit}"; then
               diff_error="Authoritative PR head commit is unavailable"
@@ -265,6 +273,7 @@ jobs:
           if [[ -n "$diff_error" ]]; then
             exit_code=2
           else
+            export BASE_SHA
             mapfile -d '' changed_files < "$changed_files_path"
             python issuer/scripts/regression_auditor_check.py \
               --root candidate \
