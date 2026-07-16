@@ -1428,6 +1428,23 @@ def validate_runner_evidence(
         return None, [f"[RUNNER_EVIDENCE:{code or 'REJECTED'}]"]
     if text(validation.get("code")) != "VALID":
         return None, [f"[RUNNER_EVIDENCE:{text(validation.get('code')) or 'INVALID_SUCCESS'}]"]
+    if staged:
+        harness = object_at(evidence, "harness")
+        manifest = harness.get("files")
+        if not isinstance(manifest, list) or not manifest:
+            return None, ["[RUNNER_EVIDENCE:HARNESS_INDEX_MISMATCH]"]
+        for item in manifest:
+            if not isinstance(item, dict):
+                return None, ["[RUNNER_EVIDENCE:HARNESS_INDEX_MISMATCH]"]
+            path = text(item.get("path"))
+            expected_sha256 = text(item.get("sha256")).lower()
+            indexed = git_index_bytes(path, root=root)
+            if (
+                not path
+                or indexed is None
+                or hashlib.sha256(indexed).hexdigest() != expected_sha256
+            ):
+                return None, ["[RUNNER_EVIDENCE:HARNESS_INDEX_MISMATCH]"]
     if not callable(validator):
         phases = [object_at(evidence, phase) for phase in ("preFix", "postFix")]
         structured_reports = [object_at(phase, "pytestReport") for phase in phases]
@@ -1899,6 +1916,39 @@ def receipt_work_classification(
     return text(receipt.get("workClassification")), None
 
 
+def receipt_historical_behavior_digest(
+    root: Path,
+    path: str,
+    work_classification_path: str,
+    declared_files: list[str],
+    *,
+    staged: bool,
+) -> tuple[str, str | None]:
+    receipt, error = read_json(root, path, staged=staged)
+    if error:
+        return "", error
+    assert receipt is not None
+    if text(receipt.get("mode")) != "issue-close":
+        return "", None
+    if text(receipt.get("workClassification")) != normalize(work_classification_path):
+        return "", None
+    historical = receipt.get("historicalBehavior")
+    if not isinstance(historical, dict):
+        return "", None
+    historical_files = sorted(
+        normalize(item) for item in string_list(historical.get("files"))
+    )
+    if historical_files != sorted(declared_files):
+        return "", None
+    post_commit_sha = text(historical.get("postCommitSha")).lower()
+    if not post_commit_sha:
+        return "", None
+    try:
+        return git_files_digest(root, declared_files, ref=post_commit_sha), None
+    except RuntimeError as exc:
+        return "", f"{path}: historicalBehavior digest를 계산할 수 없습니다: {exc}"
+
+
 def needs_commit_gate(
     files: list[str],
     force: bool,
@@ -1973,6 +2023,20 @@ def check(
                 if staged
                 else git_files_digest(root, declared_files)
             )
+            for receipt in receipts:
+                historical_digest, historical_error = receipt_historical_behavior_digest(
+                    root,
+                    receipt,
+                    classification_path,
+                    declared_files,
+                    staged=staged,
+                )
+                if historical_error:
+                    binding_errors.append(historical_error)
+                    break
+                if historical_digest:
+                    declared_digest = historical_digest
+                    break
             classification_bindings[classification_path] = (
                 declared_files,
                 declared_digest,
