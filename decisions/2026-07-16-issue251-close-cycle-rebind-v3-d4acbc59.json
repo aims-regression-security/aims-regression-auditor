@@ -1,0 +1,34 @@
+{
+  "schema": "aims.regression_auditor_decision.v1",
+  "verdict": "PASS",
+  "repository": "aim2nasa/aims",
+  "candidateCommitSha": "d4acbc598950f9007f9792b225707673b7ef01fd",
+  "candidateTreeSha": "2d3c4e8131cdf916c5ccbb77650ee2e4bb8ccbee",
+  "pullRequestBaseSha": "a69fb22897d04e485961b1427987730ce34b87e4",
+  "subjectReceipt": "docs/regression-audits/2026-07-16_issue251-close-cycle-rebind.json",
+  "subjectReceiptSha256": "56a59a906304032fa564281756a9c6452b6c5fff058e7cc5597ec4aecf49786e",
+  "auditorIdentity": "regression-auditor-agent:issue251-close-cycle-independent",
+  "auditorSessionId": "issue251-close-cycle-rebind-20260716-v3",
+  "implementationIdentity": "github-actor-id:26228531",
+  "decisionReviewerIdentity": "github-app-id:4291228",
+  "issuedAt": 1784181775,
+  "expiresAt": 1784182675,
+  "reviewedFiles": [
+    "scripts/regression_auditor_check.py",
+    "scripts/tests/test_regression_auditor_check.py",
+    "docs/ace-reports/2026-07-16_issue251-existing-fix-verification.md",
+    "docs/ace-reports/2026-07-16_issue251-close-cycle-rebind.md",
+    "docs/e2e-matrices/2026-07-16_issue251-close-cycle-rebind.json",
+    "docs/regression-evidence/2026-07-15_issue-close-subject-classification-binding.json",
+    "docs/regression-work/2026-07-16_issue251-close-cycle-rebind.json",
+    "docs/regression-audits/2026-07-16_issue251-close-cycle-rebind.json"
+  ],
+  "evidence": [
+    "Candidate d4acbc598950f9007f9792b225707673b7ef01fd and tree 2d3c4e8131cdf916c5ccbb77650ee2e4bb8ccbee are bound to #251 only.",
+    "The corrected work classification declares the close-cycle ACE report and its staged digest; the change is metadata-only.",
+    "The subject digest is canonical SHA-256 of the subject receipt with auditorReceipt excluded, matching the external issuer contract.",
+    "The candidate does not modify gate code, gate rules, or trust policy.",
+    "The original fail-first evidence failed at afc651a, and the same scoped issue-close regression harness now passes.",
+    "The current GitHub authorization binds issue #251 to cycle issue-created-4884383064 with liveOnlyStatus none."
+  ]
+}
