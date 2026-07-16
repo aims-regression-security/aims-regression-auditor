@@ -152,23 +152,23 @@ jobs:
           fi
           HISTORICAL_SHA="$(
             python - <<'PY'
-import json
-import os
-from pathlib import Path
+          import json
+          import os
+          from pathlib import Path
 
-raw = os.environ["SUBJECT_RECEIPT"].replace("\\", "/")
-path = Path(raw)
-if path.is_absolute() or ".." in path.parts:
-    raise SystemExit("subject_receipt must be repository-relative")
-subject_path = Path("candidate") / path
-try:
-    subject = json.loads(subject_path.read_text(encoding="utf-8"))
-except FileNotFoundError:
-    raise SystemExit("subject_receipt was not found in candidate checkout")
-historical = subject.get("historicalBehavior")
-if isinstance(historical, dict):
-    print(historical.get("postCommitSha", ""))
-PY
+          raw = os.environ["SUBJECT_RECEIPT"].replace("\\", "/")
+          path = Path(raw)
+          if path.is_absolute() or ".." in path.parts:
+              raise SystemExit("subject_receipt must be repository-relative")
+          subject_path = Path("candidate") / path
+          try:
+              subject = json.loads(subject_path.read_text(encoding="utf-8"))
+          except FileNotFoundError:
+              raise SystemExit("subject_receipt was not found in candidate checkout")
+          historical = subject.get("historicalBehavior")
+          if isinstance(historical, dict):
+              print(historical.get("postCommitSha", ""))
+          PY
           )"
           if [[ -n "$HISTORICAL_SHA" ]]; then
             if [[ ! "$HISTORICAL_SHA" =~ ^[0-9a-f]{40}$ ]]; then
