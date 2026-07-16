@@ -1,0 +1,30 @@
+{
+  "schema": "aims.regression_work_classification_decision.v1",
+  "verdict": "PASS",
+  "repository": "aim2nasa/aims",
+  "workClassification": "docs/regression-work/2026-07-16_task-model-router-feature.json",
+  "workClassificationSha256": "9acbf8e8b39871e602b2504dc6237198cf2e3f070a0a08e89e2c6fd5deb8197b",
+  "workKind": "feature",
+  "stagedBehaviorFiles": [
+    ".agents/skills/task-model-router/agents/openai.yaml",
+    ".agents/skills/task-model-router/scripts/select_model_profile.ps1",
+    ".agents/skills/task-model-router/scripts/tests/test_select_model_profile.py",
+    ".codex/config.toml"
+  ],
+  "stagedBehaviorDigest": "0ae0cff9f8d4dea57ef13fe2b37e01ebcc07fec66345a45886932194d09a4f0d",
+  "auditorIdentity": "regression-auditor-agent:019f691f-3b2e-7b60-8ac3-507c25438e6b",
+  "decisionReviewerIdentity": "github-app-id:4291228",
+  "reviewedFiles": [
+    ".agents/skills/task-model-router/agents/openai.yaml",
+    ".agents/skills/task-model-router/scripts/select_model_profile.ps1",
+    ".agents/skills/task-model-router/scripts/tests/test_select_model_profile.py",
+    ".codex/config.toml",
+    "docs/regression-work/2026-07-16_task-model-router-feature.json"
+  ],
+  "evidence": [
+    "Gini independent review identified TOML escaping and generated-profile path-containment risks; the selector now escapes TOML strings and normalizes catalog-derived filename components before enforcing output-directory containment.",
+    "The independent Auditor ran py .agents/skills/task-model-router/scripts/tests/test_select_model_profile.py -v: five tests passed, covering all selectable fixture combinations, invalid model/reasoning/tier rejection, a single-model catalog array, TOML parsing with quotes and backslashes, and traversal-shaped catalog values.",
+    "The live selector -List command returned the active catalog with seven selectable models and each advertised reasoning and service-tier combination.",
+    "The feature adds a project default and catalog-driven role-profile generator; it changes no customer data, service runtime, or live-only behavior, so live dependency is none."
+  ]
+}
