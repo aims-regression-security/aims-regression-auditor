@@ -1,0 +1,34 @@
+{
+  "schema": "aims.regression_auditor_decision.v1",
+  "verdict": "PASS",
+  "repository": "aim2nasa/aims",
+  "candidateCommitSha": "414f866b79868c5348587518c78032a6e0f6f05d",
+  "candidateTreeSha": "fa7669d1bc6ce773dbb441fa3fd5357c9fc290e2",
+  "pullRequestBaseSha": "a69fb22897d04e485961b1427987730ce34b87e4",
+  "subjectReceipt": "docs/regression-audits/2026-07-16_issue251-close-cycle-rebind.json",
+  "subjectReceiptSha256": "56a59a906304032fa564281756a9c6452b6c5fff058e7cc5597ec4aecf49786e",
+  "auditorIdentity": "regression-auditor-agent:issue251-close-cycle-independent",
+  "auditorSessionId": "issue251-close-cycle-rebind-20260716-v5",
+  "implementationIdentity": "github-actor-id:26228531",
+  "decisionReviewerIdentity": "github-app-id:4291228",
+  "issuedAt": 1784182104,
+  "expiresAt": 1784183004,
+  "reviewedFiles": [
+    "scripts/regression_auditor_check.py",
+    "scripts/tests/test_regression_auditor_check.py",
+    "docs/ace-reports/2026-07-16_issue251-existing-fix-verification.md",
+    "docs/ace-reports/2026-07-16_issue251-close-cycle-rebind.md",
+    "docs/e2e-matrices/2026-07-16_issue251-close-cycle-rebind.json",
+    "docs/regression-evidence/2026-07-15_issue-close-subject-classification-binding.json",
+    "docs/regression-work/2026-07-16_issue251-close-cycle-rebind.json",
+    "docs/regression-audits/2026-07-16_issue251-close-cycle-rebind.json"
+  ],
+  "evidence": [
+    "Candidate 414f866b79868c5348587518c78032a6e0f6f05d and tree fa7669d1bc6ce773dbb441fa3fd5357c9fc290e2 are bound to #251 only.",
+    "The docs work classification has a protected classification decision and a non-empty ACE-report manifest accepted by the normal commit gate.",
+    "The subject digest is canonical SHA-256 with auditorReceipt excluded, matching the external issuer contract.",
+    "The candidate does not modify gate code, gate rules, or trust policy.",
+    "The original fail-first evidence failed at afc651a, and the scoped issue-close regression harness passes after the fix.",
+    "The current GitHub authorization binds issue #251 to cycle issue-created-4884383064 with liveOnlyStatus none."
+  ]
+}
