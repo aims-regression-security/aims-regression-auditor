@@ -1,0 +1,41 @@
+{
+  "schema": "aims.regression_work_classification_decision.v1",
+  "verdict": "PASS",
+  "repository": "aim2nasa/aims",
+  "workClassification": "docs/regression-work/2026-07-17_tier0-administrative-issue-close.json",
+  "workClassificationSha256": "b3e7810606524d3f86cd97688e185043308624a254e8afe76359418551054b4b",
+  "workKind": "feature",
+  "stagedBehaviorFiles": [
+    "AGENTS.md",
+    "scripts/gate_policy_check.py",
+    "scripts/tests/test_tier0_issue_close.py",
+    "scripts/tier0_issue_close.py"
+  ],
+  "stagedBehaviorDigest": "0049d14a6a81bc37bc4df50c3bbe39491580979627bde63acdaf3a1331c06ad8",
+  "auditorIdentity": "regression-auditor-agent:tier0-admin-close-independent",
+  "decisionReviewerIdentity": "github-app-id:4291228",
+  "reviewedFiles": [
+    "AGENTS.md",
+    "docs/ace-reports/2026-07-17_tier0-administrative-issue-close.md",
+    "docs/e2e-matrices/2026-07-17_tier0-administrative-issue-close.json",
+    "docs/plans/2026-07-17_tier0-administrative-issue-close.md",
+    "docs/quality-gates/2026-07-17_tier0-administrative-issue-close.json",
+    "docs/regression-work/2026-07-17_tier0-administrative-issue-close.json",
+    "docs/requirements/gate-firewall-risk-quality-gate-implementation-report-2026-07-16.md",
+    "docs/requirements/regression-auditor-agent.md",
+    "docs/requirements/requirements-log.md",
+    "scripts/gate_policy_check.py",
+    "scripts/tests/test_tier0_issue_close.py",
+    "scripts/tier0_issue_close.py"
+  ],
+  "evidence": [
+    "Tier 0은 OPEN outdated/duplicate 대상과 서로 다른 OPEN 대체 이슈에만 허용된다.",
+    "고위험 label, 해결 완료 주장, 닫힌 대체 이슈는 fail-closed로 차단된다.",
+    "Markdown guard, 한글 비해결 선언, not planned 종료, 종료 후 재조회가 강제된다.",
+    "py -m pytest scripts/tests/test_tier0_issue_close.py scripts/tests/test_gate_policy_check.py -q -p no:cacheprovider -> 13 passed.",
+    "py -m pytest scripts/tests/test_regression_auditor_check.py -q -p no:cacheprovider -> 52 passed.",
+    "gate policy, E2E matrix, work gate가 PASS했다.",
+    "staged behavior digest 0049d14a6a81bc37bc4df50c3bbe39491580979627bde63acdaf3a1331c06ad8이 독립 재계산과 일치한다.",
+    "scripts/regression_auditor_check.py와 release-pass 구현 경로는 변경되지 않았다."
+  ]
+}
