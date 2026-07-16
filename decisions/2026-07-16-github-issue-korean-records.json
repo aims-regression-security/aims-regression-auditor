@@ -1,0 +1,28 @@
+{
+  "schema": "aims.regression_work_classification_decision.v1",
+  "verdict": "PASS",
+  "issuedAt": 1784204217,
+  "repository": "aim2nasa/aims",
+  "workClassification": "docs/regression-work/2026-07-16_github-issue-korean-records.json",
+  "workClassificationSha256": "fd5248e7471e6c531dea3bb06e3c262ae460b2075b51e47e596571a818236ac4",
+  "workKind": "docs",
+  "stagedBehaviorFiles": [
+    "AGENTS.md"
+  ],
+  "stagedBehaviorDigest": "3a9a5085ef66af5381a82965fa323c0661848a1729d3055a0af2d09c126c5c70",
+  "auditorIdentity": "regression-auditor-agent:github-issue-korean-records",
+  "decisionReviewerIdentity": "github-app-id:4291228",
+  "reviewedFiles": [
+    "AGENTS.md",
+    "docs/plans/2026-07-16_github-issue-korean-records.md",
+    "docs/quality-gates/2026-07-16_github-issue-korean-records.json",
+    "docs/regression-work/2026-07-16_github-issue-korean-records.json",
+    "docs/requirements/requirements-log.md"
+  ],
+  "evidence": [
+    "The change is limited to GitHub record-language operating documentation and traceability artifacts.",
+    "The #265 close authorization comment was rewritten in Korean after GitHub Markdown guard validation.",
+    "Technical traceability identifiers remain unchanged by rule: commands, paths, run IDs, commit SHAs, issue and PR numbers, status codes, and original error tokens.",
+    "No product behavior files or executable gate scripts are changed."
+  ]
+}
