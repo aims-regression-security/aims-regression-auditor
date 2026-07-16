@@ -141,13 +141,42 @@ jobs:
         run: |
           test "$(git -C candidate rev-parse HEAD)" = "$CANDIDATE_REF"
 
-      - name: Fetch protected PR base for full-delta binding
+      - name: Fetch protected PR base and historical close ref
         env:
           BASE_SHA: ${{ steps.decision-review.outputs.candidate_base_sha }}
+          SUBJECT_RECEIPT: ${{ inputs.subject_receipt }}
         run: |
           if [[ -n "$BASE_SHA" ]]; then
-            git -C candidate fetch --no-tags --depth=1 origin "$BASE_SHA"
+            git -C candidate fetch --no-tags origin "$BASE_SHA"
             git -C candidate cat-file -e "${BASE_SHA}^{commit}"
+          fi
+          HISTORICAL_SHA="$(
+            python - <<'PY'
+import json
+import os
+from pathlib import Path
+
+raw = os.environ["SUBJECT_RECEIPT"].replace("\\", "/")
+path = Path(raw)
+if path.is_absolute() or ".." in path.parts:
+    raise SystemExit("subject_receipt must be repository-relative")
+subject_path = Path("candidate") / path
+try:
+    subject = json.loads(subject_path.read_text(encoding="utf-8"))
+except FileNotFoundError:
+    raise SystemExit("subject_receipt was not found in candidate checkout")
+historical = subject.get("historicalBehavior")
+if isinstance(historical, dict):
+    print(historical.get("postCommitSha", ""))
+PY
+          )"
+          if [[ -n "$HISTORICAL_SHA" ]]; then
+            if [[ ! "$HISTORICAL_SHA" =~ ^[0-9a-f]{40}$ ]]; then
+              echo "historicalBehavior.postCommitSha must be an exact lowercase commit SHA" >&2
+              exit 2
+            fi
+            git -C candidate fetch --no-tags origin "$HISTORICAL_SHA"
+            git -C candidate cat-file -e "${HISTORICAL_SHA}^{commit}"
           fi
 
       - name: Setup Python
