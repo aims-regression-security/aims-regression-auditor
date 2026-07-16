@@ -1,0 +1,41 @@
+{
+  "schema": "aims.regression_auditor_decision.v1",
+  "verdict": "PASS",
+  "issuedAt": 1784214544,
+  "expiresAt": 1784215444,
+  "repository": "aim2nasa/aims",
+  "subjectReceipt": "docs/regression-audits/2026-07-16_issue242-outdated-close.json",
+  "subjectReceiptSha256": "2e26bab573a15a8e9ade0647dae64218e945102dd81a19779c4cb2a1641e7392",
+  "candidateCommitSha": "f7f8459dfda758307c49431754ea0d3d7927d789",
+  "candidateTreeSha": "359c07b98c3bc233fc93b40f87b12710c381e7a9",
+  "pullRequestBaseSha": "ca2942c3ea6442720bc27274832504d1cbbdb1cc",
+  "auditorIdentity": "regression-auditor-agent:ocr-legacy-close-independent",
+  "auditorSessionId": "019f6a3e-issue242-outdated-close-f7f8459d",
+  "implementationIdentity": "github-actor-id:26228531",
+  "decisionReviewerIdentity": "github-app-id:4291228",
+  "reviewedFiles": [
+    "docs/plans/2026-07-16_ocr-legacy-issue-supersession-close.md",
+    "docs/ace-reports/2026-07-16_ocr-legacy-issues-superseded-close.md",
+    "docs/e2e-matrices/2026-07-16_ocr-legacy-issues-superseded-close.json",
+    "docs/requirements/requirements-log.md",
+    "docs/regression-work/2026-07-16_issue241-outdated-close.json",
+    "docs/regression-audits/2026-07-16_issue241-outdated-close.json",
+    "docs/regression-audits/auditor-receipts/2026-07-16_issue241-outdated-close-auditor.json",
+    "docs/regression-work/2026-07-16_issue242-outdated-close.json",
+    "docs/regression-audits/2026-07-16_issue242-outdated-close.json",
+    "docs/regression-evidence/2026-07-16_ocr-legacy-issue-close-cycle.json",
+    "scripts/regression_auditor_check.py",
+    "scripts/regression_evidence_runner.py",
+    "scripts/tests/test_regression_auditor_check.py"
+  ],
+  "evidence": [
+    "#242 target, 별도 work classification과 별도 receipt 경로가 결속되어 단일 이슈·단일 receipt 원칙을 준수한다.",
+    "최신 reopen cycle issue-reopened-27998529487이 GitHub event와 일치한다.",
+    "#242는 해결 완료가 아닌 outdated/superseded 및 not planned 종료이며 현재 회귀를 추적하는 #293은 OPEN이다.",
+    "liveOnlyStatus=none은 제품 PASS가 아닌 추적 이관 종료에 한정되어 타당하다.",
+    "shared frozen evidence는 accepted=true, code=VALID이며 Git index SHA가 subject와 일치한다.",
+    "historical commit ca2942c3ea6442720bc27274832504d1cbbdb1cc은 origin/main ancestor이고 behavior digest d3916f247f7131e86b2ecfd43e62cf5f00778a21839529fd8434be7e94784297이 일치한다.",
+    "fast-finish preflight, work gate와 cached diff check가 PASS했고 제품·gate behavior 변경은 없다.",
+    "candidate base에 포함된 #241 signed receipt는 별도 독립 감사 산출물이며 #242 receipt를 대체하지 않는다."
+  ]
+}
