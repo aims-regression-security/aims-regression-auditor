@@ -1,0 +1,35 @@
+{
+  "schema": "aims.regression_work_classification_decision.v1",
+  "verdict": "PASS",
+  "repository": "aim2nasa/aims",
+  "workClassification": "docs/regression-work/2026-07-16_gate-firewall-risk-tier.json",
+  "workClassificationSha256": "dd74d96dff7cd88f63c7dca64e4bf7ffccdeb06539e52953d12eb23b01fabea7",
+  "workKind": "feature",
+  "stagedBehaviorFiles": [
+    ".husky/pre-commit",
+    "scripts/gate_policy_check.py",
+    "scripts/regression_auditor_check.py",
+    "scripts/tests/test_gate_policy_check.py",
+    "scripts/tests/test_regression_auditor_check.py"
+  ],
+  "stagedBehaviorDigest": "3eaeb2a3fced05b08ec29071952235c51bc31d68ef85b96e32f64cd620150c54",
+  "auditorIdentity": "policy-gate-local-harness",
+  "decisionReviewerIdentity": "github-app-id:4291228",
+  "reviewedFiles": [
+    "docs/regression-work/2026-07-16_gate-firewall-risk-tier.json",
+    ".husky/pre-commit",
+    "scripts/gate_policy_check.py",
+    "scripts/regression_auditor_check.py",
+    "scripts/tests/test_gate_policy_check.py",
+    "scripts/tests/test_regression_auditor_check.py"
+  ],
+  "evidence": [
+    "Gate-only Tier 3 risk manifest was reviewed.",
+    "Policy harness blocks mixed product and gate candidates.",
+    "Policy harness keeps docs-only Tier 0 fast path.",
+    "Regression Auditor workKind tests were updated to include the new risk manifest fixture and still reach protectedDecision validation.",
+    "Local evidence: py -m pytest scripts/tests/test_gate_policy_check.py -q -> 8 passed.",
+    "Local evidence: py -m pytest scripts/tests/test_regression_auditor_check.py -q -p no:cacheprovider -k ordinary_work_classification or exempt_work_kind_requires_protected_classification_decision -> PASS.",
+    "Local evidence: py -m py_compile scripts/gate_policy_check.py scripts/regression_auditor_check.py -> PASS."
+  ]
+}
