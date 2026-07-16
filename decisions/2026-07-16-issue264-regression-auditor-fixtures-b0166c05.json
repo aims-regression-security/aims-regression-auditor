@@ -1,0 +1,39 @@
+{
+  "schema": "aims.regression_auditor_decision.v1",
+  "verdict": "PASS",
+  "repository": "aim2nasa/aims",
+  "candidateCommitSha": "b0166c0545e19f27a042f043318c9c3ccca579f0",
+  "candidateTreeSha": "d1e8e50afe9839dc27121e1910b506ec9a47cfbb",
+  "pullRequestBaseSha": "39c7bba240bc7952f625f0824abcfc4288323532",
+  "subjectReceipt": "docs/regression-audits/2026-07-16_issue264-regression-auditor-fixtures.json",
+  "subjectReceiptSha256": "5250780d3749c1b4d5c2856a141bd9055447535780728cdd8b2571fbe4c4981a",
+  "auditorIdentity": "regression-auditor-agent:issue264-independent",
+  "auditorSessionId": "019f6a3e-issue264-regression-fixtures-b0166c05",
+  "implementationIdentity": "github-actor-id:26228531",
+  "decisionReviewerIdentity": "github-app-id:4291228",
+  "issuedAt": 1784196107,
+  "expiresAt": 1784197007,
+  "reviewedFiles": [
+    "scripts/regression_auditor_check.py",
+    "scripts/tests/test_regression_auditor_check.py",
+    "docs/ace-reports/2026-07-16_issue264-regression-auditor-fixtures.md",
+    "docs/e2e-matrices/2026-07-16_issue264-regression-auditor-fixtures.json",
+    "docs/plans/2026-07-16_issue264-regression-auditor-fixtures.md",
+    "docs/quality-gates/2026-07-16_issue264-regression-auditor-fixtures.json",
+    "docs/regression-audits/2026-07-16_issue264-regression-auditor-fixtures.json",
+    "docs/regression-evidence/2026-07-16_issue264-regression-auditor-fixtures.json",
+    "docs/regression-evidence/fixtures/test_issue264_staged_harness_binding.py",
+    "docs/regression-work/2026-07-16_issue264-regression-auditor-fixtures.json",
+    "docs/requirements/requirements-log.md"
+  ],
+  "evidence": [
+    "Candidate b0166c0545e19f27a042f043318c9c3ccca579f0 and tree d1e8e50afe9839dc27121e1910b506ec9a47cfbb are fixed for #264.",
+    "Subject receipt hash 5250780d3749c1b4d5c2856a141bd9055447535780728cdd8b2571fbe4c4981a matches the candidate commit without the signed receipt envelope.",
+    "Structured runner evidence docs/regression-evidence/2026-07-16_issue264-regression-auditor-fixtures.json returned accepted=true and code=VALID.",
+    "Fail-first evidence shows the old gate accepted a worktree-only harness closure and the fixed gate rejects a staged harness index mismatch.",
+    "Local verification passed: Regression Auditor fixture suite 51 PASS, gate policy suite 8 PASS, staged Gate Change Firewall PASS, work gate PASS, E2E matrix PASS, fast-finish preflight PASS.",
+    "The candidate is Tier 3 gate-only: changed behavior files are scripts/regression_auditor_check.py and scripts/tests/test_regression_auditor_check.py; product paths are empty.",
+    "Independent Gini and Regression Auditor reviews approved protected receipt issuance.",
+    "liveOnlyStatus is none because #264 is a deterministic local Regression Auditor fixture and Git-index binding contract."
+  ]
+}
