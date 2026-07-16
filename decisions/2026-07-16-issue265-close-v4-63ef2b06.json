@@ -1,0 +1,36 @@
+{
+  "schema": "aims.regression_auditor_decision.v1",
+  "verdict": "PASS",
+  "issuedAt": 1784202789,
+  "expiresAt": 1784203689,
+  "repository": "aim2nasa/aims",
+  "subjectReceipt": "docs/regression-audits/2026-07-16_issue265-close.json",
+  "subjectReceiptSha256": "e1464efefe30d8c858cb2f094957c05670dd8def76f33f06dd634138bf975bf7",
+  "candidateCommitSha": "63ef2b06c9f9865aa152af7d4b38d4324cca3b11",
+  "candidateTreeSha": "4f4a15d90e678aed0462f6f9c88cdfd32d7aa890",
+  "pullRequestBaseSha": "19331c3f27e65e7c572b40265239ec9e2fa999d0",
+  "auditorIdentity": "regression-auditor-agent:issue265-close-independent",
+  "auditorSessionId": "019f6a3e-issue265-close-v4-63ef2b06",
+  "implementationIdentity": "github-actor-id:26228531",
+  "decisionReviewerIdentity": "github-app-id:4291228",
+  "reviewedFiles": [
+    "scripts/regression_auditor_check.py",
+    "scripts/tests/test_regression_auditor_check.py",
+    "docs/ace-reports/2026-07-16_issue265-commit-mode-historical-close-binding.md",
+    "docs/e2e-matrices/2026-07-16_issue265-commit-mode-historical-close-binding.json",
+    "docs/quality-gates/2026-07-16_issue265-commit-mode-historical-close-binding.json",
+    "docs/requirements/requirements-log.md",
+    "docs/regression-audits/2026-07-16_issue265-close.json",
+    "docs/regression-audits/auditor-receipts/2026-07-16_issue265-close-auditor-v3.json",
+    "docs/regression-evidence/2026-07-16_issue265-close.json",
+    "docs/regression-work/2026-07-16_issue265-close.json"
+  ],
+  "evidence": [
+    "Candidate 63ef2b06c9f9865aa152af7d4b38d4324cca3b11 and tree 4f4a15d90e678aed0462f6f9c88cdfd32d7aa890 are fixed for #265 issue-close receipt v4.",
+    "Subject receipt canonical hash e1464efefe30d8c858cb2f094957c05670dd8def76f33f06dd634138bf975bf7 matches the v4 close candidate without the signed receipt envelope.",
+    "The v4 subject includes githubAcceptedState for latest issue cycle issue-reopened-28067128583 and points at docs/regression-audits/auditor-receipts/2026-07-16_issue265-close-auditor-v4.json.",
+    "Historical behavior binds main commit 90865f9af9580a5b2239d237bfdfaaf1cf4cd4f1 and digest d3916f247f7131e86b2ecfd43e62cf5f00778a21839529fd8434be7e94784297.",
+    "Structured close runner evidence docs/regression-evidence/2026-07-16_issue265-close.json returned accepted=true and code=VALID.",
+    "fast-finish preflight PASS for the issue-close v4 subject before protected issuer submission."
+  ]
+}
