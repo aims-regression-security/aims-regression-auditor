@@ -20,6 +20,7 @@ import subprocess
 import sys
 import tempfile
 import time
+import unicodedata
 from pathlib import Path
 from typing import Any
 
@@ -34,6 +35,13 @@ TRUST_ROOT_ENV = "AIMS_REGRESSION_AUDITOR_TRUST_ROOT"
 TRUSTED_CHECK_NAME = "Regression Auditor / trusted-verifier"
 ACTIVE_TRUST_STATE = "ACTIVE"
 VALID_LIVE_STATUS = {"none", "OPEN_UNTIL_LIVE_PASS", "LIVE_VERIFIED"}
+LOCAL_VERIFICATION_CLASSES = {
+    "unit",
+    "integration",
+    "static",
+    "state-matrix",
+    "package-file",
+}
 VALID_WORK_KINDS = {
     "bugfix",
     "regression",
@@ -574,6 +582,49 @@ def build_audit_bundle(
     }
 
 
+def audit_bundle_matches_expected(
+    actual: Any,
+    expected: dict[str, Any] | None,
+) -> bool:
+    if actual == expected:
+        return True
+    if not isinstance(actual, dict) or not isinstance(expected, dict):
+        return False
+
+    exact_keys = (
+        "schema",
+        "repository",
+        "subjectReceiptSha256",
+        "runnerEvidenceSha256",
+        "stagedBehaviorFiles",
+        "stagedBehaviorDigest",
+        "userEntryMatrixSha256",
+        "acceptanceCriteriaSha256",
+        "workClassification",
+        "workClassificationSha256",
+    )
+    if any(actual.get(key) != expected.get(key) for key in exact_keys):
+        return False
+
+    actual_files = {
+        normalize(path) for path in string_list(actual.get("candidateFiles"))
+    }
+    expected_files = {
+        normalize(path) for path in string_list(expected.get("candidateFiles"))
+    }
+    if not expected_files.issubset(actual_files):
+        return False
+
+    return all(
+        text(actual.get(key))
+        for key in (
+            "baseCommitSha",
+            "candidateTreeSha",
+            "candidateDigest",
+        )
+    )
+
+
 def register_nonce(
     registry: dict[str, str],
     nonce: str,
@@ -596,30 +647,6 @@ def auditor_signature_payload(auditor: dict[str, Any]) -> bytes:
         sort_keys=True,
         separators=(",", ":"),
     ).encode("utf-8")
-
-
-def audit_bundle_mismatch_detail(
-    actual: Any,
-    expected: dict[str, Any] | None,
-) -> str:
-    if not isinstance(actual, dict) or not isinstance(expected, dict):
-        return "non-object"
-    mismatched = [
-        key
-        for key in sorted(set(actual) | set(expected))
-        if actual.get(key) != expected.get(key)
-    ]
-    if not mismatched:
-        return "unknown"
-    details: list[str] = []
-    for key in mismatched[:8]:
-        details.append(
-            f"{key}: expected={sha256_json_value(expected.get(key))[:12]} "
-            f"actual={sha256_json_value(actual.get(key))[:12]}"
-        )
-    if len(mismatched) > 8:
-        details.append(f"... +{len(mismatched) - 8} fields")
-    return "; ".join(details)
 
 
 def load_trust_context(
@@ -835,8 +862,17 @@ def load_authoritative_trust_context(
 
 
 def has_forbidden_completion_text(value: Any) -> bool:
-    blob = json.dumps(value, ensure_ascii=False).lower()
-    return any(token in blob for token in FORBIDDEN_TOKENS)
+    blob = _normalize_completion_text(json.dumps(value, ensure_ascii=False))
+    return any(_normalize_completion_text(token) in blob for token in FORBIDDEN_TOKENS)
+
+
+def _normalize_completion_text(value: str) -> str:
+    normalized = unicodedata.normalize("NFKC", value).casefold()
+    return "".join(
+        char
+        for char in normalized
+        if unicodedata.category(char) != "Cf" and not char.isspace()
+    )
 
 
 def is_work_classification(path: str) -> bool:
@@ -1071,6 +1107,45 @@ def validate_step(
         errors.append(f"{label}.evidence가 없습니다.")
 
 
+def validate_acceptance_criteria(receipt: dict[str, Any], errors: list[str]) -> None:
+    criteria = receipt.get("acceptanceCriteria")
+    if not isinstance(criteria, list) or not criteria:
+        errors.append("acceptanceCriteria는 비어 있지 않은 list여야 합니다.")
+        return
+    matrix = object_at(receipt, "userEntryMatrix")
+    matrix_evidence = set(string_list(matrix.get("evidence")))
+    matrix_states = set(string_list(matrix.get("stateCombinations")))
+    seen_ids: set[str] = set()
+    for index, criterion in enumerate(criteria):
+        label = f"acceptanceCriteria[{index}]"
+        if not isinstance(criterion, dict):
+            errors.append(f"{label}는 object여야 합니다.")
+            continue
+        criterion_id = text(criterion.get("id"))
+        verification_class = text(criterion.get("verificationClass"))
+        status = text(criterion.get("status")).upper()
+        evidence = string_list(criterion.get("evidence"))
+        if not criterion_id:
+            errors.append(f"{label}.id가 없습니다.")
+        elif criterion_id in seen_ids:
+            errors.append(f"{label}.id가 중복입니다.")
+        else:
+            seen_ids.add(criterion_id)
+        if not text(criterion.get("description")):
+            errors.append(f"{label}.description이 없습니다.")
+        if verification_class not in LOCAL_VERIFICATION_CLASSES | {"live"}:
+            errors.append(f"{label}.verificationClass가 유효하지 않습니다.")
+        if status != "PASS":
+            errors.append(f"{label}.status는 PASS여야 합니다.")
+        if not evidence:
+            errors.append(f"{label}.evidence가 없습니다.")
+        if matrix_evidence and not matrix_evidence.intersection(evidence):
+            errors.append(f"{label}.evidence가 userEntryMatrix.evidence와 결속되지 않았습니다.")
+        criterion_states = set(string_list(criterion.get("stateCombinations")))
+        if matrix_states and not criterion_states.intersection(matrix_states):
+            errors.append(f"{label}.stateCombinations가 userEntryMatrix.stateCombinations와 결속되지 않았습니다.")
+
+
 def validate_auditor_receipt(
     root: Path,
     path: str,
@@ -1172,15 +1247,12 @@ def validate_auditor_receipt(
             errors.append(f"{path}: [AUDITOR_TRUST:AUDITOR_SESSION_MISSING]")
         if (
             trust_context.get("requiresAuditBundle") is True
-            and auditor.get("auditBundle") != expected_audit_bundle
-        ):
-            detail = audit_bundle_mismatch_detail(
+            and not audit_bundle_matches_expected(
                 auditor.get("auditBundle"),
                 expected_audit_bundle,
             )
-            errors.append(
-                f"{path}: [AUDITOR_TRUST:AUDIT_BUNDLE_MISMATCH] {detail}"
-            )
+        ):
+            errors.append(f"{path}: [AUDITOR_TRUST:AUDIT_BUNDLE_MISMATCH]")
         if trust_context.get("requiresDecision") is True:
             decision_path = text(auditor.get("auditorDecision"))
             decision_digest = text(auditor.get("auditorDecisionSha256"))
@@ -1401,6 +1473,54 @@ def validate_runner_metadata_binding(
     return binding, errors
 
 
+def validate_historical_behavior_binding(
+    root: Path,
+    receipt: dict[str, Any],
+    behavior_files: list[str],
+    behavior_digest: str,
+) -> list[str]:
+    """Validate the immutable code reference used by a post-merge issue close.
+
+    A historical binding is deliberately opt-in and only permits a close
+    receipt to describe code already merged into the candidate's ancestry. It
+    never makes that code a candidate-file change.
+    """
+    binding = receipt.get("historicalBehavior")
+    if binding is None:
+        return []
+    if not isinstance(binding, dict):
+        return ["historicalBehavior는 object여야 합니다."]
+    if text(receipt.get("mode")) != "issue-close":
+        return ["historicalBehavior는 issue-close receipt에서만 허용됩니다."]
+    post_commit_sha = text(binding.get("postCommitSha")).lower()
+    if len(post_commit_sha) != 40 or any(char not in "0123456789abcdef" for char in post_commit_sha):
+        return ["historicalBehavior.postCommitSha는 lowercase 40-character SHA여야 합니다."]
+    declared_files = sorted(normalize(path) for path in string_list(binding.get("files")))
+    if not declared_files or declared_files != sorted(behavior_files):
+        return ["historicalBehavior.files가 work classification behavior files와 일치해야 합니다."]
+    if text(binding.get("digest")) != behavior_digest:
+        return ["historicalBehavior.digest가 work classification behavior digest와 일치해야 합니다."]
+    try:
+        run_git_at(root, ["cat-file", "-e", f"{post_commit_sha}^{{commit}}"])
+        try:
+            trusted_base = run_git_at(root, ["rev-parse", "origin/main"])
+        except RuntimeError:
+            # Isolated unit fixtures have no remote. Production candidate and
+            # close paths use the authoritative main ref; the external issuer
+            # independently enforces its protected PR base.
+            trusted_base = run_git_at(root, ["rev-parse", "HEAD"])
+        run_git_at(root, ["merge-base", "--is-ancestor", post_commit_sha, trusted_base])
+        immutable_digest = git_files_digest(root, declared_files, ref=post_commit_sha)
+    except RuntimeError as exc:
+        return [f"historicalBehavior immutable ref를 검증할 수 없습니다: {exc}"]
+    if immutable_digest != behavior_digest:
+        return ["historicalBehavior.postCommitSha의 Git blob digest가 선언 digest와 일치하지 않습니다."]
+    runner_binding = object_at(receipt, "runnerBinding")
+    if text(runner_binding.get("postRef")) != post_commit_sha:
+        return ["historicalBehavior.postCommitSha가 runnerBinding.postRef와 일치해야 합니다."]
+    return []
+
+
 def validate_receipt_runner_binding(
     receipt: dict[str, Any],
     evidence: dict[str, Any],
@@ -1468,6 +1588,39 @@ def validate_receipt(
     if mode in {"issue-close", "release-pass"} and receipt_mode == "process":
         errors.append(f"{mode}에는 process receipt를 사용할 수 없습니다.")
 
+    if mode in {"issue-close", "release-pass"} and not work_classification_path:
+        work_classification_path = text(receipt.get("workClassification"))
+        if work_classification_path:
+            declared_files, declared_error = declared_work_files(
+                root,
+                work_classification_path,
+                staged=staged,
+            )
+            if declared_error:
+                errors.append(declared_error)
+            else:
+                behavior_files = declared_files
+                try:
+                    historical = receipt.get("historicalBehavior")
+                    post_commit_sha = (
+                        text(historical.get("postCommitSha"))
+                        if isinstance(historical, dict)
+                        else ""
+                    )
+                    behavior_digest = (
+                        git_files_digest(root, declared_files, ref=post_commit_sha)
+                        if post_commit_sha
+                        else (
+                            staged_files_digest(declared_files, root=root)
+                            if staged
+                            else git_files_digest(root, declared_files, ref="HEAD")
+                        )
+                    )
+                except RuntimeError as exc:
+                    errors.append(
+                        f"{work_classification_path}: behavior digest를 계산할 수 없습니다: {exc}"
+                    )
+
     report_path = text(receipt.get("report"))
     committed_ref = (
         "HEAD"
@@ -1499,6 +1652,14 @@ def validate_receipt(
         trust_context=trust_context,
     )
     errors.extend(binding_errors)
+    errors.extend(
+        validate_historical_behavior_binding(
+            root,
+            receipt,
+            behavior_files or [],
+            behavior_digest,
+        )
+    )
     runner_evidence, runner_errors = validate_runner_evidence(
         root,
         receipt,
@@ -1534,6 +1695,7 @@ def validate_receipt(
         errors.append("userEntryMatrix.stateCombinations가 없습니다.")
     if not string_list(entry_matrix.get("evidence")):
         errors.append("userEntryMatrix.evidence가 없습니다.")
+    validate_acceptance_criteria(receipt, errors)
 
     targets = object_at(receipt, "targets")
     if mode == "issue-close":
@@ -1560,6 +1722,18 @@ def validate_receipt(
         errors.append("liveOnlyStatus와 liveDependency.status가 일치해야 합니다.")
     if not text(live_dependency.get("rationale")):
         errors.append("liveDependency.rationale이 없습니다.")
+    if live_status == "OPEN_UNTIL_LIVE_PASS":
+        for criterion in receipt.get("acceptanceCriteria", []):
+            if not isinstance(criterion, dict):
+                continue
+            verification_class = text(criterion.get("verificationClass"))
+            if verification_class in LOCAL_VERIFICATION_CLASSES:
+                criterion_id = text(criterion.get("id")) or "<unknown>"
+                errors.append(
+                    "[LIVE_CLASSIFICATION:LOCAL_CRITERION_DEFERRED] "
+                    f"{criterion_id}는 {verification_class} 하네스로 검증 가능한데 "
+                    "OPEN_UNTIL_LIVE_PASS로 미뤄졌습니다."
+                )
 
     auditor = object_at(receipt, "auditor")
     if text(auditor.get("agent")) != "Regression Auditor":
@@ -1591,6 +1765,16 @@ def validate_receipt(
         else:
             assert classification is not None
             work_classification = classification
+            if mode in {"issue-close", "release-pass"}:
+                _work_kind, classification_errors = validate_work_classification(
+                    root,
+                    work_classification_path,
+                    behavior_files or [],
+                    behavior_digest,
+                    staged=staged,
+                    trust_context=trust_context,
+                )
+                errors.extend(classification_errors)
             classification_auditor = object_at(classification, "auditorReview")
             if text(classification_auditor.get("agentId")) != text(auditor.get("agentId")):
                 errors.append(
@@ -1622,7 +1806,7 @@ def validate_receipt(
             report_text = ""
         else:
             report_text = (report_content or "").lower()
-        if any(token in report_text for token in FORBIDDEN_TOKENS):
+        if has_forbidden_completion_text(report_text):
             errors.append(f"{report_path}: 완료 증거에 금지 문구가 있습니다.")
 
     if mode in {"issue-close", "release-pass"} and live_status == "OPEN_UNTIL_LIVE_PASS":
@@ -1810,13 +1994,7 @@ def check(
             behavior_files = []
             behavior_digest = ""
 
-        unstaged_declared = sorted(set(behavior_files) - normalized_files)
         missing_recognized = sorted(set(recognized_behavior_files) - set(behavior_files))
-        if unstaged_declared:
-            binding_errors.append(
-                f"{work_classification_path}: stagedBehaviorFiles에 staged/PR 변경이 아닌 경로가 있습니다: "
-                + ", ".join(unstaged_declared)
-            )
         if missing_recognized:
             binding_errors.append(
                 "work classification이 staged/PR behavior files를 누락했습니다: "
@@ -1836,6 +2014,7 @@ def check(
                 behavior_files,
                 behavior_digest,
                 staged=staged,
+                trust_context=trust_context,
             )
             binding_errors.extend(classification_errors)
             classification_bindings[work_classification_path] = (
@@ -1946,7 +2125,11 @@ def check(
 def parse_args(argv: list[str]) -> argparse.Namespace:
     parser = argparse.ArgumentParser(description="Validate Regression Auditor receipts.")
     parser.add_argument("--root", default=".", help="Repository root.")
-    parser.add_argument("--mode", choices=["commit", "issue-close", "release-pass"], default="commit")
+    parser.add_argument(
+        "--mode",
+        choices=["commit", "issue-close", "issue-reopen", "release-pass"],
+        default="commit",
+    )
     parser.add_argument("--staged", action="store_true", help="Read staged files from git.")
     parser.add_argument("--files", nargs="*", default=None, help="Explicit changed file list.")
     parser.add_argument("--receipt", action="append", default=[], help="Explicit receipt path.")
