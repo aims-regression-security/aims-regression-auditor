@@ -1,0 +1,34 @@
+{
+  "schema": "aims.regression_auditor_decision.v1",
+  "verdict": "PASS",
+  "repository": "aim2nasa/aims",
+  "candidateCommitSha": "8b8fcda1c4b77e6a259aaef173eb12e7ca65d34c",
+  "candidateTreeSha": "6f90731b05d341963e4a48cf07fa4ff0a998767e",
+  "pullRequestBaseSha": "4451d18f88d8e99580eb872af42b0ec56658b622",
+  "subjectReceipt": "docs/regression-audits/2026-07-16_issue264-close.json",
+  "subjectReceiptSha256": "e3dfddfae389782c7aba46ba7a4b18c979528bd53abdefeac8f0a84b1933df46",
+  "auditorIdentity": "regression-auditor-agent:issue264-close-independent",
+  "auditorSessionId": "019f6a3e-issue264-close-8b8fcda1",
+  "implementationIdentity": "github-actor-id:26228531",
+  "decisionReviewerIdentity": "github-app-id:4291228",
+  "issuedAt": 1784196710,
+  "expiresAt": 1784197610,
+  "reviewedFiles": [
+    "scripts/regression_auditor_check.py",
+    "scripts/tests/test_regression_auditor_check.py",
+    "docs/ace-reports/2026-07-16_issue264-regression-auditor-fixtures.md",
+    "docs/e2e-matrices/2026-07-16_issue264-regression-auditor-fixtures.json",
+    "docs/regression-audits/2026-07-16_issue264-close.json",
+    "docs/regression-evidence/2026-07-16_issue264-close.json",
+    "docs/regression-evidence/fixtures/test_issue264_staged_harness_binding.py",
+    "docs/regression-work/2026-07-16_issue264-close.json"
+  ],
+  "evidence": [
+    "Candidate 8b8fcda1c4b77e6a259aaef173eb12e7ca65d34c and tree 6f90731b05d341963e4a48cf07fa4ff0a998767e are fixed for #264 issue-close.",
+    "Subject receipt hash e3dfddfae389782c7aba46ba7a4b18c979528bd53abdefeac8f0a84b1933df46 matches the close candidate without the signed receipt envelope.",
+    "Historical behavior binds merged commit 4451d18f88d8e99580eb872af42b0ec56658b622 and digest 565bb1d8b7dcde5283005b62b485bf95ddf9a8fc6717798aad4a0ced810c1d99.",
+    "Structured issue-close runner evidence docs/regression-evidence/2026-07-16_issue264-close.json returned accepted=true and code=VALID.",
+    "fast-finish preflight PASS for the issue-close subject before protected issuer submission.",
+    "liveOnlyStatus is none because #264 has no live-only acceptance criteria after the protected gate repair merged."
+  ]
+}
