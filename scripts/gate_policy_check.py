@@ -58,6 +58,7 @@ GATE_EXACT_PATHS = {
     "scripts/regression_auditor_issue.py",
     "scripts/regression_gate_fast_finish.py",
     "scripts/regression_github_state_gate.py",
+    "scripts/regression_github_state_runtime.py",
     "scripts/regression_github_state_transport.py",
     "scripts/regression_github_state_marker.py",
     "scripts/regression_live_state_publish.py",
