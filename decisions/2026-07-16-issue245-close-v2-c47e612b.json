@@ -1,0 +1,36 @@
+{
+  "schema": "aims.regression_auditor_decision.v1",
+  "verdict": "PASS",
+  "issuedAt": 1784209464,
+  "expiresAt": 1784210364,
+  "repository": "aim2nasa/aims",
+  "subjectReceipt": "docs/regression-audits/2026-07-16_issue245-close.json",
+  "subjectReceiptSha256": "b1b3005e0ce1d561f88e629b88d905e3d8c9febdb7d0fa301dd1c44e49d96a2e",
+  "candidateCommitSha": "7a255f367ca59b95297ea471feb4f052d0cc64ce",
+  "candidateTreeSha": "761182fc398b1c646fc5e4cd8ba9c9c01986502f",
+  "pullRequestBaseSha": "a2c2ff114a504c63ed818a2ac882796afedce763",
+  "auditorIdentity": "regression-auditor-agent:issue245-close-independent",
+  "auditorSessionId": "019f6a3e-issue245-close-v2-c47e612b",
+  "implementationIdentity": "github-actor-id:26228531",
+  "decisionReviewerIdentity": "github-app-id:4291228",
+  "reviewedFiles": [
+    "docs/regression-evidence/fixtures/test_issue245_dotted_contract_dates.py",
+    "docs/regression-evidence/2026-07-16_issue245-dotted-contract-dates.json",
+    "docs/ace-reports/2026-07-16_issue245-dot-date-live-reverify.md",
+    "docs/e2e-matrices/2026-07-16_issue245-dot-date-live-reverify.json",
+    "docs/requirements/requirements-log.md",
+    "docs/regression-audits/2026-07-16_issue245-close.json",
+    "docs/regression-audits/auditor-receipts/2026-07-16_issue245-close-auditor.json",
+    "docs/regression-work/2026-07-16_issue245-close.json",
+    "tools/auto_clicker_v2/contract_batch_core.py"
+  ],
+  "evidence": [
+    "Candidate 7a255f367ca59b95297ea471feb4f052d0cc64ce and tree 761182fc398b1c646fc5e4cd8ba9c9c01986502f are fixed for #245 issue-close receipt v2.",
+    "Subject receipt canonical hash b1b3005e0ce1d561f88e629b88d905e3d8c9febdb7d0fa301dd1c44e49d96a2e matches the #245 close subject without the signed receipt envelope.",
+    "The v2 subject points at docs/regression-audits/auditor-receipts/2026-07-16_issue245-close-auditor-v2.json after the first signed receipt expired before accepted-state publishing.",
+    "Historical behavior binds main commit 7f006b09dbc79d6342368f470ebb042dbf1333ec and digest 33fc21309601494c66a259da56cca6d03a47cff4a7907082f950bd5e7f32266e.",
+    "Structured close runner evidence docs/regression-evidence/2026-07-16_issue245-dotted-contract-dates.json returned accepted=true and code=VALID.",
+    "Installed AutoClicker live evidence shows dotted registry dates reached MetDO DATE-VERIFY without immediate date FATAL; later OCR timeout is separated from #245.",
+    "v2 is a timing-only receipt renewal because the first receipt expired at accepted-state publisher execution."
+  ]
+}
