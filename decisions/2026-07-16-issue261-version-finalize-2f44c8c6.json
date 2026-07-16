@@ -1,0 +1,36 @@
+{
+  "schema": "aims.regression_auditor_decision.v1",
+  "verdict": "PASS",
+  "repository": "aim2nasa/aims",
+  "candidateCommitSha": "2f44c8c6b12a2552a41c5c303953058e66b74718",
+  "candidateTreeSha": "c669cd6deed9b9feabe4e73270529a8221e7b9a1",
+  "pullRequestBaseSha": "104c44dbd529f30f78f14c73cc739443b6b41014",
+  "subjectReceipt": "docs/regression-audits/2026-07-16_issue261-regression-gate-version-finalize.json",
+  "subjectReceiptSha256": "ccff1d9dda74953e79084488a071d3c48661015a32028bdc1c4f6591807890c7",
+  "auditorIdentity": "regression-auditor-agent:issue261-independent",
+  "auditorSessionId": "019f68b1-ebbb-7b22-8fc5-287ba5a34c46-issue261-version-finalize-2f44c8c6",
+  "implementationIdentity": "github-actor-id:26228531",
+  "decisionReviewerIdentity": "github-app-id:4291228",
+  "issuedAt": 1784168707,
+  "expiresAt": 1784169607,
+  "reviewedFiles": [
+    ".husky/pre-commit",
+    "scripts/regression_gate_fast_finish.py",
+    "scripts/tests/test_regression_gate_fast_finish.py",
+    "docs/ace-reports/2026-07-16_issue261-regression-gate-version-finalize.md",
+    "docs/e2e-matrices/2026-07-16_issue261-regression-gate-version-finalize.json",
+    "docs/regression-audits/2026-07-16_issue261-regression-gate-version-finalize.json",
+    "docs/regression-evidence/2026-07-16_issue261-regression-gate-version-finalize.json",
+    "docs/regression-work/2026-07-16_issue261-regression-gate-version-finalize.json"
+  ],
+  "evidence": [
+    "#261 후보 커밋 2f44c8c6b12a2552a41c5c303953058e66b74718과 트리 c669cd6deed9b9feabe4e73270529a8221e7b9a1을 고정했다.",
+    "content-bound fail-first harness가 기존 fast-finish 구현에서 AutoClicker 변경 without staged VERSION을 허용해 1건 실패했고, 동일 하네스가 수정 후 통과했다.",
+    "runner evidence validation은 accepted=true 및 code=VALID를 반환했고 staged Git blob SHA-256 93e8e05b1e20cdfa0788c5843b5eeb735cab5139e64dd914680ff239640aa7e3을 subject receipt에 결속했다.",
+    "독립 staged preflight가 behavior digest bfa056dc23fca6028e93ea3dce4a2b38f107cfbefb929d4c3d6ac3d4e23bfc83와 runner evidence SHA-256을 재현했다.",
+    "독립 실행에서 AutoVersion targeted 테스트 2건과 fast-finish 전체 테스트 10건이 통과했다.",
+    "hook-managed VERSION mapping 5건은 VERSION 누락을 차단하고 matching staged VERSION은 허용하며, backend pre-commit hook은 VERSION이 이미 staged일 때만 second bump를 생략한다.",
+    "work gate, E2E matrix gate, staged preflight, pre-commit shell syntax check가 통과했다.",
+    "live 없이 검증 가능한 로컬 gate 결속 문제이며 liveOnlyStatus는 none이다."
+  ]
+}
