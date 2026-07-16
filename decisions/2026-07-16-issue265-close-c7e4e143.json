@@ -1,0 +1,35 @@
+{
+  "schema": "aims.regression_auditor_decision.v1",
+  "verdict": "PASS",
+  "repository": "aim2nasa/aims",
+  "candidateCommitSha": "c7e4e143f33687a1d8fdefdfd9b4ee46b1bbfa20",
+  "candidateTreeSha": "17c468b54b3670683e7a472ca200edfb7baf8b71",
+  "pullRequestBaseSha": "90865f9af9580a5b2239d237bfdfaaf1cf4cd4f1",
+  "subjectReceipt": "docs/regression-audits/2026-07-16_issue265-close.json",
+  "subjectReceiptSha256": "dbc1eec3e8494d494da2878c0de4e67ff8621eb601ea0d1c891bd9b104372101",
+  "auditorIdentity": "regression-auditor-agent:issue265-close-independent",
+  "auditorSessionId": "019f6a3e-issue265-close-c7e4e143",
+  "implementationIdentity": "github-actor-id:26228531",
+  "decisionReviewerIdentity": "github-app-id:4291228",
+  "issuedAt": 1784199836,
+  "expiresAt": 1784200736,
+  "reviewedFiles": [
+    "scripts/regression_auditor_check.py",
+    "scripts/tests/test_regression_auditor_check.py",
+    "docs/ace-reports/2026-07-16_issue265-commit-mode-historical-close-binding.md",
+    "docs/e2e-matrices/2026-07-16_issue265-commit-mode-historical-close-binding.json",
+    "docs/quality-gates/2026-07-16_issue265-commit-mode-historical-close-binding.json",
+    "docs/requirements/requirements-log.md",
+    "docs/regression-audits/2026-07-16_issue265-close.json",
+    "docs/regression-evidence/2026-07-16_issue265-close.json",
+    "docs/regression-work/2026-07-16_issue265-close.json"
+  ],
+  "evidence": [
+    "Candidate c7e4e143f33687a1d8fdefdfd9b4ee46b1bbfa20 and tree 17c468b54b3670683e7a472ca200edfb7baf8b71 are fixed for #265 issue-close.",
+    "Subject receipt canonical hash dbc1eec3e8494d494da2878c0de4e67ff8621eb601ea0d1c891bd9b104372101 matches the close candidate without the signed receipt envelope.",
+    "Historical behavior binds main commit 90865f9af9580a5b2239d237bfdfaaf1cf4cd4f1 and digest d3916f247f7131e86b2ecfd43e62cf5f00778a21839529fd8434be7e94784297.",
+    "Structured close runner evidence docs/regression-evidence/2026-07-16_issue265-close.json returned accepted=true and code=VALID.",
+    "fast-finish preflight PASS for the issue-close subject before protected issuer submission.",
+    "liveOnlyStatus is none because #265 has no live-only acceptance criteria."
+  ]
+}
