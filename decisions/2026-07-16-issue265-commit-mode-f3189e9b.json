@@ -1,0 +1,35 @@
+{
+  "schema": "aims.regression_auditor_decision.v1",
+  "verdict": "PASS",
+  "repository": "aim2nasa/aims",
+  "candidateCommitSha": "f3189e9b1a7eefc02b6253dec4eabb5a8a4ec7fd",
+  "candidateTreeSha": "50917fb0dbd45c96693673db65b7ed10112ec9f3",
+  "pullRequestBaseSha": "dea4df51f1b21b87a97367da8cdb96d4c5dbee3d",
+  "subjectReceipt": "docs/regression-audits/2026-07-16_issue265-commit-mode-historical-close-binding.json",
+  "subjectReceiptSha256": "ca2b365fa52538c0bd85ae8f92616b4c611847152a12c6725629e2712a8741b7",
+  "auditorIdentity": "regression-auditor-agent:issue265-commit-mode-independent",
+  "auditorSessionId": "019f6a3e-issue265-commit-mode-f3189e9b",
+  "implementationIdentity": "github-actor-id:26228531",
+  "decisionReviewerIdentity": "github-app-id:4291228",
+  "issuedAt": 1784199265,
+  "expiresAt": 1784200165,
+  "reviewedFiles": [
+    "scripts/regression_auditor_check.py",
+    "scripts/tests/test_regression_auditor_check.py",
+    "docs/ace-reports/2026-07-16_issue265-commit-mode-historical-close-binding.md",
+    "docs/e2e-matrices/2026-07-16_issue265-commit-mode-historical-close-binding.json",
+    "docs/quality-gates/2026-07-16_issue265-commit-mode-historical-close-binding.json",
+    "docs/requirements/requirements-log.md",
+    "docs/regression-audits/2026-07-16_issue265-commit-mode-historical-close-binding.json",
+    "docs/regression-evidence/2026-07-16_issue265-commit-mode-historical-close-binding.json",
+    "docs/regression-work/2026-07-16_issue265-commit-mode-historical-close-binding.json"
+  ],
+  "evidence": [
+    "Candidate f3189e9b1a7eefc02b6253dec4eabb5a8a4ec7fd and tree 50917fb0dbd45c96693673db65b7ed10112ec9f3 are fixed for #265 commit-mode historical issue-close binding.",
+    "Subject receipt canonical hash ca2b365fa52538c0bd85ae8f92616b4c611847152a12c6725629e2712a8741b7 matches the candidate without the signed receipt envelope.",
+    "Behavior digest d3916f247f7131e86b2ecfd43e62cf5f00778a21839529fd8434be7e94784297 covers the gate code and regression test changes.",
+    "Structured runner evidence docs/regression-evidence/2026-07-16_issue265-commit-mode-historical-close-binding.json returned accepted=true and code=VALID with pre-fix FAIL and post-fix PASS.",
+    "Work Gate PASS, E2E Matrix PASS, and fast-finish preflight PASS after requirements log and report section repair.",
+    "Local suites passed: regression_auditor_check 52 passed, gate_policy_check 8 passed, issue265/fast-finish scoped suite 13 passed."
+  ]
+}
