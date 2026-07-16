@@ -1,0 +1,33 @@
+{
+  "schema": "aims.regression_auditor_decision.v1",
+  "verdict": "PASS",
+  "repository": "aim2nasa/aims",
+  "candidateCommitSha": "dc4fa12b34e3efb403d5cc1e74c0544cd6d7e0bb",
+  "candidateTreeSha": "bbc2b33a7aa7f707fe18951ad57de6b82cb8f2ad",
+  "pullRequestBaseSha": "a69fb22897d04e485961b1427987730ce34b87e4",
+  "subjectReceipt": "docs/regression-audits/2026-07-16_issue251-close-cycle-rebind.json",
+  "subjectReceiptSha256": "8c351c42175d3305708f97c654dca0bbdcbabbe6e35a24973149cc5f580b896e",
+  "auditorIdentity": "regression-auditor-agent:issue251-close-cycle-independent",
+  "auditorSessionId": "issue251-close-cycle-rebind-20260716",
+  "implementationIdentity": "github-actor-id:26228531",
+  "decisionReviewerIdentity": "github-app-id:4291228",
+  "issuedAt": 1784181251,
+  "expiresAt": 1784182151,
+  "reviewedFiles": [
+    "scripts/regression_auditor_check.py",
+    "scripts/tests/test_regression_auditor_check.py",
+    "docs/ace-reports/2026-07-16_issue251-existing-fix-verification.md",
+    "docs/ace-reports/2026-07-16_issue251-close-cycle-rebind.md",
+    "docs/e2e-matrices/2026-07-16_issue251-close-cycle-rebind.json",
+    "docs/regression-evidence/2026-07-15_issue-close-subject-classification-binding.json",
+    "docs/regression-work/2026-07-16_issue251-close-cycle-rebind.json",
+    "docs/regression-audits/2026-07-16_issue251-close-cycle-rebind.json"
+  ],
+  "evidence": [
+    "Candidate dc4fa12b34e3efb403d5cc1e74c0544cd6d7e0bb and tree bbc2b33a7aa7f707fe18951ad57de6b82cb8f2ad are bound to #251 only.",
+    "The candidate contains closure metadata only; it does not modify gate code, gate rules, or trust policy.",
+    "The original fail-first evidence failed at afc651a, and the same scoped issue-close regression harness now passes.",
+    "The current GitHub authorization binds issue #251 to cycle issue-created-4884383064 with liveOnlyStatus none.",
+    "The independent Auditor identity and session differ from implementation identity, and the App reviewer identity is bound."
+  ]
+}
