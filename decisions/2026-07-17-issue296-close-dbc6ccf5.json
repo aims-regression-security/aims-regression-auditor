@@ -1,0 +1,42 @@
+{
+  "schema": "aims.regression_auditor_decision.v1",
+  "verdict": "PASS",
+  "repository": "aim2nasa/aims",
+  "candidateCommitSha": "dbc6ccf5970cb8b28abef23afa61435bee968f5b",
+  "candidateTreeSha": "e4e26fdeb12b8f5e8c1524cc0f920424339049e6",
+  "pullRequestBaseSha": "b2c7243a1790b2e2903b632317f090c8217b5451",
+  "subjectReceipt": "docs/regression-audits/2026-07-17_issue296-close.json",
+  "subjectReceiptSha256": "ce2817319ae5fb11987d039fe5de22d1b2fee98d8dfcb97a3bd220721e0792c6",
+  "auditorIdentity": "regression-auditor-agent:issue296-close-independent-20260717",
+  "auditorSessionId": "regression-auditor-session:issue296-close-20260717-01",
+  "implementationIdentity": "github-actor-id:26228531",
+  "decisionReviewerIdentity": "github-app-id:4291228",
+  "issuedAt": 1784220529,
+  "expiresAt": 1784221429,
+  "reviewedFiles": [
+    "scripts/gate_policy_check.py",
+    "scripts/regression_github_state_gate.py",
+    "scripts/regression_github_state_runtime.py",
+    "scripts/regression_github_state_transport.py",
+    "scripts/tests/test_regression_github_state_signed_binding.py",
+    "scripts/tests/test_regression_live_gate_red_team.py",
+    "scripts/tests/test_tier0_issue_close.py",
+    "scripts/tier0_issue_close.py",
+    "docs/ace-reports/2026-07-17_issue296-close.md",
+    "docs/e2e-matrices/2026-07-17_tier0-live-gate-exemption.json",
+    "docs/quality-gates/2026-07-17_tier0-live-gate-exemption.json",
+    "docs/requirements/requirements-log.md",
+    "docs/regression-audits/2026-07-17_issue296-close.json",
+    "docs/regression-evidence/2026-07-17_issue296-close.json",
+    "docs/regression-work/2026-07-17_issue296-close.json"
+  ],
+  "evidence": [
+    "Candidate dbc6ccf5970cb8b28abef23afa61435bee968f5b and tree e4e26fdeb12b8f5e8c1524cc0f920424339049e6 are fixed for #296 issue-close.",
+    "Subject canonical SHA-256 ce2817319ae5fb11987d039fe5de22d1b2fee98d8dfcb97a3bd220721e0792c6 matches the envelope-free candidate.",
+    "Implementation commit 15b4d59d489b4a2889118b9f4f866f660e85fcc5 is an ancestor of origin/main and historical behavior digest 64c9af4f44e2b9ec2ceb898961e6dc1d3f1d42f044f3fef885db38b1c5d81a08 matches eight files.",
+    "Structured runner evidence returned accepted=true and code=VALID with pre-fix assertion FAIL and post-fix PASS.",
+    "Issue #241 and #242 are CLOSED/NOT_PLANNED after protected workflow runs 29516412767 and 29516421208 completed SUCCESS.",
+    "Replacement issue #293 remains OPEN and #296 current cycle is issue-created-4903885895.",
+    "Independent Regression Auditor returned PASS with no blocking finding."
+  ]
+}
