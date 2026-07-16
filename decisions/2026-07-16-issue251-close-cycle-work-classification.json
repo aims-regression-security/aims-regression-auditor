@@ -1,0 +1,30 @@
+{
+  "schema": "aims.regression_work_classification_decision.v1",
+  "verdict": "PASS",
+  "repository": "aim2nasa/aims",
+  "workClassification": "docs/regression-work/2026-07-16_issue251-close-cycle-rebind.json",
+  "workClassificationSha256": "8a9d928d1c2bef6e1e214c6b682f50e925c207bb6a0c097f9d4eb3e03a0b1646",
+  "workKind": "docs",
+  "stagedBehaviorFiles": [
+    "docs/ace-reports/2026-07-16_issue251-close-cycle-rebind.md"
+  ],
+  "stagedBehaviorDigest": "8b4402f6f19d5312c1b520cdf544133884eaae7a9a05e59597386781a8d59a7b",
+  "auditorIdentity": "regression-auditor-agent:issue251-close-cycle-independent",
+  "decisionReviewerIdentity": "github-app-id:4291228",
+  "reviewedFiles": [
+    "docs/ace-reports/2026-07-16_issue251-existing-fix-verification.md",
+    "docs/ace-reports/2026-07-16_issue251-close-cycle-rebind.md",
+    "docs/e2e-matrices/2026-07-16_issue251-close-cycle-rebind.json",
+    "docs/regression-evidence/2026-07-15_issue-close-subject-classification-binding.json",
+    "docs/regression-work/2026-07-16_issue251-close-cycle-rebind.json",
+    "scripts/regression_auditor_check.py",
+    "scripts/tests/test_regression_auditor_check.py"
+  ],
+  "evidence": [
+    "The #251 close-cycle candidate has docs workKind and binds its ACE close-cycle report as the sole staged behavior file.",
+    "The classification canonical SHA-256 excludes protectedDecision and matches the protected decision contract.",
+    "The staged behavior digest matches the declared ACE report file.",
+    "Existing #251 evidence shows the original fail-first harness failed at afc651a and the same scoped harness passes after the fix.",
+    "This decision changes neither AIMS gate code nor trust policy and does not invoke an issuer."
+  ]
+}
