@@ -1,0 +1,29 @@
+{
+  "schema": "aims.regression_auditor_decision.v1",
+  "verdict": "PASS",
+  "repository": "aim2nasa/aims",
+  "candidateCommitSha": "2bb0cf55427e724deeca062b34e81ae6ec05462e",
+  "candidateTreeSha": "2aaa2af2f248f8ffc9d22dc802c9dcd30f9584e3",
+  "pullRequestBaseSha": "5800a76d9e01d701e31a609618ee6c35e17db0a1",
+  "subjectReceipt": "docs/regression-audits/2026-07-17_issue296-close.json",
+  "subjectReceiptSha256": "1c1191777f4fb98c851863cd571007ececac51298401048b2836ef0ff3a988e8",
+  "auditorIdentity": "regression-auditor-agent:issue296-close-independent-20260717",
+  "auditorSessionId": "regression-auditor-session:issue296-close-cycle-v2-20260717-01",
+  "implementationIdentity": "github-actor-id:26228531",
+  "decisionReviewerIdentity": "github-app-id:4291228",
+  "issuedAt": 1784221226,
+  "expiresAt": 1784222126,
+  "reviewedFiles": [
+    "docs/regression-audits/2026-07-17_issue296-close.json",
+    "docs/regression-audits/auditor-receipts/2026-07-17_issue296-close-auditor.json",
+    "docs/ace-reports/2026-07-17_issue296-close.md"
+  ],
+  "evidence": [
+    "Candidate 2bb0cf55427e724deeca062b34e81ae6ec05462e rebinds only the current issue cycle and v2 receipt path.",
+    "Subject canonical SHA-256 1c1191777f4fb98c851863cd571007ececac51298401048b2836ef0ff3a988e8 matches the envelope-free candidate.",
+    "PR #298 merge auto-closed issue #296 in event 28082064411 and the protected live gate reopened it in event 28082083797.",
+    "The authoritative current cycle is issue-reopened-28082083797 and issue #296 is OPEN/REOPENED.",
+    "All historical behavior, runner evidence, live verification, and independent auditor identity remain unchanged.",
+    "Independent Regression Auditor approved the v2 cycle rebind with a unique session identity."
+  ]
+}
