@@ -1,0 +1,38 @@
+{
+  "schema": "aims.regression_auditor_decision.v1",
+  "verdict": "PASS",
+  "issuedAt": 1784213822,
+  "expiresAt": 1784214722,
+  "repository": "aim2nasa/aims",
+  "subjectReceipt": "docs/regression-audits/2026-07-16_issue241-outdated-close.json",
+  "subjectReceiptSha256": "70332f0963453e58809e020fb1538792c7a297d5fc7b9bf3a3cc8e074685bc20",
+  "candidateCommitSha": "cbf152beb60a03277f499975fa491643cd0c6d1e",
+  "candidateTreeSha": "17ee4c58290286b1f58194ee5dfa4c172b3f0349",
+  "pullRequestBaseSha": "ca2942c3ea6442720bc27274832504d1cbbdb1cc",
+  "auditorIdentity": "regression-auditor-agent:ocr-legacy-close-independent",
+  "auditorSessionId": "019f6a3e-issue241-outdated-close-v2-cbf152be",
+  "implementationIdentity": "github-actor-id:26228531",
+  "decisionReviewerIdentity": "github-app-id:4291228",
+  "reviewedFiles": [
+    "docs/plans/2026-07-16_ocr-legacy-issue-supersession-close.md",
+    "docs/ace-reports/2026-07-16_ocr-legacy-issues-superseded-close.md",
+    "docs/e2e-matrices/2026-07-16_ocr-legacy-issues-superseded-close.json",
+    "docs/requirements/requirements-log.md",
+    "docs/regression-work/2026-07-16_issue241-outdated-close.json",
+    "docs/regression-audits/2026-07-16_issue241-outdated-close.json",
+    "docs/regression-evidence/2026-07-16_ocr-legacy-issue-close-cycle.json",
+    "scripts/regression_auditor_check.py",
+    "scripts/regression_evidence_runner.py",
+    "scripts/tests/test_regression_auditor_check.py"
+  ],
+  "evidence": [
+    "동결된 pre/post runner evidence를 독립 검증했으며 accepted=true, code=VALID이다.",
+    "Git index evidence SHA-256과 subject 선언값이 일치하고 fast-finish preflight가 PASS했다.",
+    "historical commit ca2942c3ea6442720bc27274832504d1cbbdb1cc은 origin/main의 ancestor이며 behavior digest d3916f247f7131e86b2ecfd43e62cf5f00778a21839529fd8434be7e94784297이 일치한다.",
+    "#241 최신 cycle은 issue-reopened-27886373708이며 subject와 일치한다.",
+    "#241은 대체됨/outdated 상태로 #293 이관 안내가 기록됐고 현재 회귀를 추적하는 #293은 OPEN이다.",
+    "matrix는 실제 종료 완료가 아니라 보호 종료 권한 결속 가능성만 PASS로 판정한다.",
+    "제품 코드와 gate behavior 변경이 없어 Gate Change Firewall 범위를 준수한다.",
+    "v2는 1차 decision의 1800초 TTL이 issuer 허용 최대 900초를 초과한 계약 오류만 정정한다."
+  ]
+}
