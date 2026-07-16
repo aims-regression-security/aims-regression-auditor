@@ -56,6 +56,11 @@ def subject_and_classification(historic: str, digest: str) -> tuple[dict, dict]:
         "workKind": "bugfix",
         "stagedBehaviorFiles": ["scripts/sample.py"],
         "stagedBehaviorDigest": digest,
+        "targetBinding": {
+            "issues": ["#265"],
+            "releaseTags": [],
+            "requirements": ["self-test"],
+        },
         "auditorReview": {
             "agent": "Regression Auditor",
             "agentId": "regression-auditor-agent:self-test",
@@ -88,11 +93,21 @@ def subject_and_classification(historic: str, digest: str) -> tuple[dict, dict]:
 def test_historical_close_helper_accepts_only_immutable_matching_blobs(root: Path) -> None:
     historic, digest = init_candidate(root)
     subject, classification = subject_and_classification(historic, digest)
+    write_json(root / "docs/regression-work/sample.json", classification)
 
     assert issue.historical_close_behavior(root, subject, classification, historic) == (
         ["scripts/sample.py"],
         digest,
     )
+    _work_kind, errors = gate.validate_work_classification(
+        root,
+        "docs/regression-work/sample.json",
+        ["scripts/sample.py"],
+        digest,
+        staged=False,
+        trust_context={},
+    )
+    assert errors == []
 
     tampered = json.loads(json.dumps(subject))
     tampered["historicalBehavior"]["digest"] = "0" * 64

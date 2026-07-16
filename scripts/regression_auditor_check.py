@@ -876,6 +876,7 @@ def validate_work_classification(
     behavior_digest: str,
     *,
     staged: bool,
+    trust_context: dict[str, Any] | None = None,
 ) -> tuple[str, list[str]]:
     classification, error = read_json(root, path, staged=staged)
     if error:
@@ -921,8 +922,121 @@ def validate_work_classification(
         errors.append("auditorReview.evidence가 없습니다.")
     if has_forbidden_completion_text(classification):
         errors.append("pending/예정/TODO/미실행/나중에 확인 문구가 있습니다.")
+    if work_kind in VALID_WORK_KINDS - FAIL_FIRST_WORK_KINDS:
+        errors.extend(
+            validate_protected_work_classification_decision(
+                classification,
+                path,
+                work_kind,
+                behavior_files,
+                behavior_digest,
+                trust_context=trust_context,
+            )
+        )
 
     return work_kind, [f"{path}: {item}" for item in errors]
+
+
+def validate_protected_work_classification_decision(
+    classification: dict[str, Any],
+    path: str,
+    work_kind: str,
+    behavior_files: list[str],
+    behavior_digest: str,
+    *,
+    trust_context: dict[str, Any] | None,
+) -> list[str]:
+    protected = object_at(classification, "protectedDecision")
+    decision_path = normalize(text(protected.get("path")))
+    decision_sha256 = text(protected.get("sha256")).lower()
+    if (
+        not decision_path.startswith(AUDITOR_DECISION_PREFIX)
+        or not decision_path.endswith(".json")
+        or len(decision_sha256) != 64
+        or any(character not in "0123456789abcdef" for character in decision_sha256)
+    ):
+        return ["protectedDecision.path/sha256가 필요합니다."]
+    if trust_context is None:
+        return ["protectedDecision 검증에는 authoritative trust context가 필요합니다."]
+    policy_error = text(trust_context.get("policyError"))
+    if policy_error:
+        return [f"[AUDITOR_TRUST:POLICY_INVALID] {policy_error}"]
+    trust_root = text(trust_context.get("trustRoot"))
+    if not trust_root:
+        return [f"{TRUST_ROOT_ENV}: protected external trust root가 설정되지 않았습니다."]
+
+    decision_file = (Path(trust_root) / decision_path).resolve()
+    trust_root_path = Path(trust_root).resolve()
+    try:
+        if trust_root_path not in decision_file.parents:
+            return ["protectedDecision이 trust root 밖을 가리킵니다."]
+        decision_bytes = decision_file.read_bytes()
+    except OSError as exc:
+        return [f"protectedDecision을 읽을 수 없습니다: {exc}"]
+    actual_sha256 = hashlib.sha256(decision_bytes).hexdigest()
+    if actual_sha256 != decision_sha256:
+        return ["protectedDecision sha256이 일치하지 않습니다."]
+    try:
+        decision = json.loads(decision_bytes.decode("utf-8"))
+    except (UnicodeDecodeError, json.JSONDecodeError) as exc:
+        return [f"protectedDecision JSON이 유효하지 않습니다: {exc}"]
+
+    errors: list[str] = []
+    classification_subject = {
+        key: value for key, value in classification.items() if key != "protectedDecision"
+    }
+    expected_reviewer = ""
+    integration_id = trust_context.get("requiredCheckIntegrationId")
+    if type(integration_id) is int and integration_id > 0:
+        expected_reviewer = f"github-app-id:{integration_id}"
+    classification_auditor = object_at(classification, "auditorReview")
+    reviewed_files = {
+        normalize(item) for item in string_list(decision.get("reviewedFiles"))
+    }
+    checks = [
+        (
+            decision.get("schema") == "aims.regression_work_classification_decision.v1",
+            "protectedDecision.schema가 유효하지 않습니다.",
+        ),
+        (text(decision.get("verdict")).upper() == "PASS", "protectedDecision.verdict는 PASS여야 합니다."),
+        (text(decision.get("repository")) == "aim2nasa/aims", "protectedDecision.repository가 일치하지 않습니다."),
+        (text(decision.get("workClassification")) == normalize(path), "protectedDecision.workClassification이 일치하지 않습니다."),
+        (
+            text(decision.get("workClassificationSha256")) == sha256_json(classification_subject),
+            "protectedDecision.workClassificationSha256이 일치하지 않습니다.",
+        ),
+        (text(decision.get("workKind")) == work_kind, "protectedDecision.workKind가 일치하지 않습니다."),
+        (
+            sorted(normalize(item) for item in string_list(decision.get("stagedBehaviorFiles")))
+            == sorted(behavior_files),
+            "protectedDecision.stagedBehaviorFiles가 일치하지 않습니다.",
+        ),
+        (
+            text(decision.get("stagedBehaviorDigest")) == behavior_digest,
+            "protectedDecision.stagedBehaviorDigest가 일치하지 않습니다.",
+        ),
+        (
+            text(decision.get("auditorIdentity")) == text(classification_auditor.get("agentId")),
+            "protectedDecision.auditorIdentity가 classification auditor와 일치하지 않습니다.",
+        ),
+        (
+            expected_reviewer
+            and text(decision.get("decisionReviewerIdentity")) == expected_reviewer,
+            "protectedDecision.decisionReviewerIdentity가 trust policy App과 일치하지 않습니다.",
+        ),
+        (
+            normalize(path) in reviewed_files
+            and set(behavior_files).issubset(reviewed_files),
+            "protectedDecision.reviewedFiles가 classification과 behavior files를 포함해야 합니다.",
+        ),
+        (bool(string_list(decision.get("evidence"))), "protectedDecision.evidence가 없습니다."),
+    ]
+    for ok, message in checks:
+        if not ok:
+            errors.append(message)
+    if has_forbidden_completion_text(decision):
+        errors.append("protectedDecision에 pending/예정/TODO/미실행/나중에 확인 문구가 있습니다.")
+    return errors
 
 
 def validate_step(
