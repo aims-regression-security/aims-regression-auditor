@@ -1,0 +1,39 @@
+{
+  "schema": "aims.regression_work_classification_decision.v1",
+  "verdict": "PASS",
+  "repository": "aim2nasa/aims",
+  "workClassification": "docs/regression-work/2026-07-17_success-cleanup-regression-candidates.json",
+  "workClassificationSha256": "dbebced3546560a9f53f4e4a243ff9cc716d3b5a3570ee51169ffad9e54a4d2c",
+  "workKind": "verification-gate",
+  "stagedBehaviorFiles": [
+    "scripts/finish_branch.py",
+    "scripts/test_finish_branch.py",
+    "scripts/tests/test_finish_branch_success_cleanup_regression.py"
+  ],
+  "stagedBehaviorDigest": "21d95cfd4c4b92d30a4b01838f6a714206f57930dc4b164711dfbb4ab2b5b371",
+  "implementationIdentity": "github-actor-id:26228531",
+  "auditorIdentity": "regression-auditor-agent:success-cleanup-regression-candidates",
+  "auditorSessionId": "codex-session-20260717-success-cleanup-regression-candidates",
+  "decisionReviewerIdentity": "github-app-id:4291228",
+  "reviewedFiles": [
+    "docs/ace-reports/2026-07-17_success-cleanup-regression-candidates.md",
+    "docs/e2e-matrices/2026-07-17_success-cleanup-regression-candidates.json",
+    "docs/plans/2026-07-17_success-cleanup-regression-candidates.md",
+    "docs/quality-gates/2026-07-17_success-cleanup-regression-candidates.json",
+    "docs/regression-audits/2026-07-17_success-cleanup-regression-candidates.json",
+    "docs/regression-evidence/2026-07-17_success-cleanup-regression-candidates.json",
+    "docs/regression-work/2026-07-17_success-cleanup-regression-candidates.json",
+    "docs/requirements/requirements-log.md",
+    "scripts/finish_branch.py",
+    "scripts/test_finish_branch.py",
+    "scripts/tests/test_finish_branch_success_cleanup_regression.py"
+  ],
+  "evidence": [
+    "Old finish_branch.py dry-run omitted remote work branch cleanup; the focused runner evidence records this as fail-first.",
+    "The fixed finish_branch.py dry-run includes local branch deletion and remote branch deletion in the successful finish sequence.",
+    "Related Regression Auditor candidates are selected by candidate parent ancestry against the finished work branch.",
+    "The preserve path remains explicit through --keep-remote-branch and --keep-regression-candidates.",
+    "py -m pytest scripts/test_finish_branch.py scripts/tests/test_finish_branch_success_cleanup_regression.py -q -> 9 passed.",
+    "py scripts/e2e_matrix_check.py --staged -> PASS."
+  ]
+}
