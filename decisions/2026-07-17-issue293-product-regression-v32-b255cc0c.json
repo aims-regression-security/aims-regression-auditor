@@ -1,0 +1,31 @@
+{
+  "schema": "aims.regression_auditor_decision.v1",
+  "verdict": "PASS",
+  "repository": "aim2nasa/aims",
+  "candidateCommitSha": "b255cc0c20aee8ce4725335d82d8c5d5e30a2d5f",
+  "candidateTreeSha": "c9315bb8f596f0b9aa141b60797ed128271aeef3",
+  "pullRequestBaseSha": "e715fa252a39eedd7ebb94b2268fee6d9c79e0f8",
+  "subjectReceipt": "docs/regression-audits/2026-07-17_issue293-ocr-timeout-layering.json",
+  "subjectReceiptSha256": "9d97e04fee41a44562edff95e7a64d120b4c7b5335cab5e986ffbff63385e64e",
+  "auditorIdentity": "regression-auditor-agent:issue293-ocr-timeout-layering-independent-20260717",
+  "auditorSessionId": "regression-auditor-session:issue293-product-regression-v32-20260717",
+  "implementationIdentity": "github-actor-id:26228531",
+  "decisionReviewerIdentity": "github-app-id:4291228",
+  "issuedAt": 1784271204,
+  "expiresAt": 1784272104,
+  "reviewedFiles": [
+    "docs/regression-audits/2026-07-17_issue293-ocr-timeout-layering.json",
+    "docs/regression-audits/2026-07-17_issue293-close.json",
+    "docs/regression-audits/auditor-receipts/2026-07-17_issue293-close-auditor-v5.json",
+    "docs/regression-audits/auditor-receipts/2026-07-17_issue293-ocr-timeout-layering-auditor-v31.json",
+    "docs/ace-reports/2026-07-17_issue293-ocr-timeout-layering.md",
+    "docs/e2e-matrices/2026-07-17_issue293-ocr-timeout-layering.json",
+    "docs/regression-evidence/2026-07-17_issue293-ocr-timeout-layering.json"
+  ],
+  "evidence": [
+    "Candidate b255cc0c20aee8ce4725335d82d8c5d5e30a2d5f refreshes the #293 product evidence receipt as mode=regression so issue-close authority is isolated to the close-state receipt.",
+    "Subject canonical SHA-256 9d97e04fee41a44562edff95e7a64d120b4c7b5335cab5e986ffbff63385e64e matches the candidate subject receipt after excluding auditorReceipt per issuer contract.",
+    "The final close authority remains docs/regression-audits/2026-07-17_issue293-close.json with LIVE_VERIFIED current-cycle accepted-state authorization.",
+    "No product behavior changes are introduced in this receipt refresh PR."
+  ]
+}
