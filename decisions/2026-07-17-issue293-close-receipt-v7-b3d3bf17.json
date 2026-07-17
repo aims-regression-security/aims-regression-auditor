@@ -1,0 +1,27 @@
+{
+  "schema": "aims.regression_auditor_decision.v1",
+  "verdict": "PASS",
+  "repository": "aim2nasa/aims",
+  "candidateCommitSha": "b3d3bf17111c1a57720cdefc39742c7dfa490ca8",
+  "candidateTreeSha": "c3081dd51ff65d02b5452f9dfb75ee61ed9421a4",
+  "pullRequestBaseSha": "e715fa252a39eedd7ebb94b2268fee6d9c79e0f8",
+  "subjectReceipt": "docs/regression-audits/2026-07-17_issue293-close.json",
+  "subjectReceiptSha256": "1220d8311e013354215fd39c03dff8fdac310502d3edfe0ec4fde4fa6d628498",
+  "auditorIdentity": "regression-auditor-agent:issue293-ocr-timeout-layering-independent-20260717",
+  "auditorSessionId": "regression-auditor-session:issue293-close-state-20260717-07",
+  "implementationIdentity": "github-actor-id:26228531",
+  "decisionReviewerIdentity": "github-app-id:4291228",
+  "issuedAt": 1784271449,
+  "expiresAt": 1784272349,
+  "reviewedFiles": [
+    "docs/regression-audits/2026-07-17_issue293-close.json",
+    "docs/regression-audits/2026-07-17_issue293-ocr-timeout-layering.json",
+    "docs/regression-audits/auditor-receipts/2026-07-17_issue293-ocr-timeout-layering-auditor-v32.json"
+  ],
+  "evidence": [
+    "Candidate b3d3bf17111c1a57720cdefc39742c7dfa490ca8 refreshes #293 close receipt v7 without product workClassification so close authority is accepted-state only.",
+    "Subject canonical SHA-256 1220d8311e013354215fd39c03dff8fdac310502d3edfe0ec4fde4fa6d628498 matches the candidate subject receipt after excluding auditorReceipt per issuer contract.",
+    "The current accepted-state cycle remains issue-reopened-28106126978 and liveOnlyStatus is LIVE_VERIFIED.",
+    "Product/live evidence is carried by the separate regression receipt v32 and repository assets."
+  ]
+}
