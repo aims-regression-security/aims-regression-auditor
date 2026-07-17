@@ -1,0 +1,34 @@
+{
+  "schema": "aims.regression_auditor_decision.v1",
+  "verdict": "PASS",
+  "repository": "aim2nasa/aims",
+  "candidateCommitSha": "a21ab902f423923a9b2b23b2d46facae153502f1",
+  "candidateTreeSha": "5a95751d5427741ea3123ac48a0553183ef9c890",
+  "pullRequestBaseSha": "b0658df4b7f120f9505d699de70d2b23aa8df3a4",
+  "subjectReceipt": "docs/regression-audits/2026-07-17_ac-ocr-breakdown-persist.json",
+  "subjectReceiptSha256": "992f4b9e07e4932759c4480487692c49f4a9e2e69807b7dbb0a6d55df61746b2",
+  "auditorIdentity": "regression-auditor-agent:ac-ocr-breakdown-persist-20260717",
+  "auditorSessionId": "root-regression-auditor-20260717",
+  "implementationIdentity": "github-actor-id:26228531",
+  "decisionReviewerIdentity": "github-app-id:4291228",
+  "issuedAt": 1784296073,
+  "expiresAt": 1784296973,
+  "reviewedFiles": [
+    "tools/auto_clicker_v2/VERSION",
+    "tools/auto_clicker_v2/app_state.py",
+    "tools/auto_clicker_v2/tests/test_visible_progress_summary.py",
+    "docs/ace-reports/2026-07-17_ac-ocr-breakdown-persist.md",
+    "docs/e2e-matrices/2026-07-17_ac-ocr-breakdown-persist.json",
+    "docs/quality-gates/2026-07-17_ac-ocr-breakdown-persist.json",
+    "docs/regression-work/2026-07-17_ac-ocr-breakdown-persist.json",
+    "docs/regression-evidence/2026-07-17_ac-ocr-breakdown-persist.json",
+    "docs/regression-audits/2026-07-17_ac-ocr-breakdown-persist.json"
+  ],
+  "evidence": [
+    "Pre-fix isolated root with new regression harness failed as expected for OCR breakdown sequence reset.",
+    "Post-fix staged root passed the same harness.",
+    "Runner evidence SHA-256 36ff97b057055f974f6974803a700707e9190b042104e5600dd0ba9acc7be1c8 is bound to staged behavior digest 99d15408d657f4ba60e1d3c5f032cfbe71f401c7c27c34f490191c5af27b7bee.",
+    "Independent Regression Auditor session /root/regression_auditor returned PASS and reran visible summary and contract batch tests.",
+    "Existing live run replay shows chunk 001 OCR호출11 · 목록3 상세8 and chunk 002 OCR호출12 · 목록5 상세7."
+  ]
+}
