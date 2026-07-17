@@ -1,0 +1,37 @@
+{
+  "schema": "aims.regression_auditor_decision.v1",
+  "verdict": "PASS",
+  "repository": "aim2nasa/aims",
+  "candidateCommitSha": "796625c2c114f141f0acd5879fd3aa68a9368075",
+  "candidateTreeSha": "7597cdad43e27944542a75f4fa638f6c6274aae4",
+  "pullRequestBaseSha": "a77000be0492be78f5bb11c315ba244eb767d0ad",
+  "subjectReceipt": "docs/regression-audits/2026-07-17_ac-metdo-open-issues-live-verification-issue243-close.json",
+  "subjectReceiptSha256": "e772408f697de98c90ea5d043d9980bf5b65901d582dbb39326f1d8db6edc1d5",
+  "auditorIdentity": "regression-auditor-agent:ac-metdo-open-issues-live-20260717",
+  "auditorSessionId": "regression-auditor-session:ac-metdo-open-issues-close-243-20260717-01",
+  "implementationIdentity": "github-actor-id:26228531",
+  "decisionReviewerIdentity": "github-app-id:4291228",
+  "issuedAt": 1784288248,
+  "expiresAt": 1784289148,
+  "reviewedFiles": [
+    "tools/MetContract.sikuli/MetContract.py",
+    "tools/auto_clicker_v2/tests/test_contract_list_cache_reuse.py",
+    "tools/auto_clicker_v2/VERSION",
+    "docs/requirements/ac-metdo-real-use-test-runbook.md",
+    "docs/ace-reports/2026-07-17_ac-metdo-open-issues-live-verification.md",
+    "docs/ace-reports/2026-07-17_issue238-batch-history-cache-reuse.md",
+    "docs/ace-reports/assets/issue238-cache-hit/2026-07-17/live-cache-hit-summary.md",
+    "docs/e2e-matrices/2026-07-17_issue238-batch-history-cache-reuse.json",
+    "docs/quality-gates/2026-07-17_ac-metdo-open-issues-live-verification.json",
+    "docs/regression-work/2026-07-17_ac-metdo-open-issues-live-verification.json",
+    "docs/regression-evidence/2026-07-17_ac-metdo-open-issues-live-verification.json",
+    "docs/regression-audits/2026-07-17_ac-metdo-open-issues-live-verification-issue243-close.json"
+  ],
+  "evidence": [
+    "Candidate 796625c2c114f141f0acd5879fd3aa68a9368075 adds the issue-specific close subject receipt for #243.",
+    "Subject canonical SHA-256 e772408f697de98c90ea5d043d9980bf5b65901d582dbb39326f1d8db6edc1d5 matches docs/regression-audits/2026-07-17_ac-metdo-open-issues-live-verification-issue243-close.json after excluding auditorReceipt per issuer contract.",
+    "The subject binds #243 to current GitHub cycle issue-reopened-27886374540 with liveOnlyStatus LIVE_VERIFIED.",
+    "The shared live and regression evidence was merged in AIMS PR #308 and is referenced by the issue-specific subject receipt.",
+    "The subject isolates accepted-state authorization per issue so the protected publisher can issue a marker for the exact target."
+  ]
+}
