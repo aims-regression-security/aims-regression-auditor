@@ -1,0 +1,40 @@
+{
+  "schema": "aims.regression_auditor_decision.v1",
+  "verdict": "PASS",
+  "repository": "aim2nasa/aims",
+  "candidateCommitSha": "fd80f18f6cad7b93584123537d40b5bc05e0352b",
+  "candidateTreeSha": "27b7e4944255b98b7d49e13e1ffb93c51a044299",
+  "pullRequestBaseSha": "9cb002f15a1436cc8e3a22bc14fe8a5ecb2d85b9",
+  "subjectReceipt": "docs/regression-audits/2026-07-17_issue305-close.json",
+  "subjectReceiptSha256": "49461155101ef44e977eb346f2128d40a999f67bf92c94afca0331ed55f74edb",
+  "auditorIdentity": "regression-auditor-agent:issue305-scope-withdrawn-tier0-independent-20260717",
+  "auditorSessionId": "019f6f00-issue305-close-fd80f18f",
+  "implementationIdentity": "github-actor-id:26228531",
+  "decisionReviewerIdentity": "github-app-id:4291228",
+  "issuedAt": 1784277343,
+  "expiresAt": 1784278243,
+  "reviewedFiles": [
+    "AGENTS.md",
+    "docs/ace-reports/2026-07-17_issue305-scope-withdrawn-tier0-gate.md",
+    "docs/e2e-matrices/2026-07-17_issue305-scope-withdrawn-tier0-gate.json",
+    "docs/plans/2026-07-17_issue305-scope-withdrawn-tier0-gate.md",
+    "docs/quality-gates/2026-07-17_issue305-scope-withdrawn-tier0-gate.json",
+    "docs/regression-audits/2026-07-17_issue305-close.json",
+    "docs/regression-audits/2026-07-17_issue305-scope-withdrawn-tier0-gate.json",
+    "docs/regression-evidence/2026-07-17_issue305-scope-withdrawn-tier0-gate.json",
+    "docs/regression-work/2026-07-17_issue305-scope-withdrawn-tier0-gate.json",
+    "docs/requirements/regression-auditor-agent.md",
+    "docs/requirements/requirements-log.md",
+    "scripts/regression_github_state_transport.py",
+    "scripts/tests/test_regression_github_state_signed_binding.py",
+    "scripts/tests/test_tier0_issue_close.py",
+    "scripts/tier0_issue_close.py"
+  ],
+  "evidence": [
+    "#305 implementation PR #306 is merged into main at 9cb002f15a1436cc8e3a22bc14fe8a5ecb2d85b9.",
+    "The close subject binds issue #305 current cycle issue-created-4909442420 and liveOnlyStatus none.",
+    "Fail-first evidence shows the previous live gate returned OPEN_UNTIL_LIVE_PASS for a valid scope-withdrawn Tier 0 close.",
+    "Post-fix evidence shows the same transport harness accepts the close with liveOnlyStatus=none.",
+    "The close PR intentionally does not use GitHub auto-close keywords; accepted-state publishing will precede the manual issue close."
+  ]
+}
