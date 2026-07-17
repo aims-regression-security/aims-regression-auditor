@@ -1,0 +1,35 @@
+{
+  "schema": "aims.regression_auditor_decision.v1",
+  "verdict": "PASS",
+  "repository": "aim2nasa/aims",
+  "candidateCommitSha": "4303ed120fbf152a12d75b53b4a3a46a85ce9dbb",
+  "candidateTreeSha": "eaa867b41f8f551648460f718508ee9808030cfe",
+  "pullRequestBaseSha": "b0658df4b7f120f9505d699de70d2b23aa8df3a4",
+  "subjectReceipt": "docs/regression-audits/2026-07-17_ac-ocr-breakdown-persist.json",
+  "subjectReceiptSha256": "7561daece451e089af03686336c994d9336334e81d29b07d58981a9ebd0684c9",
+  "auditorIdentity": "regression-auditor-agent:ac-ocr-breakdown-persist-20260717",
+  "auditorSessionId": "root-regression-auditor-20260717",
+  "implementationIdentity": "github-actor-id:26228531",
+  "decisionReviewerIdentity": "github-app-id:4291228",
+  "issuedAt": 1784296602,
+  "expiresAt": 1784297502,
+  "reviewedFiles": [
+    "tools/auto_clicker_v2/VERSION",
+    "tools/auto_clicker_v2/app_state.py",
+    "tools/auto_clicker_v2/tests/test_visible_progress_summary.py",
+    "docs/ace-reports/2026-07-17_ac-ocr-breakdown-persist.md",
+    "docs/e2e-matrices/2026-07-17_ac-ocr-breakdown-persist.json",
+    "docs/quality-gates/2026-07-17_ac-ocr-breakdown-persist.json",
+    "docs/regression-work/2026-07-17_ac-ocr-breakdown-persist.json",
+    "docs/regression-evidence/2026-07-17_ac-ocr-breakdown-persist.json",
+    "docs/regression-audits/2026-07-17_ac-ocr-breakdown-persist.json"
+  ],
+  "evidence": [
+    "Pre-fix isolated root with new regression harness failed as expected for OCR breakdown sequence reset.",
+    "Post-fix staged root passed the same harness.",
+    "Runner evidence SHA-256 36ff97b057055f974f6974803a700707e9190b042104e5600dd0ba9acc7be1c8 is bound to staged behavior digest 99d15408d657f4ba60e1d3c5f032cfbe71f401c7c27c34f490191c5af27b7bee.",
+    "Independent Regression Auditor session regression-auditor-agent:ac-ocr-breakdown-persist-20260717 returned PASS.",
+    "Existing live run replay shows chunk 001 OCR호출11 · 목록3 상세8 and chunk 002 OCR호출12 · 목록5 상세7.",
+    "subjectReceiptSha256 uses the protected issuer rule: canonical JSON digest excluding auditorReceipt."
+  ]
+}
