@@ -1,0 +1,36 @@
+{
+  "schema": "aims.regression_auditor_decision.v1",
+  "verdict": "PASS",
+  "repository": "aim2nasa/aims",
+  "candidateCommitSha": "ee99ee14bd29735fa91dbd403d5a498a3dac1138",
+  "candidateTreeSha": "b28c0e8d97cf64d92125cbe8f5406f5d989f44ce",
+  "pullRequestBaseSha": "c0098831f925037d6841039d3bb81087b0e1f96f",
+  "subjectReceipt": "docs/regression-audits/2026-07-17_success-cleanup-regression-candidates.json",
+  "subjectReceiptSha256": "fb87940133af17a4c9ba9a51860fd2e4a804f6e11735f1e7b5acb605a4ada8a7",
+  "auditorIdentity": "regression-auditor-agent:success-cleanup-regression-candidates",
+  "auditorSessionId": "regression-auditor-session:success-cleanup-regression-candidates-20260717-01",
+  "implementationIdentity": "github-actor-id:26228531",
+  "decisionReviewerIdentity": "github-app-id:4291228",
+  "issuedAt": 1784294180,
+  "expiresAt": 1784295080,
+  "reviewedFiles": [
+    "docs/ace-reports/2026-07-17_success-cleanup-regression-candidates.md",
+    "docs/e2e-matrices/2026-07-17_success-cleanup-regression-candidates.json",
+    "docs/plans/2026-07-17_success-cleanup-regression-candidates.md",
+    "docs/quality-gates/2026-07-17_success-cleanup-regression-candidates.json",
+    "docs/regression-audits/2026-07-17_success-cleanup-regression-candidates.json",
+    "docs/regression-evidence/2026-07-17_success-cleanup-regression-candidates.json",
+    "docs/regression-work/2026-07-17_success-cleanup-regression-candidates.json",
+    "docs/requirements/requirements-log.md",
+    "scripts/finish_branch.py",
+    "scripts/test_finish_branch.py",
+    "scripts/tests/test_finish_branch_success_cleanup_regression.py"
+  ],
+  "evidence": [
+    "Candidate ee99ee14bd29735fa91dbd403d5a498a3dac1138 binds the successful cleanup harness change.",
+    "Subject canonical SHA-256 fb87940133af17a4c9ba9a51860fd2e4a804f6e11735f1e7b5acb605a4ada8a7 matches docs/regression-audits/2026-07-17_success-cleanup-regression-candidates.json after excluding auditorReceipt.",
+    "Fail-first evidence shows old finish_branch.py dry-run omitted remote work branch cleanup.",
+    "Post-fix evidence shows the same harness passes when successful finish includes remote branch cleanup.",
+    "The work classification is protected by decision 2026-07-17-success-cleanup-regression-candidates-v2-dbebced3."
+  ]
+}
