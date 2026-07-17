@@ -1,0 +1,40 @@
+{
+  "schema": "aims.regression_auditor_decision.v1",
+  "verdict": "PASS",
+  "repository": "aim2nasa/aims",
+  "candidateCommitSha": "86db62e5a5b38e460733a70f4766bef6ba1cf30d",
+  "candidateTreeSha": "e4d305f6a8201e12f60e10ed9be1c94c67067149",
+  "pullRequestBaseSha": "92ae3194d077e1b33d53327e45164ee5a5850efb",
+  "subjectReceipt": "docs/regression-audits/2026-07-17_issue305-scope-withdrawn-tier0-gate.json",
+  "subjectReceiptSha256": "3001208dc6c486cff5d73a165b763c9db21f0e241d6f8333738d994edc77b86e",
+  "auditorIdentity": "regression-auditor-agent:issue305-scope-withdrawn-tier0-independent-20260717",
+  "auditorSessionId": "019f6f00-issue305-scope-withdrawn-tier0-86db62e5",
+  "implementationIdentity": "github-actor-id:26228531",
+  "decisionReviewerIdentity": "github-app-id:4291228",
+  "issuedAt": 1784276750,
+  "expiresAt": 1784277650,
+  "reviewedFiles": [
+    "AGENTS.md",
+    "docs/ace-reports/2026-07-17_issue305-scope-withdrawn-tier0-gate.md",
+    "docs/e2e-matrices/2026-07-17_issue305-scope-withdrawn-tier0-gate.json",
+    "docs/plans/2026-07-17_issue305-scope-withdrawn-tier0-gate.md",
+    "docs/quality-gates/2026-07-17_issue305-scope-withdrawn-tier0-gate.json",
+    "docs/regression-audits/2026-07-17_issue305-scope-withdrawn-tier0-gate.json",
+    "docs/regression-evidence/2026-07-17_issue305-scope-withdrawn-tier0-gate.json",
+    "docs/regression-work/2026-07-17_issue305-scope-withdrawn-tier0-gate.json",
+    "docs/requirements/regression-auditor-agent.md",
+    "docs/requirements/requirements-log.md",
+    "scripts/regression_github_state_transport.py",
+    "scripts/tests/test_regression_github_state_signed_binding.py",
+    "scripts/tests/test_tier0_issue_close.py",
+    "scripts/tier0_issue_close.py"
+  ],
+  "evidence": [
+    "#305 candidate 86db62e5a5b38e460733a70f4766bef6ba1cf30d and tree e4d305f6a8201e12f60e10ed9be1c94c67067149 are fixed.",
+    "Fail-first evidence shows the previous live gate returned OPEN_UNTIL_LIVE_PASS for a valid scope-withdrawn Tier 0 close.",
+    "Post-fix evidence shows the same transport harness accepts the close with liveOnlyStatus=none.",
+    "Focused post-fix suite covers scope-withdrawn CLI execution, label re-query, marker cycle binding, replacement injection rejection, forbidden label rejection, stale marker rejection, and missing Korean notice rejection.",
+    "Work gate, E2E matrix gate, gate policy, and fast-finish preflight passed locally.",
+    "The change is gate-only and does not touch AIMS product behavior."
+  ]
+}
