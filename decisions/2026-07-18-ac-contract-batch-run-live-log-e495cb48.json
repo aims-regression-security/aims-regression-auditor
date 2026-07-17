@@ -1,0 +1,41 @@
+{
+  "schema": "aims.regression_work_classification_decision.v1",
+  "verdict": "PASS",
+  "repository": "aim2nasa/aims",
+  "workClassification": "docs/regression-work/2026-07-18_ac-contract-batch-run-live-log.json",
+  "workClassificationSha256": "e495cb48464c8af1c3156504bfcc239c6a6091096a673fdadc16f507c042b851",
+  "workKind": "feature",
+  "stagedBehaviorFiles": [
+    "scripts/ac_metdo_tail_target.py",
+    "scripts/tests/test_ac_metdo_tail_target.py",
+    "tools/auto_clicker_v2/contract_batch_core.py",
+    "tools/auto_clicker_v2/contract_batch_runner.py",
+    "tools/auto_clicker_v2/tests/test_contract_batch_core.py",
+    "tools/auto_clicker_v2/tests/test_contract_batch_runner.py"
+  ],
+  "stagedBehaviorDigest": "eac4e8aa0ebd54aa50864570aa6ddf1858ee0eaf5dad082988eb17351a8a6329",
+  "auditorIdentity": "regression-auditor-agent:ac-contract-batch-run-live-log-local-classification",
+  "decisionReviewerIdentity": "github-app-id:4291228",
+  "reviewedFiles": [
+    "docs/regression-work/2026-07-18_ac-contract-batch-run-live-log.json",
+    "scripts/ac_metdo_tail_target.py",
+    "scripts/tests/test_ac_metdo_tail_target.py",
+    "tools/auto_clicker_v2/contract_batch_core.py",
+    "tools/auto_clicker_v2/contract_batch_runner.py",
+    "tools/auto_clicker_v2/tests/test_contract_batch_core.py",
+    "tools/auto_clicker_v2/tests/test_contract_batch_runner.py",
+    "docs/design-handoff/2026-07-18-ac-contract-batch-run-live-log.md",
+    "docs/e2e-matrices/2026-07-18-ac-contract-batch-run-live-log.json",
+    "docs/plans/2026-07-18-ac-contract-batch-run-live-log.md",
+    "docs/quality-gates/2026-07-18_ac-contract-batch-run-live-log.json",
+    "docs/requirements/ac-metdo-real-use-test-runbook.md",
+    "docs/requirements/requirements-log.md"
+  ],
+  "evidence": [
+    "The work is a feature-class operational logging improvement, not a bugfix, issue close, or release PASS.",
+    "Per-attempt stdout logs remain the source evidence while contract_batch/run_live.log becomes the live tail target.",
+    "The staged behavior digest is bound to the six behavior files listed in this decision.",
+    "Local verification recorded 34 PASS for contract batch core, runner, and tail target resolver tests.",
+    "Additional regression verification recorded 15 PASS for stdout normalization, batch GUI source, and cache reuse tests."
+  ]
+}
