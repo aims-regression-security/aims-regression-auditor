@@ -1,0 +1,33 @@
+{
+  "schema": "aims.regression_auditor_decision.v1",
+  "verdict": "PASS",
+  "repository": "aim2nasa/aims",
+  "candidateCommitSha": "7f43f058ece243f18bbecabcacb3ac61e1db946b",
+  "candidateTreeSha": "0e0ca6a01c67263ab346af0bb5eef7347ac7bdc6",
+  "pullRequestBaseSha": "e715fa252a39eedd7ebb94b2268fee6d9c79e0f8",
+  "subjectReceipt": "docs/regression-audits/2026-07-17_issue293-close.json",
+  "subjectReceiptSha256": "8dbbdaf98e92d336d414da075f376e59b2651ec3c4ffa50462ee0ccfd703d240",
+  "auditorIdentity": "regression-auditor-agent:issue293-ocr-timeout-layering-independent-20260717",
+  "auditorSessionId": "regression-auditor-session:issue293-close-state-20260717-08",
+  "implementationIdentity": "github-actor-id:26228531",
+  "decisionReviewerIdentity": "github-app-id:4291228",
+  "issuedAt": 1784271569,
+  "expiresAt": 1784272469,
+  "reviewedFiles": [
+    "docs/regression-audits/2026-07-17_issue293-close.json",
+    "docs/regression-audits/2026-07-17_issue293-ocr-timeout-layering.json",
+    "docs/regression-audits/auditor-receipts/2026-07-17_issue293-ocr-timeout-layering-auditor-v32.json",
+    "docs/regression-evidence/2026-07-17_issue293-ocr-timeout-layering.json",
+    "docs/ace-reports/2026-07-17_issue293-ocr-timeout-layering.md",
+    "docs/e2e-matrices/2026-07-17_issue293-ocr-timeout-layering.json",
+    "docs/ace-reports/assets/issue293-ocr-timeout/2026-07-17/live-acceptance-redacted.md",
+    "docs/ace-reports/assets/issue293-ocr-timeout/2026-07-17/live-final-ac-status.png",
+    "docs/ace-reports/assets/issue293-ocr-timeout/2026-07-17/live-settings-pdf-none.png"
+  ],
+  "evidence": [
+    "Candidate 7f43f058ece243f18bbecabcacb3ac61e1db946b refreshes #293 close receipt v8 with complete reviewedFiles including regression evidence.",
+    "Subject canonical SHA-256 8dbbdaf98e92d336d414da075f376e59b2651ec3c4ffa50462ee0ccfd703d240 matches the candidate subject receipt after excluding auditorReceipt per issuer contract.",
+    "The current accepted-state cycle remains issue-reopened-28106126978 and liveOnlyStatus is LIVE_VERIFIED.",
+    "Product/live evidence is carried by the separate regression receipt v32 and repository assets."
+  ]
+}
