@@ -1,0 +1,33 @@
+{
+  "schema": "aims.regression_auditor_decision.v1",
+  "verdict": "PASS",
+  "repository": "aim2nasa/aims",
+  "candidateCommitSha": "a643336394455ccbe85f44e3d05610351f68b1ea",
+  "candidateTreeSha": "a5be46a603c16a0fc4e8d52a01e6ca8013fb9104",
+  "pullRequestBaseSha": "31a91d07c9a5ee1bd182530c355504444972b040",
+  "subjectReceipt": "docs/regression-audits/2026-07-17_ac-click-capture-all.json",
+  "subjectReceiptSha256": "60e770a781a4a2017fcdb32ac88df2a1b898fd82237986c0308bb24ce10d7f76",
+  "auditorIdentity": "regression-auditor-agent:regression_decision_auditor",
+  "auditorSessionId": "e651fbbd-67af-4a7f-aaca-badad5dcf249",
+  "implementationIdentity": "github-actor-id:26228531",
+  "decisionReviewerIdentity": "github-app-id:4291228",
+  "issuedAt": 1784299603,
+  "expiresAt": 1784300443,
+  "reviewedFiles": [
+    "docs/regression-evidence/2026-07-17_ac-click-capture-all.json",
+    "docs/regression-work/2026-07-17_ac-click-capture-all.json",
+    "docs/regression-audits/2026-07-17_ac-click-capture-all.json",
+    "tools/MetContract.sikuli/MetContract.py",
+    "tools/auto_clicker_v2/tests/test_window_interference_static.py",
+    "tools/auto_clicker_v2/VERSION"
+  ],
+  "evidence": [
+    "fail-first는 현재 하네스를 origin/main old behavior에 적용해 4개 중 3개 ASSERTION failure를 실제로 잡았습니다.",
+    "post-fix는 같은 하네스와 같은 staged digest로 4개 PASS입니다.",
+    "MetContract 내 Robot mousePress/mouseRelease는 robot_click_with_diagnostic와 robot_drag_with_diagnostics 내부에만 남아 있습니다.",
+    "Sikuli click 직접 호출은 click_diag, click_any_diag, click_existing_diag wrapper 내부로 제한됩니다.",
+    "start, stale cleanup 후, search form ready, contract list after search baseline 화면 캡처가 하네스로 강제됩니다.",
+    "live dependency none 판단은 타당합니다. 이번 gate는 클릭, 드래그, baseline 캡처 호출 경로를 정적으로 강제하는 변경입니다.",
+    "candidate commit a643336394455ccbe85f44e3d05610351f68b1ea와 VERSION 0.3.32는 candidate에 포함되어 최종 자동 bump 위험을 만들지 않습니다."
+  ]
+}
