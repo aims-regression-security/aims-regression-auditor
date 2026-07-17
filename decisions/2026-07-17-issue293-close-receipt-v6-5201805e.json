@@ -1,0 +1,28 @@
+{
+  "schema": "aims.regression_auditor_decision.v1",
+  "verdict": "PASS",
+  "repository": "aim2nasa/aims",
+  "candidateCommitSha": "5201805ee5d86fe246cbeeeec1171354aa0fdea3",
+  "candidateTreeSha": "0df00b2b4559ede1091fdbadf22e5e9f62d658f2",
+  "pullRequestBaseSha": "e715fa252a39eedd7ebb94b2268fee6d9c79e0f8",
+  "subjectReceipt": "docs/regression-audits/2026-07-17_issue293-close.json",
+  "subjectReceiptSha256": "1779228f1312703f576605fda0d0b8d0ea45fa42ba092a64b2eefc9abffc71c9",
+  "auditorIdentity": "regression-auditor-agent:issue293-ocr-timeout-layering-independent-20260717",
+  "auditorSessionId": "regression-auditor-session:issue293-close-state-20260717-06",
+  "implementationIdentity": "github-actor-id:26228531",
+  "decisionReviewerIdentity": "github-app-id:4291228",
+  "issuedAt": 1784271348,
+  "expiresAt": 1784272248,
+  "reviewedFiles": [
+    "docs/regression-audits/2026-07-17_issue293-close.json",
+    "docs/regression-audits/2026-07-17_issue293-ocr-timeout-layering.json",
+    "docs/regression-audits/auditor-receipts/2026-07-17_issue293-ocr-timeout-layering-auditor-v32.json",
+    "docs/ace-reports/assets/issue293-ocr-timeout/2026-07-17/live-acceptance-redacted.md"
+  ],
+  "evidence": [
+    "Candidate 5201805ee5d86fe246cbeeeec1171354aa0fdea3 refreshes the #293 close receipt after product regression receipt v32 so both receipts bind the same final PR base e715fa252a39eedd7ebb94b2268fee6d9c79e0f8.",
+    "Subject canonical SHA-256 1779228f1312703f576605fda0d0b8d0ea45fa42ba092a64b2eefc9abffc71c9 matches the candidate subject receipt after excluding auditorReceipt per issuer contract.",
+    "The current accepted-state cycle remains issue-reopened-28106126978 and liveOnlyStatus is LIVE_VERIFIED.",
+    "Installed AutoClicker v0.3.29 live MetDO evidence remains PASS."
+  ]
+}
