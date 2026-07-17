@@ -1,0 +1,25 @@
+{
+  "schema": "aims.regression_work_classification_decision.v1",
+  "verdict": "PASS",
+  "repository": "aim2nasa/aims",
+  "workClassification": "docs/regression-work/2026-07-18_ac-run-live-stdout-format.json",
+  "workClassificationSha256": "3d4cfbb6ea8a3e9adf5e2a33fdb2943b6906e503d055c36f30992d7d74d2733a",
+  "workKind": "chore",
+  "stagedBehaviorFiles": [
+    "tools/auto_clicker_v2/contract_batch_runner.py",
+    "tools/auto_clicker_v2/tests/test_contract_batch_runner.py"
+  ],
+  "stagedBehaviorDigest": "83276af42a3ec893f007eef6c1eae438d2361f4ff417b4119774182f51977423",
+  "auditorIdentity": "regression-auditor-agent:ac-run-live-stdout-format-local-classification",
+  "decisionReviewerIdentity": "github-app-id:4291228",
+  "reviewedFiles": [
+    "docs/regression-work/2026-07-18_ac-run-live-stdout-format.json",
+    "tools/auto_clicker_v2/contract_batch_runner.py",
+    "tools/auto_clicker_v2/tests/test_contract_batch_runner.py"
+  ],
+  "evidence": [
+    "Risk tier handled as low-risk/Tier 0 override in implementation session, but PR required-check needs protected classification metadata.",
+    "Reviewed behavior files are limited to run_live log presentation and its regression test.",
+    "No issue close or release PASS is claimed by this classification decision."
+  ]
+}
