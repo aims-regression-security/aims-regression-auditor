@@ -1,0 +1,36 @@
+{
+  "schema": "aims.regression_auditor_decision.v1",
+  "verdict": "PASS",
+  "repository": "aim2nasa/aims",
+  "candidateCommitSha": "82012d1bbd03a7b53dc2ea15d07975a821f4e71a",
+  "candidateTreeSha": "55588f11ee9f314cb6a603df90d6a20ea0976cad",
+  "pullRequestBaseSha": "c0098831f925037d6841039d3bb81087b0e1f96f",
+  "subjectReceipt": "docs/regression-audits/2026-07-17_success-cleanup-regression-candidates.json",
+  "subjectReceiptSha256": "6954ccbd8c3c254edcb139313b9c5bc57ffb3285630c6b6a560aa7c03a608d56",
+  "auditorIdentity": "regression-auditor-agent:success-cleanup-regression-candidates",
+  "auditorSessionId": "regression-auditor-session:success-cleanup-regression-candidates-20260717-02",
+  "implementationIdentity": "github-actor-id:26228531",
+  "decisionReviewerIdentity": "github-app-id:4291228",
+  "issuedAt": 1784294296,
+  "expiresAt": 1784295196,
+  "reviewedFiles": [
+    "docs/ace-reports/2026-07-17_success-cleanup-regression-candidates.md",
+    "docs/e2e-matrices/2026-07-17_success-cleanup-regression-candidates.json",
+    "docs/plans/2026-07-17_success-cleanup-regression-candidates.md",
+    "docs/quality-gates/2026-07-17_success-cleanup-regression-candidates.json",
+    "docs/regression-audits/2026-07-17_success-cleanup-regression-candidates.json",
+    "docs/regression-evidence/2026-07-17_success-cleanup-regression-candidates.json",
+    "docs/regression-work/2026-07-17_success-cleanup-regression-candidates.json",
+    "docs/requirements/requirements-log.md",
+    "scripts/finish_branch.py",
+    "scripts/test_finish_branch.py",
+    "scripts/tests/test_finish_branch_success_cleanup_regression.py"
+  ],
+  "evidence": [
+    "Candidate 82012d1bbd03a7b53dc2ea15d07975a821f4e71a binds the successful cleanup harness change.",
+    "Subject canonical SHA-256 6954ccbd8c3c254edcb139313b9c5bc57ffb3285630c6b6a560aa7c03a608d56 matches the subject after excluding auditorReceipt.",
+    "Fail-first evidence shows old finish_branch.py dry-run omitted remote work branch cleanup.",
+    "Post-fix evidence shows the same harness passes when successful finish includes remote branch cleanup.",
+    "The subject auditor identity matches this protected decision."
+  ]
+}
