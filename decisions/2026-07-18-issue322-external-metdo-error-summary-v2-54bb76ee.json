@@ -1,0 +1,34 @@
+{
+  "schema": "aims.regression_auditor_decision.v1",
+  "verdict": "PASS",
+  "repository": "aim2nasa/aims",
+  "candidateCommitSha": "54bb76ee62b89d50fd611b9fdc0f1f3e554922b0",
+  "candidateTreeSha": "a12d4e5b48917c201acb40ad602565b8cc866ca3",
+  "pullRequestBaseSha": "8dc024e47be934f58033c17bbfa2e27baeb8c826",
+  "subjectReceipt": "docs/regression-audits/2026-07-18_issue322-external-metdo-error-summary.json",
+  "subjectReceiptSha256": "5e000c6d5973059415cd5fc8849f9826f3ff633e9bdc1fad0329910015f0db4f",
+  "auditorIdentity": "regression-auditor-agent:issue322-receipt-audit",
+  "auditorSessionId": "regression-auditor-session:/root/issue322_receipt_auditor:2026-07-18T15:00KST",
+  "implementationIdentity": "github-actor-id:26228531",
+  "decisionReviewerIdentity": "github-app-id:4291228",
+  "issuedAt": 1784354469,
+  "expiresAt": 1784355069,
+  "reviewedFiles": [
+    "tools/MetContract.sikuli/MetContract.py",
+    "tools/auto_clicker_v2/tests/test_r102_contract_baseline.py",
+    "docs/regression-evidence/2026-07-18_issue322-external-metdo-error-summary.json",
+    "docs/regression-audits/2026-07-18_issue322-external-metdo-error-summary.json",
+    "docs/e2e-matrices/2026-07-18_issue322-external-metdo-error-summary.json",
+    "docs/ace-reports/2026-07-18_issue322-external-metdo-error-summary.md",
+    "docs/quality-gates/2026-07-18_issue322-external-metdo-error-summary.json",
+    "docs/regression-work/2026-07-18_issue322-external-metdo-error-summary.json"
+  ],
+  "evidence": [
+    "Read-only independent auditor reviewed candidate 54bb76ee62b89d50fd611b9fdc0f1f3e554922b0 and tree a12d4e5b48917c201acb40ad602565b8cc866ca3.",
+    "The behavior change is minimal: the observed MetLife 처리중 오류 wording is added to the external MetDO classifier while existing external_metdo_error, MetLife 처리 오류, PDF 로딩 중 MetLife 오류, and MetDO+오류 conditions remain intact.",
+    "_contract_external_metdo_error_count() feeds report_data.summary.external_metdo_error and errorSkipped, so the harness is bound to the final summary aggregation path.",
+    "Fail-first and post-fix evidence use the same harness id, command, and harness digest sha256:46796ca724836a006f2474fcf1608c70a870720ea316cb5998b224a0a1ab25d4.",
+    "preFix records the legacy count as 0 for the observed wording; postFix records 5 passed for the same harness.",
+    "The E2E substitution is acceptable because #322 changes deterministic report aggregation for a live-observed row reason; the live recovery path remains covered by #319 evidence."
+  ]
+}
