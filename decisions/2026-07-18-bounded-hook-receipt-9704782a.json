@@ -1,0 +1,34 @@
+{
+  "schema": "aims.regression_auditor_decision.v1",
+  "verdict": "PASS",
+  "repository": "aim2nasa/aims",
+  "candidateCommitSha": "9704782a6c72ee67b0f8c6589cad8145ab224217",
+  "candidateTreeSha": "97452664538b9a5b1fd1d9fe23defb4272ef1bfd",
+  "pullRequestBaseSha": "c855dc236b099d8c707809c5faaef27b8c4dcc0c",
+  "subjectReceipt": "docs/regression-audits/2026-07-18_bounded-latency-hook-only.json",
+  "subjectReceiptSha256": "049adeae464418b0dcdf86ed99319e301dc51f19f61ae65b56f7a933fcc0d408",
+  "auditorIdentity": "regression-auditor-agent:contract-hook-only",
+  "auditorSessionId": "regression-auditor-session:/root/bootstrap_auditor/pr332/9704782a",
+  "implementationIdentity": "github-actor-id:26228531",
+  "decisionReviewerIdentity": "github-app-id:4291228",
+  "issuedAt": 1784375463,
+  "expiresAt": 1784376063,
+  "reviewedFiles": [
+    ".husky/pre-commit",
+    "AGENTS.md",
+    "scripts/tests/test_bounded_latency_hook.py",
+    "docs/regression-evidence/2026-07-18_bounded-latency-hook-process-tree.json",
+    "docs/regression-audits/2026-07-18_bounded-latency-hook-only.json",
+    "docs/e2e-matrices/2026-07-18_bounded-latency-hook-only.json",
+    "docs/ace-reports/2026-07-18_bounded-latency-hook-only.md",
+    "docs/quality-gates/2026-07-18_bounded-latency-hook-only.json",
+    "docs/regression-work/2026-07-18_bounded-latency-hook-only.json"
+  ],
+  "evidence": [
+    "The immutable candidate is bound to the protected work-classification decision.",
+    "Runner evidence is VALID with the same harness failing before and passing after the watchdog repair.",
+    "Runner evidence uses the immutable Git-blob SHA and matches the subject receipt.",
+    "The process-group watchdog terminates a hung descendant, closes captured output, and leaves no residual PID.",
+    "Gate Policy, E2E matrix, thirty-two tests, frozen guard, and rollback isolation passed."
+  ]
+}
