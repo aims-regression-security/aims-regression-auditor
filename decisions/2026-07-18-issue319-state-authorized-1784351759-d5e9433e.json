@@ -1,0 +1,30 @@
+{
+  "schema": "aims.regression_auditor_decision.v1",
+  "verdict": "PASS",
+  "repository": "aim2nasa/aims",
+  "candidateCommitSha": "07cff90f162c32a11edc0ec85bfda24bb1a5d017",
+  "candidateTreeSha": "0c3e8242d54758aeb17330fa419269bd53acab10",
+  "pullRequestBaseSha": "a3ca0db0c92b89d68ad66b55487063a458475344",
+  "subjectReceipt": "docs/regression-audits/2026-07-18_issue319-contract-ocr-failure-recovery.json",
+  "subjectReceiptSha256": "a5b634723030a0bf6ee3bd40f2a6d1d38fc7d50291fb0b78a07b7fddce1db445",
+  "auditorIdentity": "regression-auditor-agent:issue319-endpoint-independent-20260718",
+  "auditorSessionId": "019f6f43-issue319-state-authorized-1784351759-d5e9433e",
+  "implementationIdentity": "github-actor-id:26228531",
+  "decisionReviewerIdentity": "github-app-id:4291228",
+  "issuedAt": 1784351776,
+  "expiresAt": 1784352676,
+  "reviewedFiles": [
+    "docs/regression-audits/2026-07-18_issue319-contract-ocr-failure-recovery.json",
+    "docs/regression-work/2026-07-18_issue319-contract-ocr-failure-recovery.json",
+    "docs/regression-evidence/2026-07-18_issue319-live-close.json",
+    "docs/ace-reports/assets/issue319-contract-ocr-failure-recovery/2026-07-18/live-pass-125750/live-verification-summary.json"
+  ],
+  "evidence": [
+    "Candidate 07cff90f162c32a11edc0ec85bfda24bb1a5d017 and tree 0c3e8242d54758aeb17330fa419269bd53acab10 are bound to #319 accepted-state authorization.",
+    "The subject adds githubAcceptedState for issue-close target #319, current cycle issue-reopened-28151879746, and liveOnlyStatus LIVE_VERIFIED.",
+    "The subject points to a new signed receipt path so the previous receipt remains historical and is not reused for the new issue cycle authorization.",
+    "The underlying #319 product fix and live evidence remain unchanged: PR #320 merged product behavior, PR #321 merged live evidence, and live contract-list OCR failure count is 0.",
+    "Fast-finish preflight passed for the state-authorized subject before candidate creation.",
+    "This decision authorizes receipt issuance only for the accepted-state subject, not for additional product changes."
+  ]
+}
