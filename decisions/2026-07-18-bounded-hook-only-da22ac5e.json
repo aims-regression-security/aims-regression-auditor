@@ -1,0 +1,35 @@
+{
+  "schema": "aims.regression_work_classification_decision.v1",
+  "verdict": "PASS",
+  "repository": "aim2nasa/aims",
+  "workClassification": "docs/regression-work/2026-07-18_bounded-latency-hook-only.json",
+  "workClassificationSha256": "e27d7ae51926f9a22f4d0b0d2c151e19417d3f3f37b9855ecf9d47a11c043ac8",
+  "workKind": "verification-gate",
+  "stagedBehaviorFiles": [".husky/pre-commit", "AGENTS.md", "scripts/tests/test_bounded_latency_hook.py"],
+  "stagedBehaviorDigest": "53eb6d1b38a2135f8b9adae3673fc15d4ab0433648115bcbf8dd6899cafdcd34",
+  "auditorIdentity": "regression-auditor-agent:contract-hook-only",
+  "auditorSessionId": "codex-session:/root/bootstrap_auditor/pr332/da22ac5ed66d5549ebfe84859815256cbc030310",
+  "decisionReviewerIdentity": "github-app-id:4291228",
+  "candidateCommitSha": "da22ac5ed66d5549ebfe84859815256cbc030310",
+  "pullRequestBaseSha": "c855dc236b099d8c707809c5faaef27b8c4dcc0c",
+  "reviewedFiles": [
+    ".husky/pre-commit",
+    "AGENTS.md",
+    "docs/ace-reports/2026-07-18_bounded-latency-hook-only.md",
+    "docs/e2e-matrices/2026-07-18_bounded-latency-hook-only.json",
+    "docs/quality-gates/2026-07-18_bounded-latency-hook-only.json",
+    "docs/regression-work/2026-07-18_bounded-latency-hook-only.json",
+    "docs/requirements/requirements-log.md",
+    "scripts/tests/test_bounded_latency_hook.py"
+  ],
+  "evidence": [
+    "GitHub PR API base/head coordinates matched the immutable clean checkout.",
+    "Git-blob behavior digest and canonical classification SHA were independently recomputed.",
+    "Exact Gate Policy passed tier 3 gate-change with zero product paths.",
+    "Thirty-two clean-head tests passed, including all three commit lanes.",
+    "The process-group watchdog killed a hung launcher descendant, returned captured output within five seconds, and left no live child PID.",
+    "Frozen branch protection preceded bounded and rollback paths.",
+    "Legacy execution required the explicit rollback environment variable.",
+    "E2E matrix, diff check, and App ruleset checks passed."
+  ]
+}
