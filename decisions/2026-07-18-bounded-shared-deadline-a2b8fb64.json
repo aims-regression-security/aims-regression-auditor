@@ -1,0 +1,40 @@
+{
+  "schema": "aims.regression_work_classification_decision.v1",
+  "verdict": "PASS",
+  "repository": "aim2nasa/aims",
+  "workClassification": "docs/regression-work/2026-07-18_bounded-latency-shared-deadline.json",
+  "workClassificationSha256": "9d0aa292b119de8b000a896273e20d7d8650c47c81cd3e568944187b47936875",
+  "workKind": "chore",
+  "stagedBehaviorFiles": [
+    "scripts/bounded_latency_gate.py",
+    "scripts/bounded_latency_router.py",
+    "scripts/test_bounded_latency_gate.py",
+    "scripts/test_bounded_latency_router_finish.py"
+  ],
+  "stagedBehaviorDigest": "d8b9532e34f919b23bc5fe02a7f4132b1c4585b6d45be32d4679ce75a9d5d73e",
+  "auditorIdentity": "regression-auditor-agent:contract-shared-deadline",
+  "auditorSessionId": "codex-session:/root/bootstrap_auditor/pr331/a2b8fb647ba1d6497f40cefbda42c0706c80960b",
+  "decisionReviewerIdentity": "github-app-id:4291228",
+  "candidateCommitSha": "a2b8fb647ba1d6497f40cefbda42c0706c80960b",
+  "pullRequestBaseSha": "132036562cbe717a88bfc01e2a05485119b6af92",
+  "reviewedFiles": [
+    "docs/ace-reports/2026-07-18_bounded-latency-shared-deadline.md",
+    "docs/e2e-matrices/2026-07-18_bounded-latency-shared-deadline.json",
+    "docs/quality-gates/2026-07-18_bounded-latency-shared-deadline.json",
+    "docs/regression-work/2026-07-18_bounded-latency-shared-deadline.json",
+    "docs/requirements/requirements-log.md",
+    "scripts/bounded_latency_gate.py",
+    "scripts/bounded_latency_router.py",
+    "scripts/test_bounded_latency_gate.py",
+    "scripts/test_bounded_latency_router_finish.py"
+  ],
+  "evidence": [
+    "GitHub PR API base/head coordinates matched the immutable clean audit checkout.",
+    "Git-blob behavior digest and canonical classification SHA were independently recomputed.",
+    "Exact Gate Policy CLI passed tier 2 regression for four behavior files.",
+    "Twenty-four runtime tests passed in the clean checkout.",
+    "Staged lookup and child execution consume one shared wall-clock deadline.",
+    "A successful child crossing the deadline is reclassified as TIMEOUT_FAIL.",
+    "E2E matrix and cached diff checks passed."
+  ]
+}
