@@ -1,0 +1,53 @@
+{
+  "schema": "aims.regression_work_classification_decision.v1",
+  "verdict": "PASS",
+  "repository": "aim2nasa/aims",
+  "workClassification": "docs/regression-work/2026-07-18_bounded-latency-contract-runtime.json",
+  "workClassificationSha256": "88c3c3eecf8077d2df5e737eddab342fc9a2867c860ab13d715d39601a9d7433",
+  "workKind": "chore",
+  "stagedBehaviorFiles": [
+    "scripts/bounded_issue_close.py",
+    "scripts/bounded_latency_finish.py",
+    "scripts/bounded_latency_gate.py",
+    "scripts/bounded_latency_gate_proof.py",
+    "scripts/bounded_latency_router.py",
+    "scripts/finish_branch.py",
+    "scripts/test_bounded_issue_close.py",
+    "scripts/test_bounded_latency_router_finish.py",
+    "scripts/test_finish_branch.py"
+  ],
+  "stagedBehaviorDigest": "529c566b8cfa14ae20f14aa7f8923f707cac3ced2c92b7a217612c65ed5ed54b",
+  "auditorIdentity": "regression-auditor-agent:contract-runtime",
+  "auditorSessionId": "codex-session:/root/safety_adversary/pr329/d157557bbf082ede4fc716b93890cc1e6945f2b2",
+  "decisionReviewerIdentity": "github-app-id:4291228",
+  "candidateCommitSha": "d157557bbf082ede4fc716b93890cc1e6945f2b2",
+  "pullRequestBaseSha": "762965daaabdc0b04d780ddae30fa33bfc7848ee",
+  "reviewedFiles": [
+    "docs/ace-reports/2026-07-18_bounded-latency-contract-enforcement.md",
+    "docs/ace-reports/bounded-latency-quality-gate-adoption-report-2026-07-18.md",
+    "docs/e2e-matrices/2026-07-18_bounded-latency-contract-enforcement.json",
+    "docs/plans/2026-07-18_bounded-latency-quality-gate-execution-spec.md",
+    "docs/quality-gates/2026-07-18_bounded-latency-contract-runtime.json",
+    "docs/regression-work/2026-07-18_bounded-latency-contract-runtime.json",
+    "docs/requirements/bounded-latency-quality-gate-analysis-2026-07-18.md",
+    "docs/requirements/requirements-log.md",
+    "scripts/bounded_issue_close.py",
+    "scripts/bounded_latency_finish.py",
+    "scripts/bounded_latency_gate.py",
+    "scripts/bounded_latency_gate_proof.py",
+    "scripts/bounded_latency_router.py",
+    "scripts/finish_branch.py",
+    "scripts/test_bounded_issue_close.py",
+    "scripts/test_bounded_latency_router_finish.py",
+    "scripts/test_finish_branch.py"
+  ],
+  "evidence": [
+    "GitHub API final base/head coordinates matched the clean audit checkout.",
+    "Exact manifest command reproduced 29 runtime and 10 finish tests PASS.",
+    "Aggregate bounded proof returned PASS in 7.299 seconds.",
+    "Existing-receipt issue close shares a 30-second deadline and does not mutate GitHub on validation failure.",
+    "Unmerged Core/Protected finish returns QUARANTINED without changing source or target refs.",
+    "Default finish retains branch-prefix policy and emits terminal JSON safely.",
+    "Behavior digest and canonical work-classification hash were independently recomputed."
+  ]
+}
