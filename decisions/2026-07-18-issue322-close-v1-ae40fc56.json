@@ -1,0 +1,36 @@
+{
+  "schema": "aims.regression_auditor_decision.v1",
+  "verdict": "PASS",
+  "repository": "aim2nasa/aims",
+  "candidateCommitSha": "ae40fc563b24cc53f35d41517856080fa39fd3c3",
+  "candidateTreeSha": "9f6d995e51c0dd45e1dcb1478b43c7a6f055524d",
+  "pullRequestBaseSha": "d69d8f69286ab258f6028ec6821a35602bfd2247",
+  "subjectReceipt": "docs/regression-audits/2026-07-18_issue322-close.json",
+  "subjectReceiptSha256": "79ee18ef2b9047bf0bc58c4705494d5478d42dedd3397c1c011909d0d6b1e005",
+  "auditorIdentity": "regression-auditor-agent:issue322-close-audit",
+  "auditorSessionId": "regression-auditor-session:/root/issue322_close_auditor:2026-07-18T15:33KST",
+  "implementationIdentity": "github-actor-id:26228531",
+  "decisionReviewerIdentity": "github-app-id:4291228",
+  "issuedAt": 1784356522,
+  "expiresAt": 1784357122,
+  "reviewedFiles": [
+    "docs/regression-audits/2026-07-18_issue322-close.json",
+    "docs/regression-audits/2026-07-18_issue322-external-metdo-error-summary.json",
+    "docs/regression-audits/auditor-receipts/2026-07-18_issue322-external-metdo-error-summary-auditor.json",
+    "docs/regression-evidence/2026-07-18_issue322-external-metdo-error-summary.json",
+    "docs/e2e-matrices/2026-07-18_issue322-external-metdo-error-summary.json",
+    "docs/ace-reports/2026-07-18_issue322-external-metdo-error-summary.md",
+    "docs/regression-work/2026-07-18_issue322-external-metdo-error-summary.json",
+    "docs/quality-gates/2026-07-18_issue322-external-metdo-error-summary.json",
+    "tools/MetContract.sikuli/MetContract.py",
+    "tools/auto_clicker_v2/VERSION",
+    "tools/auto_clicker_v2/tests/test_r102_contract_baseline.py"
+  ],
+  "evidence": [
+    "#322 fix was merged through PR #325 into main at d69d8f69286ab258f6028ec6821a35602bfd2247.",
+    "Regression Auditor / trusted-verifier passed on PR #325 and the issue remains OPEN until this close marker is published.",
+    "The close receipt is bound to current issue cycle issue-created-4916831948.",
+    "The deterministic summary fix has no remaining live-only acceptance; liveOnlyStatus none is appropriate.",
+    "Independent auditor PASS confirmed #322 close acceptance and required a fresh close receipt because the prior bugfix receipt expired."
+  ]
+}
