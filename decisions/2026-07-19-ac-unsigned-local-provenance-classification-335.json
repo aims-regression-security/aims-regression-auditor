@@ -1,0 +1,38 @@
+{
+  "schema": "aims.regression_work_classification_decision.v1",
+  "verdict": "PASS",
+  "repository": "aim2nasa/aims",
+  "workClassification": "docs/regression-work/2026-07-19_ac-unsigned-local-provenance.json",
+  "workClassificationSha256": "d7217dcb50ab6f5521fa66e39ccbe96b11421cb52cc10b60edbe75561fb219ac",
+  "workKind": "feature",
+  "stagedBehaviorFiles": [
+    "backend/api/aims_api/routes/ac-routes.js",
+    "tools/auto_clicker_v2/build/build.ps1",
+    "tools/auto_clicker_v2/execution_provenance.py",
+    "tools/auto_clicker_v2/gui_main.py",
+    "tools/auto_clicker_v2/provenance_result_proof.py",
+    "tools/auto_clicker_v2/scripts/ac_build_provenance.py",
+    "tools/auto_clicker_v2/scripts/smoke_install_verify.ps1"
+  ],
+  "stagedBehaviorDigest": "907d6566ccf5500025e9b3b4a63a8cbd8eb37952a72a71cb037914c821b40d4e",
+  "auditorIdentity": "regression-auditor-agent:ac-unsigned-local-provenance-classification",
+  "decisionReviewerIdentity": "github-app-id:4291228",
+  "reviewedFiles": [
+    "docs/regression-work/2026-07-19_ac-unsigned-local-provenance.json",
+    "backend/api/aims_api/routes/ac-routes.js",
+    "tools/auto_clicker_v2/build/build.ps1",
+    "tools/auto_clicker_v2/execution_provenance.py",
+    "tools/auto_clicker_v2/gui_main.py",
+    "tools/auto_clicker_v2/provenance_result_proof.py",
+    "tools/auto_clicker_v2/scripts/ac_build_provenance.py",
+    "tools/auto_clicker_v2/scripts/smoke_install_verify.ps1",
+    "docs/quality-gates/2026-07-19_ac-unsigned-local-provenance.json",
+    "docs/e2e-matrices/2026-07-19_ac-unsigned-local-provenance.json",
+    "docs/plans/2026-07-19_ac-unsigned-local-provenance.md"
+  ],
+  "evidence": [
+    "Protected classification decision for PR #335 AC 0.3.37 unsigned local provenance release.",
+    "The work introduces an explicit UNSIGNED_LOCAL mode for a single-developer release while preserving version, build id, source, installer, payload, and distribution hashes.",
+    "The release build generated AIMS_AutoClicker_Setup_0.3.37_b07a64047d2b1433cb13cbd1d56732a51.exe and passed package integrity, health check, and smoke install."
+  ]
+}
