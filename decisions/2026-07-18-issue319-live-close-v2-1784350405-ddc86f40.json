@@ -1,0 +1,38 @@
+{
+  "schema": "aims.regression_auditor_decision.v1",
+  "verdict": "PASS",
+  "repository": "aim2nasa/aims",
+  "candidateCommitSha": "1ce2e99ce2263b082ca1039cfee4bbcb1f8c49f0",
+  "candidateTreeSha": "3357c8f41a0e75fcffd96b882b5fc4658d852e56",
+  "pullRequestBaseSha": "4ed3d52e7383d20a238203efbf9379fb726cfa1b",
+  "subjectReceipt": "docs/regression-audits/2026-07-18_issue319-contract-ocr-failure-recovery.json",
+  "subjectReceiptSha256": "6c6b8447619137b5b3b538fc6ca9141883f81a0a3408aa2c649e850d30c50908",
+  "auditorIdentity": "regression-auditor-agent:issue319-endpoint-independent-20260718",
+  "auditorSessionId": "019f6f43-issue319-live-close-v2-1784350405-ddc86f40",
+  "implementationIdentity": "github-actor-id:26228531",
+  "decisionReviewerIdentity": "github-app-id:4291228",
+  "issuedAt": 1784350685,
+  "expiresAt": 1784351585,
+  "reviewedFiles": [
+    "docs/ace-reports/2026-07-18_issue319-contract-ocr-failure-recovery.md",
+    "docs/ace-reports/assets/issue319-contract-ocr-failure-recovery/2026-07-18/live-pass-125750/live-verification-summary.json",
+    "docs/ace-reports/assets/issue319-contract-ocr-failure-recovery/2026-07-18/live-pass-125750/metlife-processing-error-modal-crop.png",
+    "docs/ace-reports/assets/issue319-contract-ocr-failure-recovery/2026-07-18/live-pass-125750/redacted-log-excerpts.md",
+    "docs/e2e-matrices/2026-07-18_issue319-contract-ocr-failure-recovery.json",
+    "docs/regression-audits/2026-07-18_issue319-contract-ocr-failure-recovery.json",
+    "docs/regression-evidence/2026-07-18_issue319-live-close.json",
+    "docs/regression-evidence/2026-07-18_issue319-official-upstage-endpoint.json",
+    "docs/regression-work/2026-07-18_issue319-contract-ocr-failure-recovery.json"
+  ],
+  "evidence": [
+    "Candidate 1ce2e99ce2263b082ca1039cfee4bbcb1f8c49f0 and tree 3357c8f41a0e75fcffd96b882b5fc4658d852e56 are bound to #319 live close only.",
+    "The decision subjectReceiptSha256 uses the issuer contract hash, excluding the auditorReceipt path field.",
+    "The subject uses historicalBehavior for merged AIMS main commit 4ed3d52e7383d20a238203efbf9379fb726cfa1b, whose declared behavior files digest is 09c3cf4f6d21fec2ea7d8153b04be371371979535537a91ccbc042351525ca64.",
+    "Issue-close runner evidence docs/regression-evidence/2026-07-18_issue319-live-close.json re-ran the same fail-first harness: pre-fix FAIL and post-fix PASS.",
+    "Installed AutoClicker v0.3.35 live MetDO contract batch for 2026.05.01~2026.05.31 with PDF target all completed successfully: contract-list OCR failure 0, customer-detail OCR failure 0, DATE-RANGE-VERIFY OK, batch/chunk success.",
+    "The live run used cache OFF, DEV ON, monitor 2, and tail preflight PASS before start.",
+    "MetLife displayed processing-error modal was recorded and recovered as external MetDO behavior; the redacted modal crop contains no visible customer or contract identifier.",
+    "ACE asset policy, E2E matrix gate, work gate, and fast-finish preflight passed before candidate creation.",
+    "liveOnlyStatus is LIVE_VERIFIED, so #319 issue-close is authorized after signed receipt verification."
+  ]
+}
