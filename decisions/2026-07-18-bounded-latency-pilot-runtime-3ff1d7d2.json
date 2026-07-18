@@ -1,0 +1,17 @@
+{
+  "schema": "aims.regression_work_classification_decision.v1",
+  "verdict": "PASS",
+  "repository": "aim2nasa/aims",
+  "workClassification": "docs/regression-work/2026-07-18_bounded-latency-pilot-hook.json",
+  "workClassificationSha256": "cf3c83435d66ef71147c71b6e55625aa8104f376fb3cbedd8bb5bfb3afc9954a",
+  "workKind": "chore",
+  "stagedBehaviorFiles": ["scripts/bounded_issue_close.py", "scripts/bounded_latency_finish.py", "scripts/bounded_latency_gate.py", "scripts/bounded_latency_gate_proof.py", "scripts/bounded_latency_router.py", "scripts/finish_branch.py", "scripts/test_bounded_issue_close.py", "scripts/test_bounded_latency_gate.py", "scripts/test_bounded_latency_gate_proof.py", "scripts/test_bounded_latency_router_finish.py"],
+  "stagedBehaviorDigest": "4ed23e730b56db6497af3cf3673d4cf0e37ff68a5d1db93bee660a83bac54360",
+  "auditorIdentity": "regression-auditor-agent:019f73f9",
+  "auditorSessionId": "019f73f9-43b7-7fe1-b8bf-b75faf397d26",
+  "decisionReviewerIdentity": "github-app-id:4291228",
+  "candidateCommitSha": "3ff1d7d2eacdc2d3f42ac04293afdac9dc85740d",
+  "pullRequestBaseSha": "c6498ef340977f12cc14a466a4f40ae1bc7a3c50",
+  "reviewedFiles": ["docs/ace-reports/bounded-latency-quality-gate-adoption-report-2026-07-18.md", "docs/plans/2026-07-18_bounded-latency-quality-gate-execution-spec.md", "docs/quality-gates/2026-07-18_bounded-latency-pilot-runtime.json", "docs/regression-work/2026-07-18_bounded-latency-pilot-hook.json", "docs/requirements/bounded-latency-quality-gate-analysis-2026-07-18.md", "docs/requirements/requirements-log.md", "scripts/bounded_issue_close.py", "scripts/bounded_latency_finish.py", "scripts/bounded_latency_gate.py", "scripts/bounded_latency_gate_proof.py", "scripts/bounded_latency_router.py", "scripts/finish_branch.py", "scripts/test_bounded_issue_close.py", "scripts/test_bounded_latency_gate.py", "scripts/test_bounded_latency_gate_proof.py", "scripts/test_bounded_latency_router_finish.py"],
+  "evidence": ["GitHub API PR base/head binding confirmed.", "Clean-head runtime suite 24/24 PASS.", "Bounded proof PASS in 7.116 seconds.", "Behavior digest and classification hash independently recomputed.", "Remote ambiguity reconciliation, rollback, and quarantine source restoration verified."]
+}
