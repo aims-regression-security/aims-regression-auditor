@@ -1,0 +1,34 @@
+{
+  "schema": "aims.regression_work_classification_decision.v1",
+  "verdict": "PASS",
+  "repository": "aim2nasa/aims",
+  "workClassification": "docs/regression-work/2026-07-18_bounded-latency-hook-only.json",
+  "workClassificationSha256": "e27d7ae51926f9a22f4d0b0d2c151e19417d3f3f37b9855ecf9d47a11c043ac8",
+  "workKind": "verification-gate",
+  "stagedBehaviorFiles": [".husky/pre-commit", "AGENTS.md", "scripts/tests/test_bounded_latency_hook.py"],
+  "stagedBehaviorDigest": "53eb6d1b38a2135f8b9adae3673fc15d4ab0433648115bcbf8dd6899cafdcd34",
+  "auditorIdentity": "regression-auditor-agent:contract-hook-only",
+  "auditorSessionId": "codex-session:/root/bootstrap_auditor/pr332/f549ed03f5d3ee6169f6c5992dab2010757fa422",
+  "decisionReviewerIdentity": "github-app-id:4291228",
+  "candidateCommitSha": "f549ed03f5d3ee6169f6c5992dab2010757fa422",
+  "pullRequestBaseSha": "c855dc236b099d8c707809c5faaef27b8c4dcc0c",
+  "reviewedFiles": [
+    ".husky/pre-commit",
+    "AGENTS.md",
+    "docs/ace-reports/2026-07-18_bounded-latency-hook-only.md",
+    "docs/e2e-matrices/2026-07-18_bounded-latency-hook-only.json",
+    "docs/quality-gates/2026-07-18_bounded-latency-hook-only.json",
+    "docs/regression-audits/2026-07-18_bounded-latency-hook-only.json",
+    "docs/regression-evidence/2026-07-18_bounded-latency-hook-process-tree.json",
+    "docs/regression-work/2026-07-18_bounded-latency-hook-only.json",
+    "docs/requirements/requirements-log.md",
+    "scripts/tests/test_bounded_latency_hook.py"
+  ],
+  "evidence": [
+    "Immutable PR base/head and Git-blob digests were independently recomputed.",
+    "Structured runner evidence is VALID with pre-fix FAIL and post-fix PASS.",
+    "Process-group watchdog killed the hung descendant and left no residual PID.",
+    "Gate Policy passed tier 3 gate-change with zero product paths.",
+    "Thirty-two clean-head tests, E2E matrix, and diff checks passed."
+  ]
+}
