@@ -1,0 +1,17 @@
+{
+  "schema": "aims.regression_work_classification_decision.v1",
+  "verdict": "PASS",
+  "repository": "aim2nasa/aims",
+  "workClassification": "docs/regression-work/2026-07-18_bounded-latency-pilot-hook-wiring.json",
+  "workClassificationSha256": "73ba0235fd25d957230030bca33f55d4ec5719eca2fb65094e0d08bc67f7a4f9",
+  "workKind": "chore",
+  "stagedBehaviorFiles": [".husky/pre-commit", "scripts/tests/test_bounded_latency_hook.py"],
+  "stagedBehaviorDigest": "639274266db448484086dc632710476fd859247c07b780940c9af26e896f6e64",
+  "auditorIdentity": "regression-auditor-agent:hook-pilot",
+  "auditorSessionId": "019f73f9-43b7-7fe1-b8bf-b75faf397d26",
+  "decisionReviewerIdentity": "github-app-id:4291228",
+  "candidateCommitSha": "fa8b9050474de322ebf26387bf29b2c0e97d273e",
+  "pullRequestBaseSha": "9f52ecba32669ef543edb93fa2dd7e3812835b02",
+  "reviewedFiles": [".github/bounded-gate-trust/issuer.pub.b64", ".husky/pre-commit", "docs/quality-gates/2026-07-18_bounded-latency-pilot-gate-change.json", "docs/regression-work/2026-07-18_bounded-latency-pilot-hook-wiring.json", "scripts/tests/test_bounded_latency_hook.py"],
+  "evidence": ["Clean-head hook tests 2/2 PASS.", "Frozen branch guard executes before bounded switch.", "Core and Protected diffs are rejected by Direct-only route.", "Tier 3 gate-change policy and trust key fingerprint verified."]
+}
