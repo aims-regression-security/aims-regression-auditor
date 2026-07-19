@@ -1,0 +1,39 @@
+{
+  "schema": "aims.regression_auditor_decision.v1",
+  "verdict": "PASS",
+  "repository": "aim2nasa/aims",
+  "candidateCommitSha": "baac8a45dc0c29b21b8d37865555f0989fa96fb3",
+  "candidateTreeSha": "5a5479133d46cebc03190e16b933292e601e8876",
+  "pullRequestBaseSha": "ad2c1574c72eab1f5af5732ce849728e95f6c2da",
+  "candidateDigest": "96f3136378c9ff9037cbfa9f736309d992e88687da1510d02542d99122642cae",
+  "workKind": "verification-gate",
+  "subjectReceipt": "docs/regression-audits/2026-07-20_issue354-355-ac-verification-infra.json",
+  "subjectReceiptSha256": "9d7ea817d8e09da5eb213594aef5cee176770a99f3ac0e91c945f1213ffabce8",
+  "auditorIdentity": "regression-auditor-agent:issue354-355-gate-infra-20260720",
+  "auditorSessionId": "regression-auditor-session:/root/gate_final_audit:2026-07-20T07:59:24+09:00",
+  "implementationIdentity": "github-actor-id:26228531",
+  "decisionReviewerIdentity": "github-app-id:4291228",
+  "issuedAt": 1784501964,
+  "expiresAt": 1784502864,
+  "reviewedFiles": [
+    "docs/regression-work/2026-07-20_issue354-355-ac-verification-infra.json",
+    "scripts/gate_policy_check.py",
+    "scripts/solo_agent_quality_gate_policy.py",
+    "scripts/tests/test_gate_policy_check.py",
+    "scripts/tests/test_issue354_355_ac_verification_infra.py",
+    "scripts/tests/test_solo_agent_quality_gate_policy.py",
+    "tools/auto_clicker_v2/tests/test_pdf_window_guard.py",
+    "docs/regression-evidence/2026-07-20_issue354-355-ac-verification-infra.json",
+    "docs/e2e-matrices/2026-07-20_issue354-355-ac-verification-infra.json",
+    "docs/ace-reports/2026-07-20_issue354-355-ac-verification-infra.md",
+    "docs/quality-gates/2026-07-20_issue354-355-ac-verification-infra.json",
+    "docs/ace-reports/assets/issue352-crs-preview-timeout/2026-07-20/live-complete-redacted.png"
+  ],
+  "evidence": [
+    "The six-file Git-index behavior digest is 5c8302f69a07f856a24cfabf2f39b51690b2ffae78faa0fc967cc9cf4ed8a433.",
+    "The same immutable harness returns five assertion failures on main and five passes on the candidate, with no errors or skips.",
+    "The expanded targeted group returns 83 passes and includes path escape, release-context, firewall, and delayed-start negative controls.",
+    "The redacted 485x474 DXGI asset contains no visible customer row or local path and matches SHA-256 b54783c476c863f60f00a4722bc5556a9416a7ab64a0745fb5a18885bfe7243c.",
+    "Independent review found no remaining High or Medium finding after Core-only PNG routing and behavioral reap fail-first reinforcement."
+  ]
+}
