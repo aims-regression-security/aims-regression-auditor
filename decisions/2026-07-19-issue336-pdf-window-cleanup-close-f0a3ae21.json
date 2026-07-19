@@ -1,0 +1,41 @@
+{
+  "schema": "aims.regression_auditor_decision.v1",
+  "verdict": "PASS",
+  "repository": "aim2nasa/aims",
+  "candidateCommitSha": "f0a3ae21bd9a0b88f631a9f5333ebd07ee0244c9",
+  "candidateTreeSha": "15a27385afe555f7c3889c1f05738ef7f90e4021",
+  "pullRequestBaseSha": "71a6c6e96844ce9c9ba171cb387a200a52579fc5",
+  "candidateDigest": "c99e50cfd25bdf8fbc59b9ff7b7cc25644653075b5cad76904e55b42b9c86f76",
+  "subjectReceipt": "docs/regression-audits/2026-07-19_issue336-pdf-window-cleanup.json",
+  "subjectReceiptSha256": "4ec8a8cca5f37d73cb05513a47230d47c01986473bcc6ce6c6ec12cb280569dd",
+  "auditorIdentity": "regression-auditor-agent:issue336-regression-auditor-20260719",
+  "auditorSessionId": "regression-auditor-session:/root/issue336_regression_auditor:2026-07-19T20:56KST:issue-close",
+  "implementationIdentity": "github-actor-id:26228531",
+  "decisionReviewerIdentity": "github-app-id:4291228",
+  "issuedAt": 1784462197,
+  "expiresAt": 1784463097,
+  "reviewedFiles": [
+    "docs/regression-audits/2026-07-19_issue336-pdf-window-cleanup.json",
+    "docs/regression-audits/auditor-receipts/2026-07-19_issue336-pdf-window-cleanup-auditor.json",
+    "docs/regression-audits/auditor-receipts/2026-07-19_issue336-pdf-window-cleanup-auditor-v2.json",
+    "docs/regression-work/2026-07-19_issue336-pdf-window-cleanup.json",
+    "docs/regression-evidence/2026-07-19_issue336-pdf-window-cleanup.json",
+    "docs/e2e-matrices/2026-07-19_issue336-pdf-window-cleanup.json",
+    "docs/ace-reports/2026-07-19_issue336-pdf-window-cleanup.md",
+    "docs/ace-reports/assets/issue336-pdf-window-cleanup/2026-07-19/live-pass-redacted-summary.json",
+    "docs/ace-reports/assets/issue336-pdf-window-cleanup/2026-07-19/live-pass-monitor2-redacted-overlay.png",
+    "tools/MetContract.sikuli/MetContract.py",
+    "tools/auto_clicker_v2/pdf_window_guard.py",
+    "tools/auto_clicker_v2/pdf_window_guard.ps1",
+    "tools/auto_clicker_v2/tests/test_issue336_pdf_window_cleanup_regression.py",
+    "tools/auto_clicker_v2/tests/run_issue336_windows_integration.py",
+    "tools/auto_clicker_v2/tests/run_issue336_ezpdf_smoke.py"
+  ],
+  "evidence": [
+    "Issue-close candidate binding was independently recomputed as base 71a6c6e96844ce9c9ba171cb387a200a52579fc5, commit f0a3ae21bd9a0b88f631a9f5333ebd07ee0244c9, tree 15a27385afe555f7c3889c1f05738ef7f90e4021, 31-file digest c99e50cfd25bdf8fbc59b9ff7b7cc25644653075b5cad76904e55b42b9c86f76, and canonical subject digest 4ec8a8cca5f37d73cb05513a47230d47c01986473bcc6ce6c6ec12cb280569dd.",
+    "GitHub issue #336 was independently read as OPEN with REOPENED state, and the authoritative latest cycle issue-reopened-28178824956 exactly matches both githubAcceptedState.cycle and receiptReissue.issueCloseAuthorization.",
+    "Compared with signed candidate 9984cde434b177762c1eb9476d74e42990261585, no product behavior or regression evidence file changed; behavior digest 72be51aa4865fd76f47248dc17e43babdeb479164e5d73dd6abe56c2c09a42d6, runner evidence c8bf4df060f13af44e224f716390501d301c51758648fe753dcc9f82e6adb418, and harness SHA-256 b6114b6187f3d4fadd0b8c0e4101684b79401e56a498010da035483e714808f6 remain exact.",
+    "Both prior protected receipts were independently verified against the trusted primary-2026-07 Ed25519 public key; this new authorization is separately bound to mode issue-close and output docs/regression-audits/auditor-receipts/2026-07-19_issue336-pdf-window-cleanup-close-auditor.json.",
+    "Functional issue-close evidence is accepted while release provenance remains FAIL with PROVENANCE_DISTRIBUTION_UNAVAILABLE and UNSIGNED_LOCAL distribution mode; this decision does not claim release provenance PASS."
+  ]
+}
