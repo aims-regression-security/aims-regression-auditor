@@ -62,6 +62,7 @@ GATE_EXACT_PATHS = {
     "scripts/regression_github_state_transport.py",
     "scripts/regression_github_state_marker.py",
     "scripts/regression_live_state_publish.py",
+    "scripts/solo_agent_quality_gate_policy.py",
     "scripts/tier0_issue_close.py",
     "scripts/work_gate_check.py",
 }
@@ -85,6 +86,7 @@ SUPPORT_PREFIXES = (
     "docs/regression-work/",
     "scripts/tests/",
     "tests/",
+    "tools/auto_clicker_v2/tests/",
 )
 SUPPORT_EXACT_PATHS = {
     "docs/requirements/requirements-log.md",

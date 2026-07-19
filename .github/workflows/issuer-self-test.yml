@@ -38,10 +38,17 @@ jobs:
       - name: Compile protected verifier
         run: >-
           python -m py_compile
+          scripts/gate_policy_check.py
           scripts/regression_auditor_check.py
           scripts/regression_auditor_issue.py
           scripts/regression_auditor_verify_base.py
           scripts/regression_evidence_runner.py
+          scripts/tests/test_gate_policy_check.py
+
+      - name: Validate gate policy classifications
+        run: >-
+          python -m unittest discover -s scripts/tests
+          -p 'test_gate_policy_check.py' -v
 
       - name: Validate protected workflow contracts
         shell: bash
