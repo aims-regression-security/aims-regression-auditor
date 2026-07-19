@@ -1,0 +1,252 @@
+name: Bounded Deploy Attestation Issuer
+
+run-name: Issue bounded deploy attestation for ${{ inputs.expected_certified_sha }}
+
+on:
+  workflow_dispatch:
+    inputs:
+      deploy_decision:
+        description: Protected default-branch bounded deploy decision path
+        required: true
+        type: string
+      expected_certified_sha:
+        description: Exact lowercase source commit SHA expected by the deployer
+        required: true
+        type: string
+      expected_artifact_digest:
+        description: Exact lowercase SHA-256 of the distribution manifest
+        required: true
+        type: string
+      expected_installer_digest:
+        description: Exact lowercase SHA-256 of the installer
+        required: true
+        type: string
+      expected_latest_manifest_digest:
+        description: Exact lowercase SHA-256 of latest.json
+        required: true
+        type: string
+      expected_publisher_script_digest:
+        description: Exact lowercase SHA-256 of the pinned publisher script
+        required: true
+        type: string
+      expected_ac_build_provenance_digest:
+        description: Exact lowercase SHA-256 of ac_build_provenance.py
+        required: true
+        type: string
+      expected_execution_provenance_digest:
+        description: Exact lowercase SHA-256 of execution_provenance.py
+        required: true
+        type: string
+      expected_provenance_trust_digest:
+        description: Exact lowercase SHA-256 of provenance_trust.py
+        required: true
+        type: string
+
+permissions:
+  contents: read
+  pull-requests: read
+
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
+jobs:
+  reject-non-default-ref:
+    name: Reject non-default workflow ref
+    if: github.ref != format('refs/heads/{0}', github.event.repository.default_branch)
+    runs-on: ubuntu-24.04
+    timeout-minutes: 1
+    steps:
+      - name: Fail closed before any protected secret is available
+        shell: bash
+        run: |
+          echo "bounded deploy issuance must run from the protected default branch" >&2
+          exit 2
+
+  issue-attestation:
+    name: Protected bounded deploy issuance
+    if: github.ref == format('refs/heads/{0}', github.event.repository.default_branch)
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    environment: regression-auditor
+
+    steps:
+      - name: Checkout trusted issuer from default branch
+        uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6
+        with:
+          ref: ${{ github.event.repository.default_branch }}
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Require a protected decision introduced by one merged PR
+        id: decision
+        env:
+          DEPLOY_DECISION: ${{ inputs.deploy_decision }}
+          DEFAULT_BRANCH: ${{ github.event.repository.default_branch }}
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          if [[ ! "$DEPLOY_DECISION" =~ ^decisions/[A-Za-z0-9._/-]+\.json$ ]] || \
+             [[ "$DEPLOY_DECISION" == *".."* ]]; then
+            echo "deploy_decision must be a safe decisions/*.json path" >&2
+            exit 2
+          fi
+          DECISION_COMMIT="$(git log -1 --format=%H -- "$DEPLOY_DECISION")"
+          if [[ -z "$DECISION_COMMIT" ]]; then
+            echo "protected deploy decision commit was not found" >&2
+            exit 2
+          fi
+          DECISION_PR="$(gh api \
+            -H 'Accept: application/vnd.github+json' \
+            "repos/$GITHUB_REPOSITORY/commits/$DECISION_COMMIT/pulls" | \
+            python -c 'import json,sys; branch=sys.argv[1]; prs=[p for p in json.load(sys.stdin) if p.get("merged_at") and p.get("base", {}).get("ref") == branch]; print(prs[0]["number"] if len(prs) == 1 else "")' \
+              "$DEFAULT_BRANCH")"
+          if [[ -z "$DECISION_PR" ]]; then
+            echo "protected deploy decision must be introduced by one merged default-branch PR" >&2
+            exit 2
+          fi
+          SOURCE_TAG="$(python -c 'import json,sys; print(json.load(open(sys.argv[1], encoding="utf-8")).get("sourceTag", ""))' "$DEPLOY_DECISION")"
+          TAG_OBJECT_SHA="$(python -c 'import json,sys; print(json.load(open(sys.argv[1], encoding="utf-8")).get("tagObjectSha", ""))' "$DEPLOY_DECISION")"
+          PUBLISHER_COMMIT_SHA="$(python -c 'import json,sys; print(json.load(open(sys.argv[1], encoding="utf-8")).get("publisherCommitSha", ""))' "$DEPLOY_DECISION")"
+          SOURCE_TREE_SHA="$(python -c 'import json,sys; print(json.load(open(sys.argv[1], encoding="utf-8")).get("sourceTreeSha", ""))' "$DEPLOY_DECISION")"
+          if [[ ! "$SOURCE_TAG" =~ ^refs/tags/ac-source-[A-Za-z0-9._-]+$ ]]; then
+            echo "protected decision sourceTag must be an exact refs/tags/ac-source-* ref" >&2
+            exit 2
+          fi
+          if [[ ! "$TAG_OBJECT_SHA" =~ ^[0-9a-f]{40}$ ]]; then
+            echo "protected decision tagObjectSha must be an exact lowercase SHA" >&2
+            exit 2
+          fi
+          if [[ ! "$PUBLISHER_COMMIT_SHA" =~ ^[0-9a-f]{40}$ ]]; then
+            echo "protected decision publisherCommitSha must be an exact lowercase SHA" >&2
+            exit 2
+          fi
+          if [[ ! "$SOURCE_TREE_SHA" =~ ^[0-9a-f]{40}$ ]]; then
+            echo "protected decision sourceTreeSha must be an exact lowercase SHA" >&2
+            exit 2
+          fi
+          echo "source_tag=$SOURCE_TAG" >> "$GITHUB_OUTPUT"
+          echo "tag_object_sha=$TAG_OBJECT_SHA" >> "$GITHUB_OUTPUT"
+          echo "publisher_commit_sha=$PUBLISHER_COMMIT_SHA" >> "$GITHUB_OUTPUT"
+          echo "source_tree_sha=$SOURCE_TREE_SHA" >> "$GITHUB_OUTPUT"
+
+      - name: Checkout certified source tag as read-only input
+        uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6
+        with:
+          repository: ${{ vars.AIMS_REGRESSION_CANDIDATE_REPOSITORY }}
+          ref: ${{ steps.decision.outputs.source_tag }}
+          path: candidate
+          ssh-key: ${{ secrets.AIMS_REGRESSION_CANDIDATE_READ_SSH_KEY }}
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Require durable annotated tag to peel to certified SHA
+        env:
+          SOURCE_TAG: ${{ steps.decision.outputs.source_tag }}
+          TAG_OBJECT_SHA: ${{ steps.decision.outputs.tag_object_sha }}
+          EXPECTED_CERTIFIED_SHA: ${{ inputs.expected_certified_sha }}
+          EXPECTED_SOURCE_TREE_SHA: ${{ steps.decision.outputs.source_tree_sha }}
+        shell: bash
+        run: |
+          test "$(git -C candidate cat-file -t "$SOURCE_TAG")" = "tag"
+          test "$(git -C candidate rev-parse "$SOURCE_TAG")" = "$TAG_OBJECT_SHA"
+          test "$(git -C candidate rev-parse "$SOURCE_TAG^{commit}")" = "$EXPECTED_CERTIFIED_SHA"
+          test "$(git -C candidate rev-parse HEAD)" = "$EXPECTED_CERTIFIED_SHA"
+          test "$(git -C candidate rev-parse "HEAD^{tree}")" = "$EXPECTED_SOURCE_TREE_SHA"
+
+      - name: Checkout exact publisher commit with full main history
+        uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6
+        with:
+          repository: ${{ vars.AIMS_REGRESSION_CANDIDATE_REPOSITORY }}
+          ref: ${{ steps.decision.outputs.publisher_commit_sha }}
+          path: publisher
+          ssh-key: ${{ secrets.AIMS_REGRESSION_CANDIDATE_READ_SSH_KEY }}
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Require publisher commit on main and recompute its script bytes
+        env:
+          AIMS_CANDIDATE_DEFAULT_BRANCH: ${{ vars.AIMS_REGRESSION_CANDIDATE_DEFAULT_BRANCH }}
+          PUBLISHER_COMMIT_SHA: ${{ steps.decision.outputs.publisher_commit_sha }}
+          EXPECTED_PUBLISHER_SCRIPT_DIGEST: ${{ inputs.expected_publisher_script_digest }}
+          EXPECTED_AC_BUILD_PROVENANCE_DIGEST: ${{ inputs.expected_ac_build_provenance_digest }}
+          EXPECTED_EXECUTION_PROVENANCE_DIGEST: ${{ inputs.expected_execution_provenance_digest }}
+          EXPECTED_PROVENANCE_TRUST_DIGEST: ${{ inputs.expected_provenance_trust_digest }}
+        shell: bash
+        run: |
+          test "$(git -C publisher rev-parse HEAD)" = "$PUBLISHER_COMMIT_SHA"
+          git -C publisher merge-base --is-ancestor "$PUBLISHER_COMMIT_SHA" "origin/$AIMS_CANDIDATE_DEFAULT_BRANCH"
+          ACTUAL_PUBLISHER_SCRIPT_DIGEST="$(sha256sum publisher/tools/auto_clicker_v2/scripts/publish_provenance_release.ps1 | cut -d ' ' -f 1)"
+          if [[ "$ACTUAL_PUBLISHER_SCRIPT_DIGEST" != "$EXPECTED_PUBLISHER_SCRIPT_DIGEST" ]]; then
+            echo "publisher script digest does not match certified source" >&2
+            exit 2
+          fi
+          declare -A EXPECTED_DEPENDENCIES=(
+            ["tools/auto_clicker_v2/scripts/ac_build_provenance.py"]="$EXPECTED_AC_BUILD_PROVENANCE_DIGEST"
+            ["tools/auto_clicker_v2/execution_provenance.py"]="$EXPECTED_EXECUTION_PROVENANCE_DIGEST"
+            ["tools/auto_clicker_v2/provenance_trust.py"]="$EXPECTED_PROVENANCE_TRUST_DIGEST"
+          )
+          for dependency in "${!EXPECTED_DEPENDENCIES[@]}"; do
+            actual_digest="$(sha256sum "publisher/$dependency" | cut -d ' ' -f 1)"
+            if [[ "$actual_digest" != "${EXPECTED_DEPENDENCIES[$dependency]}" ]]; then
+              echo "publisher dependency digest mismatch: $dependency" >&2
+              exit 2
+            fi
+          done
+
+      - name: Setup Python
+        uses: actions/setup-python@ece7cb06caefa5fff74198d8649806c4678c61a1 # v6
+        with:
+          python-version: '3.13'
+
+      - name: Install pinned signature dependency
+        run: >-
+          python -m pip install --disable-pip-version-check --no-cache-dir
+          --only-binary=:all: --require-hashes
+          -r .github/regression-auditor-requirements.txt
+
+      - name: Issue exact decision-bound deploy attestation
+        env:
+          AIMS_REGRESSION_AUDITOR_ED25519_PRIVATE_KEY_B64: ${{ secrets.AIMS_REGRESSION_AUDITOR_ED25519_PRIVATE_KEY_B64 }}
+          AIMS_CANDIDATE_REPOSITORY: ${{ vars.AIMS_REGRESSION_CANDIDATE_REPOSITORY }}
+          EXPECTED_AUDITOR_REVIEWER: github-app-id:${{ vars.AIMS_REGRESSION_VERIFIER_APP_ID }}
+          DEPLOY_DECISION: ${{ inputs.deploy_decision }}
+          EXPECTED_CERTIFIED_SHA: ${{ inputs.expected_certified_sha }}
+          EXPECTED_ARTIFACT_DIGEST: ${{ inputs.expected_artifact_digest }}
+          EXPECTED_INSTALLER_DIGEST: ${{ inputs.expected_installer_digest }}
+          EXPECTED_LATEST_MANIFEST_DIGEST: ${{ inputs.expected_latest_manifest_digest }}
+          EXPECTED_PUBLISHER_SCRIPT_DIGEST: ${{ inputs.expected_publisher_script_digest }}
+          EXPECTED_SOURCE_TAG: ${{ steps.decision.outputs.source_tag }}
+          EXPECTED_TAG_OBJECT_SHA: ${{ steps.decision.outputs.tag_object_sha }}
+          EXPECTED_PUBLISHER_COMMIT_SHA: ${{ steps.decision.outputs.publisher_commit_sha }}
+          EXPECTED_SOURCE_TREE_SHA: ${{ steps.decision.outputs.source_tree_sha }}
+          EXPECTED_AC_BUILD_PROVENANCE_DIGEST: ${{ inputs.expected_ac_build_provenance_digest }}
+          EXPECTED_EXECUTION_PROVENANCE_DIGEST: ${{ inputs.expected_execution_provenance_digest }}
+          EXPECTED_PROVENANCE_TRUST_DIGEST: ${{ inputs.expected_provenance_trust_digest }}
+        shell: bash
+        run: |
+          python scripts/bounded_deploy_attestation_issue.py \
+            --trust-root . \
+            --decision "$DEPLOY_DECISION" \
+            --repository "$AIMS_CANDIDATE_REPOSITORY" \
+            --decision-reviewer-identity "$EXPECTED_AUDITOR_REVIEWER" \
+            --expected-certified-sha "$EXPECTED_CERTIFIED_SHA" \
+            --expected-artifact-digest "$EXPECTED_ARTIFACT_DIGEST" \
+            --expected-installer-digest "$EXPECTED_INSTALLER_DIGEST" \
+            --expected-latest-manifest-digest "$EXPECTED_LATEST_MANIFEST_DIGEST" \
+            --expected-publisher-script-digest "$EXPECTED_PUBLISHER_SCRIPT_DIGEST" \
+            --expected-source-tag "$EXPECTED_SOURCE_TAG" \
+            --expected-tag-object-sha "$EXPECTED_TAG_OBJECT_SHA" \
+            --expected-publisher-commit-sha "$EXPECTED_PUBLISHER_COMMIT_SHA" \
+            --expected-source-tree-sha "$EXPECTED_SOURCE_TREE_SHA" \
+            --expected-ac-build-provenance-digest "$EXPECTED_AC_BUILD_PROVENANCE_DIGEST" \
+            --expected-execution-provenance-digest "$EXPECTED_EXECUTION_PROVENANCE_DIGEST" \
+            --expected-provenance-trust-digest "$EXPECTED_PROVENANCE_TRUST_DIGEST" \
+            --output issued/bounded-deploy-attestation.json
+
+      - name: Upload bounded deploy attestation only
+        uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f # v7.0.0
+        with:
+          name: bounded-deploy-attestation-${{ github.run_id }}
+          path: issued/bounded-deploy-attestation.json
+          if-no-files-found: error
+          retention-days: 7
