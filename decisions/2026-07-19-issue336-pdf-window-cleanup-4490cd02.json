@@ -1,0 +1,42 @@
+{
+  "schema": "aims.regression_auditor_decision.v1",
+  "verdict": "PASS",
+  "repository": "aim2nasa/aims",
+  "candidateCommitSha": "4490cd022d7dd81d3e883f0dbd7cef9324960e1b",
+  "candidateTreeSha": "97991b63457b7848fac50bfe201635be2a1e65a2",
+  "pullRequestBaseSha": "71a6c6e96844ce9c9ba171cb387a200a52579fc5",
+  "candidateDigest": "b1bb557e13e75ce0dbca7d3aff390402d111596c9b14e5c6819aace6c71b075c",
+  "subjectReceipt": "docs/regression-audits/2026-07-19_issue336-pdf-window-cleanup.json",
+  "subjectReceiptSha256": "82d440dd2c1df4b6487c148fd3db11b648cb60a6666e207ac03188312d92ccb4",
+  "auditorIdentity": "regression-auditor-agent:issue336-regression-auditor-20260719",
+  "auditorSessionId": "regression-auditor-session:/root/issue336_regression_auditor:2026-07-19T20:24KST",
+  "implementationIdentity": "github-actor-id:26228531",
+  "decisionReviewerIdentity": "github-app-id:4291228",
+  "issuedAt": 1784460288,
+  "expiresAt": 1784461188,
+  "reviewedFiles": [
+    "docs/regression-audits/2026-07-19_issue336-pdf-window-cleanup.json",
+    "docs/regression-work/2026-07-19_issue336-pdf-window-cleanup.json",
+    "docs/regression-evidence/2026-07-19_issue336-pdf-window-cleanup.json",
+    "docs/e2e-matrices/2026-07-19_issue336-pdf-window-cleanup.json",
+    "docs/ace-reports/2026-07-19_issue336-pdf-window-cleanup.md",
+    "docs/ace-reports/assets/issue336-pdf-window-cleanup/2026-07-19/windows-hwnd-integration.json",
+    "docs/ace-reports/assets/issue336-pdf-window-cleanup/2026-07-19/ezpdf-smoke.json",
+    "docs/ace-reports/assets/issue336-pdf-window-cleanup/2026-07-19/package-clean-candidate.json",
+    "docs/ace-reports/assets/issue336-pdf-window-cleanup/2026-07-19/live-pass-redacted-summary.json",
+    "docs/ace-reports/assets/issue336-pdf-window-cleanup/2026-07-19/live-pass-monitor2-redacted-overlay.png",
+    "tools/MetContract.sikuli/MetContract.py",
+    "tools/auto_clicker_v2/pdf_window_guard.py",
+    "tools/auto_clicker_v2/pdf_window_guard.ps1",
+    "tools/auto_clicker_v2/tests/test_issue336_pdf_window_cleanup_regression.py",
+    "tools/auto_clicker_v2/tests/run_issue336_windows_integration.py",
+    "tools/auto_clicker_v2/tests/run_issue336_ezpdf_smoke.py"
+  ],
+  "evidence": [
+    "Independent Regression Auditor recomputed the exact candidate binding: base 71a6c6e96844ce9c9ba171cb387a200a52579fc5, commit 4490cd022d7dd81d3e883f0dbd7cef9324960e1b, tree 97991b63457b7848fac50bfe201635be2a1e65a2, 29-file candidate digest b1bb557e13e75ce0dbca7d3aff390402d111596c9b14e5c6819aace6c71b075c, and canonical subject digest 82d440dd2c1df4b6487c148fd3db11b648cb60a6666e207ac03188312d92ccb4.",
+    "The 15-file behavior digest 72be51aa4865fd76f47248dc17e43babdeb479164e5d73dd6abe56c2c09a42d6 and harness source SHA-256 b6114b6187f3d4fadd0b8c0e4101684b79401e56a498010da035483e714808f6 were independently verified against the candidate Git blobs.",
+    "Fail-first evidence records two assertion failures and the same post-fix harness records two passes; native Win32 and ezPDF evidence cover success, refusal, ambiguity, ownership, confirmation-dialog, and recovery flows.",
+    "The installed AutoClicker v0.3.37 targeted MetDO run functionally completed one row, saved two structurally valid CRS PDFs, closed both acquired viewers, and left zero visible PDF or save-dialog windows.",
+    "The live run remains PROVENANCE_DISTRIBUTION_UNAVAILABLE with UNSIGNED_LOCAL distribution mode; this decision explicitly does not claim release provenance PASS."
+  ]
+}
