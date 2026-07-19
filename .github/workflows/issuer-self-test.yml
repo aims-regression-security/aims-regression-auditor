@@ -39,16 +39,18 @@ jobs:
         run: >-
           python -m py_compile
           scripts/gate_policy_check.py
+          scripts/bounded_deploy_attestation_issue.py
           scripts/regression_auditor_check.py
           scripts/regression_auditor_issue.py
           scripts/regression_auditor_verify_base.py
           scripts/regression_evidence_runner.py
+          scripts/tests/test_bounded_deploy_attestation_issue.py
           scripts/tests/test_gate_policy_check.py
 
       - name: Validate gate policy classifications
         run: >-
           python -m unittest discover -s scripts/tests
-          -p 'test_gate_policy_check.py' -v
+          -p 'test_*.py' -v
 
       - name: Validate protected workflow contracts
         shell: bash
@@ -64,6 +66,9 @@ jobs:
           )
           attestation = Path(
               ".github/workflows/regression-auditor-key-attestation.yml"
+          ).read_text(encoding="utf-8")
+          deploy_issuer = Path(
+              ".github/workflows/bounded-deploy-attestation-issuer.yml"
           ).read_text(encoding="utf-8")
           assert "environment: regression-auditor" in issuer
           assert 'get("implementationIdentity", "")' in issuer
@@ -131,6 +136,31 @@ jobs:
           assert "::add-mask::" in attestation
           assert "print(private" not in attestation
           assert "print(actual" not in attestation
+          assert "environment: regression-auditor" in deploy_issuer
+          assert "github.ref == format('refs/heads/{0}', github.event.repository.default_branch)" in deploy_issuer
+          assert "github.ref != format('refs/heads/{0}', github.event.repository.default_branch)" in deploy_issuer
+          assert "Fail closed before any protected secret is available" in deploy_issuer
+          assert "Checkout trusted issuer from default branch" in deploy_issuer
+          assert "Checkout certified source tag as read-only input" in deploy_issuer
+          assert 'cat-file -t "$SOURCE_TAG"' in deploy_issuer
+          assert 'rev-parse "$SOURCE_TAG"' in deploy_issuer
+          assert 'rev-parse "$SOURCE_TAG^{commit}"' in deploy_issuer
+          assert "Checkout exact publisher commit with full main history" in deploy_issuer
+          assert 'merge-base --is-ancestor "$PUBLISHER_COMMIT_SHA"' in deploy_issuer
+          assert 'sha256sum publisher/tools/auto_clicker_v2/scripts/publish_provenance_release.ps1' in deploy_issuer
+          assert "persist-credentials: false" in deploy_issuer
+          assert "protected deploy decision must be introduced by one merged default-branch PR" in deploy_issuer
+          assert "AIMS_REGRESSION_AUDITOR_ED25519_PRIVATE_KEY_B64" in deploy_issuer
+          assert "AIMS_BOUNDED_DEPLOY" not in deploy_issuer
+          assert "--expected-certified-sha" in deploy_issuer
+          assert "--expected-artifact-digest" in deploy_issuer
+          assert "--expected-installer-digest" in deploy_issuer
+          assert "--expected-latest-manifest-digest" in deploy_issuer
+          assert "--expected-publisher-script-digest" in deploy_issuer
+          assert "--expected-ac-build-provenance-digest" in deploy_issuer
+          assert "--expected-execution-provenance-digest" in deploy_issuer
+          assert "--expected-provenance-trust-digest" in deploy_issuer
+          assert "bounded-deploy-attestation.json" in deploy_issuer
           PY
 
       - name: Validate historical issue-close binding

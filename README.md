@@ -16,6 +16,36 @@
 key, 보안 GitHub App 개인키는 저장소 파일이 아니라 GitHub environment secret으로만
 보관합니다.
 
+## Bounded production deploy attestation
+
+AIMS issue `#358`의 Solo-v2 Protected deploy 경로는 별도 secret을 만들지 않고 기존
+`regression-auditor` environment의 Ed25519 키를 재사용합니다. 단, 일반 receipt와
+달리 임의 payload 서명 API를 제공하지 않습니다. 기본 브랜치에 pull request로
+병합된 `aims.bounded_deploy_attestation_decision.v1` 결정이 exact source SHA와 AutoClicker
+distribution manifest SHA-256을 승인하고, 보호된 `ac-source-*` annotated tag가 원격에서
+해당 SHA로 정확히 peel되는 경우에만 발급합니다. 태그 보호 ruleset `19181898`의 active
+tag target, `refs/tags/ac-source-*` include, deletion/non-fast-forward 차단, 빈 bypass 목록은
+protected decision evidence에 기록되고 그 decision digest가 attestation에 결속됩니다.
+
+서명 대상은 `AIMS_BOUNDED_DEPLOY_ATTESTATION_V1\0` domain separator와 canonical JSON을
+결합한 bytes입니다. Canonical JSON은 schema, repository, operation, artifact kind,
+issuer, key ID, signature algorithm, source ref, certified SHA, sidecar/installer/latest
+manifest/publisher script digest, 고정 publisher command contract, decision digest,
+publisher commit SHA, source commit tree SHA, source tag object SHA, publisher script와
+`ac_build_provenance.py`/`execution_provenance.py`/`provenance_trust.py`를 합친 exact
+`publisherFiles` path→digest map,
+발급/만료 시각을 모두 포함합니다.
+Publisher commit은 source tag commit과 분리하며 AIMS `origin/main` ancestor인 exact commit의
+실제 publisher script bytes를 다시 hash합니다. JSON은 UTF-8, key 정렬, 공백 없는 separator로
+직렬화합니다. 고정 command contract는
+`aims.auto_clicker.publish_provenance_release.v1`입니다.
+
+발급 workflow 자체도 default branch ref와 보호 environment에 고정됩니다. 결정은 10분
+이하의 유효기간, 독립 Auditor identity/session, App reviewer identity, evidence를 모두
+가져야 하며 attestation도 최대 10분 안에 만료됩니다. 결과 attestation은 다른 operation,
+artifact 또는 시각으로 재사용할 수 없고 private key나 새로운 secret 값은 artifact 또는
+로그로 노출하지 않습니다.
+
 ## 비밀과 실행 경계
 
 `regression-auditor` environment는 `main` 브랜치만 허용합니다. 따라서 collaborator가
