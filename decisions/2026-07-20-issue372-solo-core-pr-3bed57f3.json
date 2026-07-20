@@ -8,7 +8,7 @@
   "candidateDigest": "58d2ee35644a218cd61431e69aceaaaa0d541b64098c682ec645577c00d4b738",
   "workKind": "verification-gate",
   "subjectReceipt": "docs/regression-audits/2026-07-20_issue372-solo-core-pr-promotion.json",
-  "subjectReceiptSha256": "f2a703da6543083fcfd32693fc89c8c020d144ebd5212cc9850ac313b197c571",
+  "subjectReceiptSha256": "5e9f1d97f834147882e4ee21ef17954efa88389beb121ac809eff4fdfe43f2c5",
   "auditorIdentity": "regression-auditor-agent:issue372-independent-review-20260720",
   "auditorSessionId": "regression-auditor-session:/root/issue372_independent_review:2026-07-20T21:45KST",
   "implementationIdentity": "github-actor-id:26228531",
