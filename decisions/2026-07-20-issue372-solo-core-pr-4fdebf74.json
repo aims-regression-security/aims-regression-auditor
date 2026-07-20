@@ -1,0 +1,42 @@
+{
+  "schema": "aims.regression_auditor_decision.v1",
+  "verdict": "PASS",
+  "repository": "aim2nasa/aims",
+  "candidateCommitSha": "4fdebf74afed7a705d0a932e126b46f16915dfe2",
+  "candidateTreeSha": "7f36a343e01ab5429db11b5382efb52ebcc13847",
+  "pullRequestBaseSha": "2633cdf386f2cfba3a3eb8a40538744a91b49932",
+  "candidateDigest": "dcc3488a6543895df5ef1a469445bc88fccacc434db0c3dc2f9075ce0b58f4be",
+  "workKind": "verification-gate",
+  "subjectReceipt": "docs/regression-audits/2026-07-20_issue372-solo-core-pr-promotion.json",
+  "subjectReceiptSha256": "58391a6183674b082450d8b5552112d8f35f38bb399ba7f0b5b5a6ee007928cb",
+  "auditorIdentity": "regression-auditor-agent:issue372-independent-review-20260720",
+  "auditorSessionId": "regression-auditor-session:/root/issue372_independent_review:2026-07-20T21:55KST",
+  "implementationIdentity": "github-actor-id:26228531",
+  "decisionReviewerIdentity": "github-app-id:4291228",
+  "issuedAt": 1784552122,
+  "expiresAt": 1784553022,
+  "reviewedFiles": [
+    "docs/ace-reports/2026-07-20_issue372-solo-core-pr-promotion.md",
+    "docs/e2e-matrices/2026-07-20_issue372-solo-core-pr-promotion.json",
+    "docs/quality-gates/2026-07-20_issue372-solo-core-pr-promotion.json",
+    "docs/regression-audits/2026-07-20_issue372-solo-core-pr-promotion.json",
+    "docs/regression-evidence/2026-07-20_issue372-solo-core-pr-promotion.json",
+    "docs/regression-evidence/fixtures/test_issue372_solo_core_pr_promotion.py",
+    "docs/regression-work/2026-07-20_issue372-solo-core-pr-promotion.json",
+    "docs/requirements/requirements-log.md",
+    "scripts/finish_branch.py",
+    "scripts/gate_policy_check.py",
+    "scripts/pre_push_review.py",
+    "scripts/regression_auditor_candidate.py",
+    "scripts/solo_agent_quality_gate_policy.py",
+    "scripts/solo_pr_finish.py",
+    "scripts/tests/test_issue372_solo_core_pr_promotion.py"
+  ],
+  "evidence": [
+    "The immutable five-case gate harness returned five assertion failures on origin/main 2633cdf386f2 and five passes with zero skips on the candidate behavior.",
+    "The final PR-equivalent Gate Policy passed as tier 3 gate-change with seven behavior files and an explicit quality manifest.",
+    "AIMS targeted gate verification returned 29 passes; Python compile, diff, work, and E2E gates passed.",
+    "Independent follow-up review confirmed solo_pr_finish.py is a gate trust-boundary and the exact-path classification is the minimal safe correction.",
+    "No #362 product regression or live test was rerun; the candidate is Protected solely because it changes the gate trust boundary."
+  ]
+}
