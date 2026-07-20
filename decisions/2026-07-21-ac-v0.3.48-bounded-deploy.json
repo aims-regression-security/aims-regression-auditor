@@ -31,7 +31,7 @@
     "rules": ["deletion", "non_fast_forward"],
     "bypassActors": []
   },
-  "auditorIdentity": "independent-regression-auditor:/root/ac048_deploy_auditor",
+  "auditorIdentity": "regression-auditor-agent:ac-v0.3.48-deploy-20260721",
   "auditorSessionId": "019f80c8-1a0e-7553-9c17-6b71e662cc20",
   "implementationIdentity": "github-actor-id:26228531",
   "decisionReviewerIdentity": "github-app-id:4291228",
