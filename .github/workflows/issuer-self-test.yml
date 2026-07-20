@@ -44,8 +44,10 @@ jobs:
           scripts/regression_auditor_issue.py
           scripts/regression_auditor_verify_base.py
           scripts/regression_evidence_runner.py
+          scripts/solo_v2_pr_lane.py
           scripts/tests/test_bounded_deploy_attestation_issue.py
           scripts/tests/test_gate_policy_check.py
+          scripts/tests/test_solo_v2_pr_lane.py
 
       - name: Validate gate policy classifications
         run: >-
@@ -111,6 +113,9 @@ jobs:
           assert "github.event.client_payload.implementation_user_id" not in verifier
           assert "AUTHORITATIVE_BASE_SHA: ${{ steps.pr.outputs.base_sha }}" in verifier
           assert "regression_auditor_verify_base.py" in verifier
+          assert "solo_v2_pr_lane.py" in verifier
+          assert "steps.lane.outputs.lane == 'protected'" in verifier
+          assert "Solo-v2 Core verification reused" in verifier
           assert '--authoritative-base "$AUTHORITATIVE_BASE_SHA"' in verifier
           assert 'cat-file -e "${BASE_SHA}^{commit}"' in verifier
           assert 'cat-file -e "${HEAD_SHA}^{commit}"' in verifier
