@@ -1,0 +1,36 @@
+{
+  "schema": "aims.regression_auditor_decision.v1",
+  "verdict": "PASS",
+  "repository": "aim2nasa/aims",
+  "candidateCommitSha": "cd47571db98693e0a20b536bdbda7fbda060e85c",
+  "candidateTreeSha": "10c9ecf5b9c9707859d9e615b2fc7ccd4faafef9",
+  "pullRequestBaseSha": "f9c057d28cfffce11c459a8a2e8e80cdfd1ef170",
+  "candidateDigest": "9842cb42207d6029e2842fd90c020b01fc8454d64067af2e00ff49c5b3e06812",
+  "workKind": "verification-gate",
+  "subjectReceipt": "docs/regression-audits/2026-07-20_issue376-ac-smoke-sha256.json",
+  "subjectReceiptSha256": "40a8f6a689cda87b83fa7e42feb173f4300c179f2b4af2b15f2ecac4c17fc49a",
+  "auditorIdentity": "regression-auditor-agent:issue376-protected-20260720",
+  "auditorSessionId": "regression-auditor-session:/root/issue376_protected_audit:20260720-final",
+  "implementationIdentity": "github-actor-id:26228531",
+  "decisionReviewerIdentity": "github-app-id:4291228",
+  "issuedAt": 1784559710,
+  "expiresAt": 1784560610,
+  "reviewedFiles": [
+    "docs/ace-reports/2026-07-20_issue376-ac-smoke-sha256.md",
+    "docs/ace-reports/assets/issue376-ac-smoke-sha256/2026-07-20/poisoned-module-path-smoke-summary.json",
+    "docs/e2e-matrices/2026-07-20_issue376-ac-smoke-sha256.json",
+    "docs/quality-gates/2026-07-20_issue376-ac-smoke-sha256.json",
+    "docs/regression-audits/2026-07-20_issue376-ac-smoke-sha256.json",
+    "docs/regression-evidence/2026-07-20_issue376-ac-smoke-sha256.json",
+    "docs/regression-work/2026-07-20_issue376-ac-smoke-sha256.json",
+    "scripts/tests/test_issue376_ac_smoke_sha256.py",
+    "tools/auto_clicker_v2/scripts/smoke_install_verify.ps1"
+  ],
+  "evidence": [
+    "The exact final harness produced two assertion failures on the protected base and two passes on the candidate.",
+    "The current helper computes exact bytes and releases file handles on normal and injected factory-failure paths.",
+    "Issue 376 plus issue 360 targeted verification produced nine passes with zero failures.",
+    "The final current-script installer smoke completed with exit code zero and three content-bound raw evidence digests.",
+    "Independent final review found zero High and zero Medium defects."
+  ]
+}
