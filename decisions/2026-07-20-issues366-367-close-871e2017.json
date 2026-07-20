@@ -1,0 +1,30 @@
+{
+  "schema": "aims.regression_auditor_decision.v1",
+  "verdict": "PASS",
+  "repository": "aim2nasa/aims",
+  "candidateCommitSha": "871e2017ac10163fd07742fb7bc5720711932573",
+  "candidateTreeSha": "b60382d3c0b65675468ccc9645dc777ceb66f0ee",
+  "pullRequestBaseSha": "85770dd9ae22243d9f86149634ee2e293a7fc9d5",
+  "candidateDigest": "d3248d71a0e70ed0be2702b2da9150eef3dcda781dbec1034ba46cebad015e9d",
+  "workKind": "verification-gate",
+  "subjectReceipt": "docs/regression-audits/2026-07-20_issue366-367-close.json",
+  "subjectReceiptSha256": "8a3bee9d796e133b1ef8d06799350e8fc0484524562b68ea1a842d2bbe06fbb6",
+  "auditorIdentity": "regression-auditor-agent:issues366-367-gate-contract-batch-20260720",
+  "auditorSessionId": "regression-auditor-session:/root/p0_runtime_protected_auditor:2026-07-20T19:35KST:871e2017",
+  "implementationIdentity": "github-actor-id:26228531",
+  "decisionReviewerIdentity": "github-app-id:4291228",
+  "issuedAt": 1784543734,
+  "expiresAt": 1784544634,
+  "reviewedFiles": [
+    "docs/regression-audits/2026-07-20_issue366-367-close.json",
+    "docs/regression-evidence/2026-07-20_issue366-367-close.json",
+    "docs/regression-work/2026-07-20_issue366-367-close.json"
+  ],
+  "evidence": [
+    "Candidate 871e2017ac10163fd07742fb7bc5720711932573, tree b60382d3c0b65675468ccc9645dc777ceb66f0ee, PR base 85770dd9ae22243d9f86149634ee2e293a7fc9d5, and full candidate digest d3248d71a0e70ed0be2702b2da9150eef3dcda781dbec1034ba46cebad015e9d were independently recomputed from the candidate ref.",
+    "The aggregate issue-close subject targets #366 and #367, uses liveOnlyStatus none, and has canonical subject SHA-256 8a3bee9d796e133b1ef8d06799350e8fc0484524562b68ea1a842d2bbe06fbb6.",
+    "Historical behavior is bound to merge commit 85770dd9ae22243d9f86149634ee2e293a7fc9d5 and the six-file digest ee8848444c75b3d5fd5ee82b32fafff7a9439ad3ec4209f11785ddfb362b6f78.",
+    "The Git-index runner evidence SHA-256 is 3e7e8796a0c1617e9e607471978abd1117ccc7c28b797898872b45ca016f6841; its baseline, post-merge ref, and behavior digest match the subject binding.",
+    "Independent pre-issuance issue-close validation for both #366 and #367 found no blocker other than the expected absence of the not-yet-issued signed receipt, and fast-finish preflight passed."
+  ]
+}
