@@ -1,0 +1,46 @@
+{
+  "schema": "aims.bounded_deploy_attestation_decision.v1",
+  "verdict": "PASS",
+  "repository": "aim2nasa/aims",
+  "operation": "deploy",
+  "artifactKind": "aims-auto-clicker-distribution-manifest",
+  "issuer": "github-environment:regression-auditor",
+  "keyId": "primary-2026-07",
+  "signatureAlgorithm": "ed25519",
+  "certifiedSha": "b4d91f646ebbfb7afaf7e0f0680487ceaab6cc85",
+  "artifactDigest": "92dcfdbd5655e136a7da5e04952f4c76ca82901c527fe0a376a70bcac3a54a76",
+  "installerDigest": "dbdc8bc7380287b8dc89528c937fbbe7347c7ea2437a84b698af61550113b39e",
+  "latestManifestDigest": "53656f7d144da879cd691fe9cc98e760366a62491c2631963bde8b131691b075",
+  "publisherScriptDigest": "d3175775df4938e4c97c753fc06ef866b534825034cebe1f426edddb9357a84d",
+  "commandContract": "aims.auto_clicker.publish_provenance_release.v1",
+  "sourceTag": "refs/tags/ac-source-v0.3.40-b4d91f646",
+  "tagObjectSha": "56f2888cb971dca98ba732ce6760e361bed332f3",
+  "publisherCommitSha": "61ae4000368385aff1897d0d426bf3f16f4c6f76",
+  "sourceTreeSha": "2863086fe85ab425f4d9707daff09cc8028d05ff",
+  "publisherFiles": {
+    "tools/auto_clicker_v2/scripts/publish_provenance_release.ps1": "d3175775df4938e4c97c753fc06ef866b534825034cebe1f426edddb9357a84d",
+    "tools/auto_clicker_v2/scripts/ac_build_provenance.py": "d75bb94de23358a5530556a97fb7b00ef33df59b7639ed2d0d6342ffef64efdc",
+    "tools/auto_clicker_v2/execution_provenance.py": "ae6ea59e2260bdbc4e87a9d8597a3f76feb3a6998b21d15fe9d6d1bffc7216dc",
+    "tools/auto_clicker_v2/provenance_trust.py": "65af95c6eb7380d01b22d4b27b897f311db83f01152db782c9e67f8fd743f267"
+  },
+  "sourceTagProtection": {
+    "rulesetId": 19181898,
+    "target": "tag",
+    "enforcement": "active",
+    "include": ["refs/tags/ac-source-*"],
+    "rules": ["deletion", "non_fast_forward"],
+    "bypassActors": []
+  },
+  "auditorIdentity": "regression-auditor-agent:issue360-deploy-attestation-v2",
+  "auditorSessionId": "codex-session:/root/issue358_deploy_attestation_prep:v2",
+  "implementationIdentity": "github-actor-id:26228531",
+  "decisionReviewerIdentity": "github-app-id:4291228",
+  "issuedAt": 1784510730,
+  "expiresAt": 1784511330,
+  "evidence": [
+    "AIMS main 61ae4000368385aff1897d0d426bf3f16f4c6f76의 publisher Git blob과 LF checkout SHA-256을 독립 대조했습니다.",
+    "AC v0.3.40 exact installer, distribution, latest와 provenance helper 결속을 재검증했습니다.",
+    "annotated source tag의 object, peel, tree와 active ruleset 19181898을 재검증했습니다.",
+    "보호 issuer의 canonical decision-bound 계약, 600초 제한, exact publisherCommitSha 결속이 유지됨을 확인했습니다."
+  ]
+}
