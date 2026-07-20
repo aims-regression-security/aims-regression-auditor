@@ -14,7 +14,7 @@
   "implementationIdentity": "github-actor-id:26228531",
   "decisionReviewerIdentity": "github-app-id:4291228",
   "issuedAt": 1784551570,
-  "expiresAt": 1784552770,
+  "expiresAt": 1784552470,
   "reviewedFiles": [
     "docs/ace-reports/2026-07-20_issue372-solo-core-pr-promotion.md",
     "docs/e2e-matrices/2026-07-20_issue372-solo-core-pr-promotion.json",
