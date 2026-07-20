@@ -1,0 +1,46 @@
+{
+  "schema": "aims.bounded_deploy_attestation_decision.v1",
+  "verdict": "PASS",
+  "repository": "aim2nasa/aims",
+  "operation": "deploy",
+  "artifactKind": "aims-auto-clicker-distribution-manifest",
+  "issuer": "github-environment:regression-auditor",
+  "keyId": "primary-2026-07",
+  "signatureAlgorithm": "ed25519",
+  "certifiedSha": "03025a1a038ff94bbd38b1904df823118320ff17",
+  "artifactDigest": "8c2b322b0b1b04a9c659b6580c3d075cf8f9d7faafc64373241fc427e02bc337",
+  "installerDigest": "f0abf8d6e4f445554fac31f4e43ec5712eb9d57c36f8b73d3b0be0a78f7112a1",
+  "latestManifestDigest": "8b1ce80b425f65ac6ec1b0f7767d9c8bce30e86895bb5c52b2cb6a1f2135ec5d",
+  "publisherScriptDigest": "d3175775df4938e4c97c753fc06ef866b534825034cebe1f426edddb9357a84d",
+  "commandContract": "aims.auto_clicker.publish_provenance_release.v1",
+  "sourceTag": "refs/tags/ac-source-v0.3.46-03025a1a0",
+  "tagObjectSha": "27f0c02770b7160c6ca918f7a793c42d7130fde2",
+  "publisherCommitSha": "03025a1a038ff94bbd38b1904df823118320ff17",
+  "sourceTreeSha": "4cac51b04cae7dc2535e2b42b72575fe2d4fd37e",
+  "publisherFiles": {
+    "tools/auto_clicker_v2/scripts/publish_provenance_release.ps1": "d3175775df4938e4c97c753fc06ef866b534825034cebe1f426edddb9357a84d",
+    "tools/auto_clicker_v2/scripts/ac_build_provenance.py": "d75bb94de23358a5530556a97fb7b00ef33df59b7639ed2d0d6342ffef64efdc",
+    "tools/auto_clicker_v2/execution_provenance.py": "ae6ea59e2260bdbc4e87a9d8597a3f76feb3a6998b21d15fe9d6d1bffc7216dc",
+    "tools/auto_clicker_v2/provenance_trust.py": "65af95c6eb7380d01b22d4b27b897f311db83f01152db782c9e67f8fd743f267"
+  },
+  "sourceTagProtection": {
+    "rulesetId": 19181898,
+    "target": "tag",
+    "enforcement": "active",
+    "include": ["refs/tags/ac-source-*"],
+    "rules": ["deletion", "non_fast_forward"],
+    "bypassActors": []
+  },
+  "auditorIdentity": "regression-auditor-agent:ac-v0.3.46-deploy-20260721",
+  "auditorSessionId": "codex-session:/root/ac_0346_deploy_audit:2026-07-21-ac-v0.3.46",
+  "implementationIdentity": "github-actor-id:26228531",
+  "decisionReviewerIdentity": "github-app-id:4291228",
+  "issuedAt": 1784560410,
+  "expiresAt": 1784561010,
+  "evidence": [
+    "AIMS source 03025a1a038ff94bbd38b1904df823118320ff17 and tree 4cac51b04cae7dc2535e2b42b72575fe2d4fd37e were independently recomputed.",
+    "Annotated tag refs/tags/ac-source-v0.3.46-03025a1a0 object 27f0c02770b7160c6ca918f7a793c42d7130fde2 peels to the certified source and is protected by active no-bypass ruleset 19181898.",
+    "AC 0.3.46 installer f0abf8d6..., distribution 8c2b322b..., latest 8b1ce80b..., buildId 8a1ddd1df4f740329d99352717edb4ac and source bindings all match.",
+    "The exact publisher and three provenance dependency digests match main, and the complete installer smoke finished PASS."
+  ]
+}
