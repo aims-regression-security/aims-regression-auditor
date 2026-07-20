@@ -52,6 +52,7 @@ def write_gate_policy(root: Path) -> str:
 class GatePolicyClassificationTests(unittest.TestCase):
     def test_solo_quality_policy_is_an_exact_gate_path(self) -> None:
         self.assertTrue(gate.is_gate_path(GATE_PATH))
+        self.assertTrue(gate.is_gate_path("scripts/solo_pr_finish.py"))
 
     def test_bounded_finish_runtime_is_part_of_the_gate_boundary(self) -> None:
         for path in (
