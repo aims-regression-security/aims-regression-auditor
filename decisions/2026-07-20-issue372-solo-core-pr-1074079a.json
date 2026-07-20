@@ -1,0 +1,40 @@
+{
+  "schema": "aims.regression_auditor_decision.v1",
+  "verdict": "PASS",
+  "repository": "aim2nasa/aims",
+  "candidateCommitSha": "1074079a67e9bf18b0cd138774e94a235b1aacdf",
+  "candidateTreeSha": "dac8b47f8cadfaeb70696bb27abcf1dc2f6073ad",
+  "pullRequestBaseSha": "2633cdf386f2cfba3a3eb8a40538744a91b49932",
+  "candidateDigest": "0ae1cb2e5ff386249f96b11617dc1758c89631f40f54ffa1a54232b9111f0fa1",
+  "workKind": "verification-gate",
+  "subjectReceipt": "docs/regression-audits/2026-07-20_issue372-solo-core-pr-promotion.json",
+  "subjectReceiptSha256": "becd780ddedee4c6068d20299cff07bb1a439d67bbebdb96ca4bd3eb7c604ce0",
+  "auditorIdentity": "regression-auditor-agent:issue372-independent-review-20260720",
+  "auditorSessionId": "regression-auditor-session:/root/issue372_independent_review:2026-07-20T21:20KST",
+  "implementationIdentity": "github-actor-id:26228531",
+  "decisionReviewerIdentity": "github-app-id:4291228",
+  "issuedAt": 1784550935,
+  "expiresAt": 1784551835,
+  "reviewedFiles": [
+    "docs/ace-reports/2026-07-20_issue372-solo-core-pr-promotion.md",
+    "docs/e2e-matrices/2026-07-20_issue372-solo-core-pr-promotion.json",
+    "docs/regression-audits/2026-07-20_issue372-solo-core-pr-promotion.json",
+    "docs/regression-evidence/2026-07-20_issue372-solo-core-pr-promotion.json",
+    "docs/regression-evidence/fixtures/test_issue372_solo_core_pr_promotion.py",
+    "docs/regression-work/2026-07-20_issue372-solo-core-pr-promotion.json",
+    "docs/requirements/requirements-log.md",
+    "scripts/finish_branch.py",
+    "scripts/pre_push_review.py",
+    "scripts/regression_auditor_candidate.py",
+    "scripts/solo_agent_quality_gate_policy.py",
+    "scripts/solo_pr_finish.py",
+    "scripts/tests/test_issue372_solo_core_pr_promotion.py"
+  ],
+  "evidence": [
+    "The immutable four-case fail-first harness returned four assertion failures on origin/main 2633cdf386f2 and four passes with zero skips on the candidate behavior.",
+    "AIMS targeted gate verification returned 67 passes; the external classifier and workflow suite returned 42 passes and Issuer Self Test passed.",
+    "Independent review retained its initial FAIL for unauthenticated Core success and a check-creation race; both were fixed and exact-actor plus exact-name/App/SHA polling re-review returned PASS with High 0 and Medium 0.",
+    "External run 29742242985 classified PR 371 as Core in 19 seconds, skipped protected dependency installation and product-test/receipt reruns, published the exact App check, and enabled normal merge.",
+    "The candidate is Protected because it changes gate trust-boundary files; ordinary Direct/Core changes remain on the receipt-free lightweight path."
+  ]
+}
