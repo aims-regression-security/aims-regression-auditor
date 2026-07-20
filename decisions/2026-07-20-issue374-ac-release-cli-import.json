@@ -1,0 +1,35 @@
+{
+  "schema": "aims.regression_auditor_decision.v1",
+  "verdict": "PASS",
+  "repository": "aim2nasa/aims",
+  "candidateCommitSha": "937fc9936b1da5e5559fd4ff27711e1d07944804",
+  "candidateTreeSha": "5ec08f5b93eeaeffed9c07545f2b610ad6f762a8",
+  "pullRequestBaseSha": "0f10d7dab5d39d7401200f7e7a297bb4b72d5003",
+  "candidateDigest": "8347a84ed99a796807b2de2ba4c64e9ada9cd001b9b79618cd4673a3f6c9de93",
+  "workKind": "release-coordinator-bugfix",
+  "subjectReceipt": "docs/regression-audits/2026-07-20_issue374-ac-release-cli-import.json",
+  "subjectReceiptSha256": "a01c8d654864d2e6679e03f4efca4b4eb8e249e6c8b60f8cdba62ed0137eab27",
+  "auditorIdentity": "regression-auditor-agent:issue374-protected-20260720",
+  "auditorSessionId": "regression-auditor-session:/root/issue374_regression_auditor:019f7fe0-6f9d-7753-96d4-b546d4472591",
+  "implementationIdentity": "github-actor-id:26228531",
+  "decisionReviewerIdentity": "github-app-id:4291228",
+  "issuedAt": 1784557616,
+  "expiresAt": 1784558516,
+  "reviewedFiles": [
+    "docs/ace-reports/2026-07-20_issue374-ac-release-cli-import.md",
+    "docs/e2e-matrices/2026-07-20_issue374-ac-release-cli-import.json",
+    "docs/quality-gates/2026-07-20_issue374-ac-release-cli-import.json",
+    "docs/regression-audits/2026-07-20_issue374-ac-release-cli-import.json",
+    "docs/regression-evidence/2026-07-20_issue374-ac-release-cli-import.json",
+    "docs/regression-work/2026-07-20_issue374-ac-release-cli-import.json",
+    "scripts/ac_release_candidate.py",
+    "scripts/tests/test_issue374_ac_release_candidate_cli.py"
+  ],
+  "evidence": [
+    "The exact immutable harness produced three assertion failures and one pass on the protected base, then four passes on the candidate.",
+    "Direct and module CLI entrypoints completed prepare, status, live, deploy, and final status with identical DEPLOYED results.",
+    "Pre-publish gate-loader failure preserved PENDING with zero publisher calls and recovered on the same frozen candidate.",
+    "Existing release-candidate and bounded-gate regression suites produced thirty-eight additional passes.",
+    "Independent review found zero High and zero Medium defects and verified the exact staged behavior digest."
+  ]
+}
