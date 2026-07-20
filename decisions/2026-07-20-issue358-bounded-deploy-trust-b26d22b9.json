@@ -1,0 +1,40 @@
+{
+  "schema": "aims.regression_auditor_decision.v1",
+  "verdict": "PASS",
+  "repository": "aim2nasa/aims",
+  "candidateCommitSha": "b26d22b91e64c3782ba41e60da3200c992f1e94f",
+  "candidateTreeSha": "fc2082ec29c6a3f06f4b5030f0a3481819ab2618",
+  "pullRequestBaseSha": "9b1537a7c3e99afcd3ddf1b3536d1b28d8cd944e",
+  "candidateDigest": "f1ceb6b84e41c4769c4e11e256d9637a188f5b4502ad6fe61272196cdd433198",
+  "workKind": "verification-gate",
+  "subjectReceipt": "docs/regression-audits/2026-07-20_issue358-bounded-deploy-trust.json",
+  "subjectReceiptSha256": "857460ac4f37fea22a2d09a75936742b93cac18548cb40d1208e8ccf349673b3",
+  "auditorIdentity": "regression-auditor-agent:issue358-bounded-security-review-20260720",
+  "auditorSessionId": "regression-auditor-session:/root/bounded_security_review:2026-07-20T08:42:KST",
+  "implementationIdentity": "github-actor-id:26228531",
+  "decisionReviewerIdentity": "github-app-id:4291228",
+  "issuedAt": 1784505757,
+  "expiresAt": 1784506657,
+  "reviewedFiles": [
+    ".gitattributes",
+    "docs/regression-work/2026-07-20_issue358-bounded-deploy-trust.json",
+    "docs/regression-evidence/2026-07-20_issue358-bounded-deploy-trust.json",
+    "docs/e2e-matrices/2026-07-20_issue358-bounded-deploy-trust.json",
+    "docs/quality-gates/2026-07-20_issue358-bounded-deploy-trust.json",
+    "docs/ace-reports/2026-07-20_issue358-bounded-deploy-trust.md",
+    "docs/regression-audits/2026-07-20_issue358-bounded-deploy-trust.json",
+    "scripts/bounded_latency_gate.py",
+    "scripts/ac_smoke_test.py",
+    "scripts/hooks/ac_deploy_gate.py",
+    "tools/auto_clicker_v2/scripts/publish_provenance_release.ps1",
+    "scripts/tests/test_issue358_bounded_deploy_trust.py"
+  ],
+  "evidence": [
+    "Exact candidate b26d22b91e64c3782ba41e60da3200c992f1e94f, tree fc2082ec29c6a3f06f4b5030f0a3481819ab2618, base 9b1537a7c3e99afcd3ddf1b3536d1b28d8cd944e, and candidate digest f1ceb6b84e41c4769c4e11e256d9637a188f5b4502ad6fe61272196cdd433198 were recomputed from a clean detached checkout.",
+    "Canonical subject receipt SHA-256 857460ac4f37fea22a2d09a75936742b93cac18548cb40d1208e8ccf349673b3 was recomputed with auditorReceipt excluded.",
+    "Fresh Windows checkout and Git blob both produced LF publisher SHA-256 6c58f83b5a2a4daa56318293014776bcc1b404877ced22fd25bf3d2677e20ea7 after the explicit eol=lf override.",
+    "The independent targeted suite returned 39 passes, 4 environment skips, and zero failures; the four skips require distribution installers absent from a candidate source checkout.",
+    "Independent mutation review found High 0 and Medium 0 after canonical envelope binding, exact publisher allowlisting, pre-execution rehash, and shared 180-second deadline checks.",
+    "The only delta from the previously clean 14fbfb0d candidate is issuer-compatible Auditor identity alignment in the subject and work-classification documents."
+  ]
+}
