@@ -1,0 +1,41 @@
+{
+  "schema": "aims.regression_auditor_decision.v1",
+  "verdict": "PASS",
+  "repository": "aim2nasa/aims",
+  "candidateCommitSha": "f69e22217991552ecd1b08fa5a97c1ab447bbcb0",
+  "candidateTreeSha": "d3d442246e2224a183807883f35610366b466610",
+  "pullRequestBaseSha": "61c84745ebabb10a159cacda05162a97fa843af2",
+  "candidateDigest": "375cff6d0d829c53307302976e693122dd819c6e38afc0d34f67e5da21ed3480",
+  "workKind": "verification-gate",
+  "subjectReceipt": "docs/regression-audits/2026-07-20_issue366-367-gate-contract-batch.json",
+  "subjectReceiptSha256": "07a3061ef28d36c569c4515ef1bdf9b4482816629f3e56901606d8436865eade",
+  "auditorIdentity": "regression-auditor-agent:issues366-367-gate-contract-batch-20260720",
+  "auditorSessionId": "regression-auditor-session:/root/p0_runtime_protected_auditor:2026-07-20T19:24KST:f69e2221",
+  "implementationIdentity": "github-actor-id:26228531",
+  "decisionReviewerIdentity": "github-app-id:4291228",
+  "issuedAt": 1784543125,
+  "expiresAt": 1784544025,
+  "reviewedFiles": [
+    "docs/ace-reports/2026-07-20_issue366-367-gate-contract-batch.md",
+    "docs/e2e-matrices/2026-07-20_issue366-367-gate-contract-batch.json",
+    "docs/plans/2026-07-20_issues366-367-gate-contracts.md",
+    "docs/quality-gates/2026-07-20_issue366-367-gate-contract-batch.json",
+    "docs/regression-audits/2026-07-20_issue366-367-gate-contract-batch.json",
+    "docs/regression-evidence/2026-07-20_issue366-367-gate-contract-batch.json",
+    "docs/regression-work/2026-07-20_issue366-367-gate-contract-batch.json",
+    "docs/requirements/requirements-log.md",
+    "scripts/regression_auditor_check.py",
+    "scripts/regression_gate_fast_finish.py",
+    "scripts/tests/test_issue366_367_gate_contract_batch.py",
+    "scripts/tests/test_regression_auditor_check.py",
+    "scripts/tests/test_regression_gate_fast_finish.py",
+    "scripts/tests/test_regression_live_gate_red_team.py"
+  ],
+  "evidence": [
+    "Candidate f69e22217991552ecd1b08fa5a97c1ab447bbcb0, tree d3d442246e2224a183807883f35610366b466610, PR base 61c84745ebabb10a159cacda05162a97fa843af2, and full candidate digest 375cff6d0d829c53307302976e693122dd819c6e38afc0d34f67e5da21ed3480 were independently recomputed from the candidate ref.",
+    "The six-file behavior digest ee8848444c75b3d5fd5ee82b32fafff7a9439ad3ec4209f11785ddfb362b6f78 and canonical subject SHA-256 07a3061ef28d36c569c4515ef1bdf9b4482816629f3e56901606d8436865eade match the immutable candidate.",
+    "The identical seven-case harness produced seven assertion failures on baseline 61c84745ebabb10a159cacda05162a97fa843af2 and seven passes on the candidate; the focused AIMS suites produced twenty-one and fifty-five passes.",
+    "External PR 248 merged as 7f684465af98d6bd2e1c41ac812a39b589d07610 with Issuer Self Test success, and both authoritative and AIMS checker blobs are ebceed99f0941cbb00d758f1f88e72a4b103ca3d.",
+    "Gate policy, work gate, E2E matrix, Python compile, JSON parse, diff check, and Git-index fast-finish preflight passed. The seven unrelated red-team failures are identical on baseline and candidate and do not affect this gate-contract batch."
+  ]
+}
