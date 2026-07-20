@@ -146,6 +146,20 @@ class SnapshotClassificationTests(unittest.TestCase):
         self.assertEqual(decision.reason_code, "classifier_self_change")
 
 
+class WorkflowAttestationContractTests(unittest.TestCase):
+    def test_lightweight_lane_requires_exact_pr_author_dispatch(self) -> None:
+        root = Path(__file__).resolve().parents[2]
+        workflow = (root / ".github/workflows/regression-auditor-verify.yml").read_text(
+            encoding="utf-8"
+        )
+        self.assertIn('EVENT_NAME: ${{ github.event_name }}', workflow)
+        self.assertIn('DISPATCH_ACTOR_ID: ${{ github.actor_id }}', workflow)
+        self.assertIn('[[ "$EVENT_NAME" != "workflow_dispatch" ]]', workflow)
+        self.assertIn('[[ "$MANUAL_PR_NUMBER" != "$PR_NUMBER" ]]', workflow)
+        self.assertIn('[[ "$DISPATCH_ACTOR_ID" != "$IMPLEMENTATION_USER_ID" ]]', workflow)
+        self.assertIn("protected receipt and product-test rerun skipped", workflow)
+
+
 class GitDeltaIntegrationTests(unittest.TestCase):
     def git(self, root: Path, *arguments: str) -> str:
         completed = subprocess.run(

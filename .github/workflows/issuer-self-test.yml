@@ -115,7 +115,9 @@ jobs:
           assert "regression_auditor_verify_base.py" in verifier
           assert "solo_v2_pr_lane.py" in verifier
           assert "steps.lane.outputs.lane == 'protected'" in verifier
-          assert "Solo-v2 Core verification reused" in verifier
+          assert "local gate attested by the exact PR author" in verifier
+          assert 'DISPATCH_ACTOR_ID: ${{ github.actor_id }}' in verifier
+          assert '[[ "$DISPATCH_ACTOR_ID" != "$IMPLEMENTATION_USER_ID" ]]' in verifier
           assert '--authoritative-base "$AUTHORITATIVE_BASE_SHA"' in verifier
           assert 'cat-file -e "${BASE_SHA}^{commit}"' in verifier
           assert 'cat-file -e "${HEAD_SHA}^{commit}"' in verifier
