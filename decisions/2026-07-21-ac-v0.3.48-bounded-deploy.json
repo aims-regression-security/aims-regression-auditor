@@ -1,0 +1,48 @@
+{
+  "schema": "aims.bounded_deploy_attestation_decision.v1",
+  "verdict": "PASS",
+  "repository": "aim2nasa/aims",
+  "operation": "deploy",
+  "artifactKind": "aims-auto-clicker-distribution-manifest",
+  "issuer": "github-environment:regression-auditor",
+  "keyId": "primary-2026-07",
+  "signatureAlgorithm": "ed25519",
+  "certifiedSha": "2f768a35a2ebe450768f1e8da667bb9939868466",
+  "artifactDigest": "7de957b3d1eab27d9fb87b532137ba017bdf2696ed6466947d47945607c20669",
+  "installerDigest": "69067dcac852e00a95f0f3f00a0fd7898b9d0cdcd7e0e339312456e45a504a70",
+  "latestManifestDigest": "2514367e93be8ad6f43d7dee3c039378fd501949e5f0ca2eeff8b7364ee0e86f",
+  "publisherScriptDigest": "d3175775df4938e4c97c753fc06ef866b534825034cebe1f426edddb9357a84d",
+  "commandContract": "aims.auto_clicker.publish_provenance_release.v1",
+  "sourceTag": "refs/tags/ac-source-v0.3.48-2f768a35a2",
+  "tagObjectSha": "faf4453a987c13bc003f78b7ea837b605ceb6606",
+  "publisherCommitSha": "2f768a35a2ebe450768f1e8da667bb9939868466",
+  "sourceTreeSha": "249521895e6abd7434fa8d1c82bbcf096a81e644",
+  "publisherFiles": {
+    "tools/auto_clicker_v2/scripts/publish_provenance_release.ps1": "d3175775df4938e4c97c753fc06ef866b534825034cebe1f426edddb9357a84d",
+    "tools/auto_clicker_v2/scripts/ac_build_provenance.py": "d75bb94de23358a5530556a97fb7b00ef33df59b7639ed2d0d6342ffef64efdc",
+    "tools/auto_clicker_v2/execution_provenance.py": "9b6f0d17a549a814a1b593ae17c01e0b3a308f6b610699b6920d15e86f408c65",
+    "tools/auto_clicker_v2/provenance_trust.py": "65af95c6eb7380d01b22d4b27b897f311db83f01152db782c9e67f8fd743f267"
+  },
+  "sourceTagProtection": {
+    "rulesetId": 19181898,
+    "target": "tag",
+    "enforcement": "active",
+    "include": ["refs/tags/ac-source-*"],
+    "rules": ["deletion", "non_fast_forward"],
+    "bypassActors": []
+  },
+  "auditorIdentity": "independent-regression-auditor:/root/ac048_deploy_auditor",
+  "auditorSessionId": "019f80c8-1a0e-7553-9c17-6b71e662cc20",
+  "implementationIdentity": "github-actor-id:26228531",
+  "decisionReviewerIdentity": "github-app-id:4291228",
+  "issuedAt": 1784572080,
+  "expiresAt": 1784572680,
+  "evidence": [
+    "AIMS source 2f768a35a2ebe450768f1e8da667bb9939868466 and tree 249521895e6abd7434fa8d1c82bbcf096a81e644 were independently recomputed.",
+    "Annotated tag refs/tags/ac-source-v0.3.48-2f768a35a2 object faf4453a987c13bc003f78b7ea837b605ceb6606 peels to the certified source and is protected by active no-bypass ruleset 19181898.",
+    "AC 0.3.48 installer 69067dca..., distribution 7de957b3..., latest 2514367e..., buildId 5e8011eb277a4e61a287b2b72951c8cf, source bindings, package integrity, health check, and installer smoke all match.",
+    "Issue #381 WC targeted evidence proves two CRS preview acquisitions, PDF save verification, and execution-bound viewer close with ok=True and active=0; the later batch stop was operator window interference outside the fixed path.",
+    "The independent Auditor approves bounded predeployment only; final release PASS remains contingent on exact API/download readback and immediate post-deploy kitten live acceptance for the same buildId.",
+    "The operator explicitly directed immediate protected deployment with post-deploy acceptance on kitten at Z:\\met-2024-v0.3.48; WC browser-destructive smoke retries were stopped and are not represented as product failures."
+  ]
+}
