@@ -1,0 +1,33 @@
+{
+  "schema": "aims.regression_auditor_decision.v1",
+  "verdict": "PASS",
+  "repository": "aim2nasa/aims",
+  "candidateCommitSha": "a75dd3142ac4dc305e6f7789bd86632af0b5f302",
+  "candidateTreeSha": "1891118583b0a939245fd5c8f6af6245be42f813",
+  "pullRequestBaseSha": "03025a1a038ff94bbd38b1904df823118320ff17",
+  "candidateDigest": "5b22e672d26a5a3f7af9d5f6f484ac2483a39659367289b20b0853fbd5ed990a",
+  "workKind": "verification-gate",
+  "subjectReceipt": "docs/regression-audits/2026-07-20_issue378-protected-receipt-close-reuse.json",
+  "subjectReceiptSha256": "073a885af5636f9bb79f9e9ac25dd9c734cfaad5d245ff3ba2f666f2111cafc3",
+  "auditorIdentity": "regression-auditor-agent:issue378-protected-20260720",
+  "auditorSessionId": "regression-auditor-session:/root/issue376_protected_audit:20260720-issue378-final",
+  "implementationIdentity": "github-actor-id:26228531",
+  "decisionReviewerIdentity": "github-app-id:4291228",
+  "issuedAt": 1784563290,
+  "expiresAt": 1784564190,
+  "reviewedFiles": [
+    "docs/ace-reports/2026-07-20_issue378-protected-receipt-close-reuse.md",
+    "docs/e2e-matrices/2026-07-20_issue378-protected-receipt-close-reuse.json",
+    "docs/quality-gates/2026-07-20_issue378-protected-receipt-close-reuse.json",
+    "docs/regression-evidence/2026-07-20_issue378-protected-receipt-close-reuse.json",
+    "docs/regression-work/2026-07-20_issue378-protected-receipt-close-reuse.json",
+    "scripts/regression_auditor_check.py",
+    "scripts/tests/test_issue378_historical_receipt_reuse.py",
+    "scripts/tests/test_regression_auditor_trust.py"
+  ],
+  "evidence": [
+    "Independent Regression Auditor and Gini reviewed the exact staged candidate.",
+    "The exact harness produced fourteen failures on main and fourteen passes on the candidate.",
+    "Related gate tests produced 109 passes and actual issue 374 and 376 receipts passed without reissuance."
+  ]
+}
