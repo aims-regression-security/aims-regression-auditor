@@ -49,7 +49,10 @@ GATE_EXACT_PATHS = {
     "AGENTS.md",
     "CLAUDE.md",
     "scripts/check_ace_assets_policy.py",
+    "scripts/bounded_latency_finish.py",
+    "scripts/bounded_latency_router.py",
     "scripts/e2e_matrix_check.py",
+    "scripts/finish_branch.py",
     "scripts/gate_policy_check.py",
     "scripts/pre_commit_review.py",
     "scripts/pre_push_review.py",
@@ -63,6 +66,7 @@ GATE_EXACT_PATHS = {
     "scripts/regression_github_state_marker.py",
     "scripts/regression_live_state_publish.py",
     "scripts/solo_agent_quality_gate_policy.py",
+    "scripts/test_bounded_latency_router_finish.py",
     "scripts/tier0_issue_close.py",
     "scripts/work_gate_check.py",
 }

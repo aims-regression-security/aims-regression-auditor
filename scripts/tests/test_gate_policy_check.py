@@ -53,6 +53,15 @@ class GatePolicyClassificationTests(unittest.TestCase):
     def test_solo_quality_policy_is_an_exact_gate_path(self) -> None:
         self.assertTrue(gate.is_gate_path(GATE_PATH))
 
+    def test_bounded_finish_runtime_is_part_of_the_gate_boundary(self) -> None:
+        for path in (
+            "scripts/bounded_latency_finish.py",
+            "scripts/bounded_latency_router.py",
+            "scripts/finish_branch.py",
+            "scripts/test_bounded_latency_router_finish.py",
+        ):
+            self.assertTrue(gate.is_gate_path(path), path)
+
     def test_auto_clicker_tests_are_support_paths(self) -> None:
         self.assertTrue(gate.is_support_path(AC_TEST_PATH))
         self.assertFalse(gate.is_support_path(AC_PRODUCT_PATH))
