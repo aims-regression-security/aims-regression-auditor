@@ -861,9 +861,61 @@ def load_authoritative_trust_context(
     return context
 
 
+COMPLETION_STATE_FIELDS = {
+    "conclusion",
+    "liveOnlyStatus",
+    "status",
+    "terminalState",
+    "verdict",
+}
+
+
+def _json_path(parent: str, key: str) -> str:
+    if key.isidentifier():
+        return f"{parent}.{key}"
+    return f"{parent}[{json.dumps(key, ensure_ascii=False)}]"
+
+
+def forbidden_completion_state_paths(value: Any, *, path: str = "$") -> list[str]:
+    """Return authoritative completion-state paths containing incomplete values.
+
+    Narrative evidence is intentionally excluded.  It may describe blocked states
+    such as OPEN_PENDING_LIVE without declaring the current candidate incomplete.
+    """
+    matches: list[str] = []
+    if isinstance(value, dict):
+        for raw_key, item in value.items():
+            key = str(raw_key)
+            item_path = _json_path(path, key)
+            if key in COMPLETION_STATE_FIELDS and isinstance(item, str):
+                normalized = _normalize_completion_text(item)
+                if any(
+                    _normalize_completion_text(token) in normalized
+                    for token in FORBIDDEN_TOKENS
+                ):
+                    matches.append(item_path)
+            matches.extend(forbidden_completion_state_paths(item, path=item_path))
+    elif isinstance(value, list):
+        for index, item in enumerate(value):
+            matches.extend(
+                forbidden_completion_state_paths(item, path=f"{path}[{index}]")
+            )
+    return matches
+
+
 def has_forbidden_completion_text(value: Any) -> bool:
-    blob = _normalize_completion_text(json.dumps(value, ensure_ascii=False))
-    return any(_normalize_completion_text(token) in blob for token in FORBIDDEN_TOKENS)
+    """Compatibility wrapper for protected issuer callers."""
+    return bool(forbidden_completion_state_paths(value))
+
+
+def append_forbidden_completion_state_errors(
+    errors: list[str],
+    value: Any,
+    *,
+    label: str,
+) -> None:
+    for path in forbidden_completion_state_paths(value):
+        errors.append(f"{label}의 실제 미완료 상태가 차단되었습니다: {path}")
 
 
 def _normalize_completion_text(value: str) -> str:
@@ -956,8 +1008,11 @@ def validate_work_classification(
         errors.append("auditorReview.status는 PASS여야 합니다.")
     if not string_list(auditor.get("evidence")):
         errors.append("auditorReview.evidence가 없습니다.")
-    if has_forbidden_completion_text(classification):
-        errors.append("pending/예정/TODO/미실행/나중에 확인 문구가 있습니다.")
+    append_forbidden_completion_state_errors(
+        errors,
+        classification,
+        label="work classification",
+    )
     if work_kind in VALID_WORK_KINDS - FAIL_FIRST_WORK_KINDS:
         errors.extend(
             validate_protected_work_classification_decision(
@@ -1070,8 +1125,11 @@ def validate_protected_work_classification_decision(
     for ok, message in checks:
         if not ok:
             errors.append(message)
-    if has_forbidden_completion_text(decision):
-        errors.append("protectedDecision에 pending/예정/TODO/미실행/나중에 확인 문구가 있습니다.")
+    append_forbidden_completion_state_errors(
+        errors,
+        decision,
+        label="protectedDecision",
+    )
     return errors
 
 
@@ -1198,8 +1256,11 @@ def validate_auditor_receipt(
         )
     if not string_list(auditor.get("evidence")):
         errors.append(f"{path}: evidence가 없습니다.")
-    if has_forbidden_completion_text(auditor):
-        errors.append(f"{path}: pending/예정/TODO/미실행/나중에 확인 문구가 있습니다.")
+    append_forbidden_completion_state_errors(
+        errors,
+        auditor,
+        label=path,
+    )
 
     nonce_to_consume = ""
     nonce_binding = ""
@@ -1808,11 +1869,14 @@ def validate_receipt(
             + ", ".join(missing_receipt_reviews)
         )
 
-    if has_forbidden_completion_text(receipt):
-        errors.append("receipt에 pending/예정/TODO/미실행/나중에 확인 문구가 있습니다.")
+    append_forbidden_completion_state_errors(
+        errors,
+        receipt,
+        label="receipt",
+    )
 
     if report_path:
-        report_content, report_read_error = read_text(
+        _report_content, report_read_error = read_text(
             root,
             report_path,
             staged=staged,
@@ -1820,11 +1884,8 @@ def validate_receipt(
         )
         if report_read_error:
             errors.append(f"{report_path}: 완료 증거 report를 읽을 수 없습니다.")
-            report_text = ""
-        else:
-            report_text = (report_content or "").lower()
-        if has_forbidden_completion_text(report_text):
-            errors.append(f"{report_path}: 완료 증거에 금지 문구가 있습니다.")
+        # The structured receipt is authoritative. Reports may describe negative
+        # states and recovery policy, so free-form Markdown is not a status field.
 
     if mode in {"issue-close", "release-pass"} and live_status == "OPEN_UNTIL_LIVE_PASS":
         errors.append(f"{mode}는 OPEN_UNTIL_LIVE_PASS 상태에서 차단됩니다.")
