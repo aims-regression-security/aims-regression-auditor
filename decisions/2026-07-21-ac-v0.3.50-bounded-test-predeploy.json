@@ -1,0 +1,55 @@
+{
+  "schema": "aims.bounded_deploy_attestation_decision.v1",
+  "verdict": "PASS",
+  "repository": "aim2nasa/aims",
+  "operation": "deploy",
+  "artifactKind": "aims-auto-clicker-distribution-manifest",
+  "issuer": "github-environment:regression-auditor",
+  "keyId": "primary-2026-07",
+  "signatureAlgorithm": "ed25519",
+  "certifiedSha": "c0e14df01ff2429aa3caba7ecbecc63f7fa22dff",
+  "artifactDigest": "cbebffffce4dc2bbb39c3e052234f4973354890ef7c9f1bfcb86c36bfcc32b80",
+  "installerDigest": "673aab45c4a5ea56d9372d14163377e6b8e07664c1123535ac11907d9a75161b",
+  "latestManifestDigest": "938e05a509e169a4796e20cd75da473bd20dc36973b14920bd69bdfb7d60d2e6",
+  "publisherScriptDigest": "d3175775df4938e4c97c753fc06ef866b534825034cebe1f426edddb9357a84d",
+  "commandContract": "aims.auto_clicker.publish_provenance_release.v1",
+  "sourceTag": "refs/tags/ac-source-v0.3.50-c0e14df01",
+  "tagObjectSha": "c3ebc06abd0b23f2b1b224c50410f003c0a0ff7a",
+  "publisherCommitSha": "c0e14df01ff2429aa3caba7ecbecc63f7fa22dff",
+  "sourceTreeSha": "a0d050b6dc314a4dee6c1d4a40019a401b02955f",
+  "publisherFiles": {
+    "tools/auto_clicker_v2/scripts/publish_provenance_release.ps1": "d3175775df4938e4c97c753fc06ef866b534825034cebe1f426edddb9357a84d",
+    "tools/auto_clicker_v2/scripts/ac_build_provenance.py": "d75bb94de23358a5530556a97fb7b00ef33df59b7639ed2d0d6342ffef64efdc",
+    "tools/auto_clicker_v2/execution_provenance.py": "9b6f0d17a549a814a1b593ae17c01e0b3a308f6b610699b6920d15e86f408c65",
+    "tools/auto_clicker_v2/provenance_trust.py": "65af95c6eb7380d01b22d4b27b897f311db83f01152db782c9e67f8fd743f267"
+  },
+  "sourceTagProtection": {
+    "rulesetId": 19181898,
+    "target": "tag",
+    "enforcement": "active",
+    "include": [
+      "refs/tags/ac-source-*"
+    ],
+    "rules": [
+      "deletion",
+      "non_fast_forward"
+    ],
+    "bypassActors": []
+  },
+  "auditorIdentity": "regression-auditor-agent:ac-v0.3.50-test-predeploy-20260721",
+  "auditorSessionId": "/root/ac_0350_deploy_audit",
+  "implementationIdentity": "github-actor-id:26228531",
+  "decisionReviewerIdentity": "github-app-id:4291228",
+  "issuedAt": 1784645260,
+  "expiresAt": 1784645860,
+  "evidence": [
+    "독립 Auditor는 최종 release PASS가 아니라 kitten exact-artifact 실사용을 열기 위한 bounded test predeployment만 승인했다.",
+    "AIMS source c0e14df01ff2429aa3caba7ecbecc63f7fa22dff와 tree a0d050b6dc314a4dee6c1d4a40019a401b02955f는 origin/main에 병합되었고 VERSION은 0.3.50이다.",
+    "Annotated tag refs/tags/ac-source-v0.3.50-c0e14df01 object c3ebc06abd0b23f2b1b224c50410f003c0a0ff7a는 certified source로 peel되며 active no-bypass ruleset 19181898의 보호를 받는다.",
+    "Installer 673aab45..., distribution cbebffff..., latest 938e05a5..., buildId c3275e58059f40f59126bee430861f33, source/tree binding과 publisher dependency bytes가 exact candidate와 일치한다.",
+    "두 Solo-v2 ledger는 동일 Git blob harness의 pre-fix nonzero, post-fix zero, targeted zero와 gpt-5.6-sol high 독립 review를 exact source SHA/tree에 결속했고 focused 42 PASS 및 full AC 943 PASS 12 SKIP 증거와 일치한다.",
+    "개선 1의 전체 배치 기간 고객 digest registry, 개선 2의 Full/Compact OCR 누적, 개선 3의 Upstage OCR 비용 표시에 대한 live acceptance는 삭제되지 않고 OPEN_PENDING_LIVE로 유지된다.",
+    "Default last-known-good는 live-verified 0.3.49 installer 638b4fa2...와 distribution 5417387b...로 보존하며 0.3.50 predeploy readback은 별도 record에 기록한다.",
+    "게시 직후 exact API/manifest/download readback과 kitten 설치/hash 확인 및 2024.01~12 실사용을 수행하기 전 release PASS와 관련 이슈 close를 금지하고, 실패 시 0.3.49 signed monotonic rollback을 적용한다."
+  ]
+}
