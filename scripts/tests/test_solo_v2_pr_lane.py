@@ -8,6 +8,7 @@ import unittest
 from pathlib import Path
 
 from scripts.solo_v2_pr_lane import (
+    AC_RUNTIME_IMAGE_CLASSIFIER_SHA256S,
     CLASSIFIER_PATH,
     EXPECTED_CANDIDATE_CLASSIFIER_SHA256S,
     POLICY_POINTER_PATH,
@@ -80,9 +81,14 @@ class SnapshotClassificationTests(unittest.TestCase):
     def test_current_and_transition_classifier_snapshots_are_accepted(self) -> None:
         current = "2aa1ba6698eb78d7e43cc509ef802b2b8a268e2675dd0d41565762a4de80c088"
         transition = "6689e7ef95a95c4e777dec3c304c34c4000bd26e28456eb9ef9d329399152a95"
-        self.assertEqual(EXPECTED_CANDIDATE_CLASSIFIER_SHA256S, {current, transition})
+        issue384 = "2ff30f54ebb235b59a373925d8dbf5314cdb3675cdaf36fe8069074d80ef4dda"
+        self.assertEqual(
+            EXPECTED_CANDIDATE_CLASSIFIER_SHA256S,
+            {current, transition, issue384},
+        )
         self.assertTrue(is_expected_classifier_sha256(current))
         self.assertTrue(is_expected_classifier_sha256(transition))
+        self.assertTrue(is_expected_classifier_sha256(issue384))
 
     def test_unknown_classifier_snapshot_fails_closed(self) -> None:
         self.assertFalse(is_expected_classifier_sha256("f" * 64))
@@ -115,6 +121,40 @@ class SnapshotClassificationTests(unittest.TestCase):
             "solo-v2",
         )
         self.assertEqual(decision.lane, "core")
+
+    def test_ac_runtime_png_assets_are_core(self) -> None:
+        for path in (
+            "tools/auto_clicker_v2/img/alert.png",
+            "tools/auto_clicker_v2/img/dialogs/error/retry.png",
+            "tools/auto_clicker_v2/img/security/remove-login-button.png",
+        ):
+            with self.subTest(path=path):
+                decision = classify_paths(
+                    [path],
+                    "solo-v2",
+                    allow_ac_runtime_images=True,
+                )
+                self.assertEqual(decision.lane, "core")
+                self.assertFalse(decision.requires_protected_verifier)
+
+    def test_ac_runtime_image_allowlist_rejects_lookalikes_and_non_pngs(self) -> None:
+        for path in (
+            "tools/auto_clicker_v2/img/../payload.png",
+            "tools/auto_clicker_v2/img/dialogs/../../payload.png",
+            "tools/auto_clicker_v2/img/./payload.png",
+            "tools/auto_clicker_v2/img//payload.png",
+            "tools/auto_clicker_v2/img_evil/payload.png",
+            "tools/auto_clicker_v2/img.png/payload.png",
+            "tools/auto_clicker_v2/img/payload.jpg",
+            "tools/auto_clicker_v2/img/payload.png.jpg",
+            "tools/auto_clicker_v2/img/payload.txt",
+            "tools/auto_clicker_v2/icons/payload.png",
+            "screenshots/payload.png",
+        ):
+            with self.subTest(path=path):
+                decision = classify_paths([path], "solo-v2")
+                self.assertEqual(decision.lane, "protected")
+                self.assertTrue(decision.requires_protected_verifier)
 
     def test_dependency_manifest_uses_protected_verifier(self) -> None:
         decision = classify_paths(["package-lock.json"], "solo-v2")
@@ -195,6 +235,57 @@ class GitDeltaIntegrationTests(unittest.TestCase):
             expected_classifier_sha256s={hashlib.sha256(classifier).hexdigest()},
         )
 
+    def classify_runtime_image_candidate(
+        self,
+        classifier_text: str,
+        *,
+        grant_runtime_image_capability: bool,
+    ):
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            self.git(root, "init", "-b", "main")
+            self.git(root, "config", "user.email", "test@example.invalid")
+            self.git(root, "config", "user.name", "Verifier Test")
+            self.write(
+                root,
+                POLICY_POINTER_PATH,
+                json.dumps({"activePolicyVersion": "solo-v2"}),
+            )
+            self.write(root, CLASSIFIER_PATH, classifier_text)
+            self.write(root, "src/app.ts", "export const value = 1;\n")
+            self.git(root, "add", ".")
+            self.git(root, "commit", "-m", "base")
+            base = self.git(root, "rev-parse", "HEAD")
+            self.write(
+                root,
+                "tools/auto_clicker_v2/img/security/remove-login-button.png",
+                "synthetic image bytes",
+            )
+            self.git(root, "add", ".")
+            self.git(root, "commit", "-m", "runtime image")
+            head = self.git(root, "rev-parse", "HEAD")
+            pointer = subprocess.run(
+                ["git", "-C", str(root), "show", f"{head}:{POLICY_POINTER_PATH}"],
+                capture_output=True,
+                check=True,
+            ).stdout
+            classifier = subprocess.run(
+                ["git", "-C", str(root), "show", f"{head}:{CLASSIFIER_PATH}"],
+                capture_output=True,
+                check=True,
+            ).stdout
+            classifier_sha256 = hashlib.sha256(classifier).hexdigest()
+            return classify_git_delta(
+                root,
+                base,
+                head,
+                expected_pointer_sha256=hashlib.sha256(pointer).hexdigest(),
+                expected_classifier_sha256s={classifier_sha256},
+                ac_runtime_image_classifier_sha256s=(
+                    {classifier_sha256} if grant_runtime_image_capability else set()
+                ),
+            )
+
     def write_snapshot(self, root: Path) -> None:
         self.write(
             root,
@@ -223,6 +314,29 @@ class GitDeltaIntegrationTests(unittest.TestCase):
 
             self.assertEqual(decision.lane, "core")
             self.assertEqual(decision.reason_code, "core_behavior")
+
+    def test_runtime_png_capability_is_bound_to_classifier_snapshot(self) -> None:
+        old_decision = self.classify_runtime_image_candidate(
+            "# classifier before issue 384\n",
+            grant_runtime_image_capability=False,
+        )
+        new_decision = self.classify_runtime_image_candidate(
+            "# classifier after issue 384\n",
+            grant_runtime_image_capability=True,
+        )
+
+        self.assertEqual(old_decision.lane, "protected")
+        self.assertTrue(old_decision.requires_protected_verifier)
+        self.assertEqual(new_decision.lane, "core")
+        self.assertFalse(new_decision.requires_protected_verifier)
+
+    def test_runtime_png_capability_set_contains_only_issue384_snapshot(self) -> None:
+        self.assertEqual(
+            AC_RUNTIME_IMAGE_CLASSIFIER_SHA256S,
+            {
+                "2ff30f54ebb235b59a373925d8dbf5314cdb3675cdaf36fe8069074d80ef4dda"
+            },
+        )
 
     def test_exact_git_rename_fails_closed(self) -> None:
         with tempfile.TemporaryDirectory() as temporary:
