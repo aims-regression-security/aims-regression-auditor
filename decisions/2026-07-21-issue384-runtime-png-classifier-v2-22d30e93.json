@@ -1,0 +1,37 @@
+{
+  "schema": "aims.regression_auditor_decision.v1",
+  "verdict": "PASS",
+  "repository": "aim2nasa/aims",
+  "candidateCommitSha": "22d30e930643963c8bc087cc4a20c20df74b1e5a",
+  "candidateTreeSha": "79a5f95858401a2776a45de39619854a9e43249b",
+  "pullRequestBaseSha": "2f768a35a2ebe450768f1e8da667bb9939868466",
+  "candidateDigest": "a7ee7ed013117b03f14b0e4147a2cc27db45a630f8b05ca9c704c368d0a5ff11",
+  "workKind": "verification-gate",
+  "subjectReceipt": "docs/regression-audits/2026-07-21_issue384-runtime-png-classifier.json",
+  "subjectReceiptSha256": "6ade54b2c656b8272b5a52e94c1aee10bf6fa1010446e9d95fc2f0ae84f86e44",
+  "auditorIdentity": "regression-auditor-agent:issue384-gate-20260721",
+  "auditorSessionId": "regression-auditor-session:/root/issue384_protected_decision:2026-07-21T14:54:54+09:00:v2",
+  "implementationIdentity": "github-actor-id:26228531",
+  "decisionReviewerIdentity": "github-app-id:4291228",
+  "issuedAt": 1784613294,
+  "expiresAt": 1784614194,
+  "reviewedFiles": [
+    "docs/ace-reports/2026-07-21_issue384-runtime-png-classifier.md",
+    "docs/e2e-matrices/2026-07-21_issue384-runtime-png-classifier.json",
+    "docs/plans/2026-07-21_issue384-runtime-png-classifier.md",
+    "docs/quality-gates/2026-07-21_issue384-runtime-png-classifier.json",
+    "docs/regression-audits/2026-07-21_issue384-runtime-png-classifier.json",
+    "docs/regression-evidence/2026-07-21_issue384-runtime-png-classifier.json",
+    "docs/regression-work/2026-07-21_issue384-runtime-png-classifier.json",
+    "docs/requirements/requirements-log.md",
+    "scripts/solo_agent_quality_gate_policy.py",
+    "scripts/tests/test_solo_agent_quality_gate_policy.py"
+  ],
+  "evidence": [
+    "Independent recomputation bound base 2f768a35a2ebe450768f1e8da667bb9939868466, candidate 22d30e930643963c8bc087cc4a20c20df74b1e5a, tree 79a5f95858401a2776a45de39619854a9e43249b, and the exact ten-file candidate digest a7ee7ed013117b03f14b0e4147a2cc27db45a630f8b05ca9c704c368d0a5ff11.",
+    "The raw candidate Git blob subject digest is 6ade54b2c656b8272b5a52e94c1aee10bf6fa1010446e9d95fc2f0ae84f86e44, the runner evidence byte digest is 28aff196cea6645ab999de48f78e2ff76198c536915b74e00123122ea57be3d4, and the two-file Git-blob behavior digest is a05ff4758b073d68d12ed1781a24011f348426079e63422b05c4dbba8862f297.",
+    "An isolated protected-runner replay used the identical candidate harness, whose source digest is 95968f72ed8e6c43b91a3b4fd9bcef75f5d4a9ecd8b0f5d1d0349348d7372758 and closure digest is 03fa77ccdeb1767e28b4a2be3495a0a4deb0cd098a870c2871e82f77a625eb94; the baseline produced one assertion failure and two passes, while the candidate produced three passes with no skip, xfail, or error.",
+    "The user-entry matrix covers direct, nested, security-named, PNG-only and non-regression-declared runtime images, plus traversal, dot and empty segments, lookalike prefixes, non-PNG and external paths; deploy, release and explicit gate-trust contexts remain Protected.",
+    "The exact diff contains only the classifier gate, its regression test, and eight issue-specific evidence or planning records; no AutoClicker product, image, build, deploy, release, dependency, permission, data, or unrelated behavior file is mixed into the candidate."
+  ]
+}
