@@ -20,7 +20,7 @@ from pathlib import Path, PurePosixPath
 from typing import Collection, Sequence
 
 
-SNAPSHOT_VERSION = "solo-v2-external-2026-07-20.1"
+SNAPSHOT_VERSION = "solo-v2-external-2026-07-21.1"
 SOLO_POLICY_VERSION = "solo-v2"
 LEGACY_POLICY_VERSION = "legacy-v1"
 POLICY_POINTER_PATH = "docs/requirements/solo-agent-quality-gate-policy.json"
@@ -32,6 +32,15 @@ EXPECTED_CANDIDATE_CLASSIFIER_SHA256S = frozenset(
         # #372 transition candidate. Its own delta remains Protected below;
         # after that candidate merges, ordinary future Core PRs are recognized.
         "6689e7ef95a95c4e777dec3c304c34c4000bd26e28456eb9ef9d329399152a95",
+        # AIMS main after #384 runtime PNG classifier correction.
+        "2ff30f54ebb235b59a373925d8dbf5314cdb3675cdaf36fe8069074d80ef4dda",
+    }
+)
+AC_RUNTIME_IMAGE_CLASSIFIER_SHA256S = frozenset(
+    {
+        # AIMS #384 introduced the exact runtime-PNG semantics mirrored below.
+        # Older accepted classifier snapshots must not inherit this capability.
+        "2ff30f54ebb235b59a373925d8dbf5314cdb3675cdaf36fe8069074d80ef4dda",
     }
 )
 EXPECTED_CANDIDATE_POINTER_SHA256 = (
@@ -73,6 +82,7 @@ EVIDENCE_ASSET_PATH_PATTERN = re.compile(
     r"^docs/ace-reports/assets/issue[0-9]+(?:-[a-z0-9][a-z0-9-]*)?/"
     r"[0-9]{4}-[0-9]{2}-[0-9]{2}/[a-z0-9][a-z0-9._-]*\.png$"
 )
+AC_RUNTIME_IMAGE_PREFIX = "tools/auto_clicker_v2/img/"
 PROTECTED_PREFIXES = ("deploy", "migration", "migrations", "infrastructure/")
 PROTECTED_FILENAMES = {
     "package.json",
@@ -219,6 +229,18 @@ def _is_evidence_asset_path(path: str) -> bool:
     return EVIDENCE_ASSET_PATH_PATTERN.fullmatch(path) is not None
 
 
+def _is_ac_runtime_image_path(path: str) -> bool:
+    if not path.startswith(AC_RUNTIME_IMAGE_PREFIX):
+        return False
+    relative_path = path[len(AC_RUNTIME_IMAGE_PREFIX) :]
+    parts = relative_path.split("/")
+    return (
+        PurePosixPath(relative_path).suffix == ".png"
+        and bool(relative_path)
+        and all(part not in {"", ".", ".."} for part in parts)
+    )
+
+
 def _is_executable_agent_or_gate_path(path: str) -> bool:
     suffix = PurePosixPath(path).suffix
     name = PurePosixPath(path).name
@@ -245,7 +267,7 @@ def _is_executable_agent_or_gate_path(path: str) -> bool:
     )
 
 
-def _is_protected_path(path: str) -> bool:
+def _is_protected_path(path: str, *, allow_ac_runtime_images: bool = False) -> bool:
     name = PurePosixPath(path).name
     return (
         path == POLICY_POINTER_PATH
@@ -256,9 +278,17 @@ def _is_protected_path(path: str) -> bool:
         or _is_dependency_manifest(path)
         or _is_deployment_manifest(path)
         or _is_executable_agent_or_gate_path(path)
-        or _is_hard_operational_path(path)
-        or any(keyword in PurePosixPath(path).stem for keyword in PROTECTED_KEYWORDS)
-        or any(segment in {"auth", "security", "permission"} for segment in path.split("/"))
+        or (
+            not (allow_ac_runtime_images and _is_ac_runtime_image_path(path))
+            and (
+                _is_hard_operational_path(path)
+                or any(keyword in PurePosixPath(path).stem for keyword in PROTECTED_KEYWORDS)
+                or any(
+                    segment in {"auth", "security", "permission"}
+                    for segment in path.split("/")
+                )
+            )
+        )
         or name in {"agents.md", "claude.md"}
     )
 
@@ -331,7 +361,12 @@ def parse_raw_diff(raw: bytes) -> tuple[list[str], str | None]:
     return paths, None
 
 
-def classify_paths(paths: Sequence[str], policy_version: str) -> LaneDecision:
+def classify_paths(
+    paths: Sequence[str],
+    policy_version: str,
+    *,
+    allow_ac_runtime_images: bool = False,
+) -> LaneDecision:
     if policy_version == LEGACY_POLICY_VERSION:
         return protected(
             "legacy_policy",
@@ -358,7 +393,14 @@ def classify_paths(paths: Sequence[str], policy_version: str) -> LaneDecision:
             "candidate classifier changes require the signed receipt verifier",
             policy_version,
         )
-    protected_paths = [path for path in paths if _is_protected_path(path)]
+    protected_paths = [
+        path
+        for path in paths
+        if _is_protected_path(
+            path,
+            allow_ac_runtime_images=allow_ac_runtime_images,
+        )
+    ]
     if protected_paths:
         return protected(
             "protected_path",
@@ -377,6 +419,7 @@ def classify_paths(paths: Sequence[str], policy_version: str) -> LaneDecision:
         PurePosixPath(path).suffix in CODE_SUFFIXES
         or _is_direct_path(path)
         or _is_evidence_asset_path(path)
+        or (allow_ac_runtime_images and _is_ac_runtime_image_path(path))
         or path in RUNTIME_METADATA_PATHS
         for path in paths
     ):
@@ -434,6 +477,9 @@ def classify_git_delta(
     *,
     expected_classifier_sha256s: Collection[str] = EXPECTED_CANDIDATE_CLASSIFIER_SHA256S,
     expected_pointer_sha256: str = EXPECTED_CANDIDATE_POINTER_SHA256,
+    ac_runtime_image_classifier_sha256s: Collection[
+        str
+    ] = AC_RUNTIME_IMAGE_CLASSIFIER_SHA256S,
 ) -> LaneDecision:
     if not SHA_PATTERN.fullmatch(base) or not SHA_PATTERN.fullmatch(head):
         return protected("invalid_coordinates", "invalid PR commit coordinates")
@@ -458,10 +504,15 @@ def classify_git_delta(
             policy_version,
         )
     classifier_blob = read_candidate_blob(root, head, CLASSIFIER_PATH)
+    classifier_sha256 = (
+        hashlib.sha256(classifier_blob).hexdigest()
+        if classifier_blob is not None
+        else ""
+    )
     if (
         classifier_blob is None
         or not is_expected_classifier_sha256(
-            hashlib.sha256(classifier_blob).hexdigest(),
+            classifier_sha256,
             expected_classifier_sha256s,
         )
     ):
@@ -512,7 +563,13 @@ def classify_git_delta(
             reasons.get(structural_error, "malformed or unsupported raw diff fails closed"),
             policy_version,
         )
-    return classify_paths(paths, policy_version)
+    return classify_paths(
+        paths,
+        policy_version,
+        allow_ac_runtime_images=(
+            classifier_sha256 in ac_runtime_image_classifier_sha256s
+        ),
+    )
 
 
 def parse_args() -> argparse.Namespace:
