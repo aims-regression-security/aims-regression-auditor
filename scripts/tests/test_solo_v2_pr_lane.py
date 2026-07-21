@@ -194,6 +194,8 @@ class WorkflowAttestationContractTests(unittest.TestCase):
         )
         self.assertIn('EVENT_NAME: ${{ github.event_name }}', workflow)
         self.assertIn('DISPATCH_ACTOR_ID: ${{ github.actor_id }}', workflow)
+        self.assertIn('echo "skip_check=true"', workflow)
+        self.assertIn("steps.verify.outputs.skip_check != 'true'", workflow)
         self.assertIn('[[ "$EVENT_NAME" != "workflow_dispatch" ]]', workflow)
         self.assertIn('[[ "$MANUAL_PR_NUMBER" != "$PR_NUMBER" ]]', workflow)
         self.assertIn('[[ "$DISPATCH_ACTOR_ID" != "$IMPLEMENTATION_USER_ID" ]]', workflow)
