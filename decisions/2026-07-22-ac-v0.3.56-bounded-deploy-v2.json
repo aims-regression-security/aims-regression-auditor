@@ -1,0 +1,48 @@
+{
+  "schema": "aims.bounded_deploy_attestation_decision.v1",
+  "verdict": "PASS",
+  "repository": "aim2nasa/aims",
+  "operation": "deploy",
+  "artifactKind": "aims-auto-clicker-distribution-manifest",
+  "issuer": "github-environment:regression-auditor",
+  "keyId": "primary-2026-07",
+  "signatureAlgorithm": "ed25519",
+  "certifiedSha": "f88ed62417229930cce054f008c912d601da4cd5",
+  "artifactDigest": "7d5aadf0a48b7f2e3eda5016c4af7dfab44c6cf7b471d18d368f247cef97bf33",
+  "installerDigest": "f0ad41482d5b711a4cbccfd25857761c7ae055d74b6d20162e0d33c5ef8550a2",
+  "latestManifestDigest": "e86370106ff99818663daae223e27875b0700544e1fdca9006f84c1b9797aacd",
+  "publisherScriptDigest": "802c4e09eb5474129312be3abecb26247bade9df8eda3583b129b0bc9acf2671",
+  "commandContract": "aims.auto_clicker.publish_provenance_release.v1",
+  "sourceTag": "refs/tags/ac-source-v0.3.56-f88ed6241",
+  "tagObjectSha": "2e50583ef21e3445df803b97dc49df0b1d7121f2",
+  "publisherCommitSha": "f88ed62417229930cce054f008c912d601da4cd5",
+  "sourceTreeSha": "df632f722db8add9d96fd06e577805a52b09bc49",
+  "publisherFiles": {
+    "tools/auto_clicker_v2/scripts/publish_provenance_release.ps1": "802c4e09eb5474129312be3abecb26247bade9df8eda3583b129b0bc9acf2671",
+    "tools/auto_clicker_v2/scripts/ac_build_provenance.py": "ccf4cc9c079a9e23a53fcf0da7f4965aa133da3638a6b5499843e998e53723fd",
+    "tools/auto_clicker_v2/execution_provenance.py": "9b6f0d17a549a814a1b593ae17c01e0b3a308f6b610699b6920d15e86f408c65",
+    "tools/auto_clicker_v2/provenance_trust.py": "65af95c6eb7380d01b22d4b27b897f311db83f01152db782c9e67f8fd743f267"
+  },
+  "sourceTagProtection": {
+    "rulesetId": 19181898,
+    "target": "tag",
+    "enforcement": "active",
+    "include": ["refs/tags/ac-source-*"],
+    "rules": ["deletion", "non_fast_forward"],
+    "bypassActors": []
+  },
+  "auditorIdentity": "regression-auditor-agent:ac-protected-deploy-gini-20260722",
+  "auditorSessionId": "/root/ac_deploy_gini_review",
+  "implementationIdentity": "github-actor-id:26228531",
+  "decisionReviewerIdentity": "github-app-id:4291228",
+  "issuedAt": 1784705199,
+  "expiresAt": 1784705799,
+  "evidence": [
+    "독립 Regression Auditor는 exact checkpoint d1be31c7c17485b9337e20c01a259766674609f2와 병합된 source f88ed62417229930cce054f008c912d601da4cd5의 보호 배포 상태 전이를 검토했다.",
+    "동일 하네스에서 보호 배포·게이트·provenance 94건과 LKG 집중 상태 전이 4건이 PASS했고 P0, P1, P2 결함이 없었다.",
+    "AC 전체 회귀 1004건 PASS, 12건 SKIP과 backend 49건 PASS가 기록되었으며 live.required=false로 사용자 동작 라이브 테스트를 배포 승인 조건으로 오인하지 않았다.",
+    "C 드라이브 격리 빌드는 package integrity, health check, 실제 installer smoke를 통과했고 buildId 323f8e59a48543208d55b768cbb7510f 및 exact installer/distribution/latest digest가 불변 snapshot에 고정되었다.",
+    "현재 공개 0.3.50과 last-known-good의 version, buildId, filename, installer SHA가 일치하며 새 배포 실패 전에는 기존 공개 상태와 LKG를 변경하지 않는다.",
+    "controller는 exact API와 다운로드 SHA readback 후에만 DEPLOYED와 LKG 승격을 허용하며 직전 0.3.50 installer/distribution pair를 rollback 근거로 보존한다."
+  ]
+}
