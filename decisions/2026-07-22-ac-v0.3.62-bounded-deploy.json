@@ -1,0 +1,46 @@
+{
+  "schema": "aims.bounded_deploy_attestation_decision.v1",
+  "verdict": "PASS",
+  "repository": "aim2nasa/aims",
+  "operation": "deploy",
+  "artifactKind": "aims-auto-clicker-distribution-manifest",
+  "issuer": "github-environment:regression-auditor",
+  "keyId": "primary-2026-07",
+  "signatureAlgorithm": "ed25519",
+  "certifiedSha": "6a1278ba35251a0e20ed424634e16bf3f53731d0",
+  "artifactDigest": "61e53b6dec9b4105362a24d3f537f7f9773b1335845c35f3040c5df5d71179fc",
+  "installerDigest": "84231d15673d46d1b5f28f751859f9bf940aff409b77169680d7d78531357891",
+  "latestManifestDigest": "bfcb83868e922205074c925d1ae5fa97ded9ca370f2e512adbc796c90057e6ed",
+  "publisherScriptDigest": "802c4e09eb5474129312be3abecb26247bade9df8eda3583b129b0bc9acf2671",
+  "commandContract": "aims.auto_clicker.publish_provenance_release.v1",
+  "sourceTag": "refs/tags/ac-source-v0.3.62-6a1278ba3",
+  "tagObjectSha": "a286b974043c157ffe9fd8ad01bbb5fd3b6b15c9",
+  "publisherCommitSha": "6a1278ba35251a0e20ed424634e16bf3f53731d0",
+  "sourceTreeSha": "a970a39fb09d25461cd87ffb28c91e01e28b5891",
+  "publisherFiles": {
+    "tools/auto_clicker_v2/scripts/publish_provenance_release.ps1": "802c4e09eb5474129312be3abecb26247bade9df8eda3583b129b0bc9acf2671",
+    "tools/auto_clicker_v2/scripts/ac_build_provenance.py": "ccf4cc9c079a9e23a53fcf0da7f4965aa133da3638a6b5499843e998e53723fd",
+    "tools/auto_clicker_v2/execution_provenance.py": "ae6ea59e2260bdbc4e87a9d8597a3f76feb3a6998b21d15fe9d6d1bffc7216dc",
+    "tools/auto_clicker_v2/provenance_trust.py": "65af95c6eb7380d01b22d4b27b897f311db83f01152db782c9e67f8fd743f267"
+  },
+  "sourceTagProtection": {
+    "rulesetId": 19181898,
+    "target": "tag",
+    "enforcement": "active",
+    "include": ["refs/tags/ac-source-*"],
+    "rules": ["deletion", "non_fast_forward"],
+    "bypassActors": []
+  },
+  "auditorIdentity": "regression-auditor-agent:ac-v0362-protected-deploy-20260722",
+  "auditorSessionId": "regression-auditor-session:/root/issue397_independent_review:ac-v0362:v1",
+  "implementationIdentity": "github-actor-id:26228531",
+  "decisionReviewerIdentity": "github-app-id:4291228",
+  "issuedAt": 1784734364,
+  "expiresAt": 1784734964,
+  "evidence": [
+    "Exact source commit and tree are on origin/main, protected source tag resolves to the same commit, and GitHub open issue count is zero.",
+    "RC 0.3.62 build 9ebaca84c3f54d4ca355a7ea3802c129 passed package integrity, frozen health check and installer smoke; installer, distribution and latest manifest digests are bound above.",
+    "Independent high-reasoning review found zero blocking findings and confirmed the #397 and #388 fixes, gate bytes, release record and artifact relationships.",
+    "live.required=false because deterministic regression and packaged-offline evidence cover correctness; deployment remains fail-closed until API and downloaded installer SHA readback pass."
+  ]
+}
