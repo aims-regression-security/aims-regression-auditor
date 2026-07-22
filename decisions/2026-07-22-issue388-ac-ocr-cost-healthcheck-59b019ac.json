@@ -1,0 +1,41 @@
+{
+  "schema": "aims.regression_auditor_decision.v1",
+  "verdict": "PASS",
+  "repository": "aim2nasa/aims",
+  "candidateCommitSha": "59b019ac9820542373fe5f8e6e05030170a26285",
+  "candidateTreeSha": "adda7dc9db35a24578d07d6b1a1708c8c80cd828",
+  "pullRequestBaseSha": "f88ed62417229930cce054f008c912d601da4cd5",
+  "candidateDigest": "aa39b328d23ec3a1d713205a60ebb7d1491ba1ccecc082e25792f15086b8d10f",
+  "workKind": "bugfix",
+  "subjectReceipt": "docs/regression-audits/2026-07-22_ac-ocr-cost-healthcheck-bugfix.json",
+  "subjectReceiptSha256": "1a2171e36f91d45c71e5e6fe038949ad6b87cccc1b3c6838dcfaf6c14f4992d9",
+  "auditorIdentity": "regression-auditor-agent:issue388-release-audit-20260722",
+  "auditorSessionId": "regression-auditor-session:/root/release_audit:2026-07-22T19:15:00+09:00:v1",
+  "implementationIdentity": "github-actor-id:26228531",
+  "decisionReviewerIdentity": "github-app-id:4291228",
+  "issuedAt": 1784715721,
+  "expiresAt": 1784716621,
+  "reviewedFiles": [
+    "docs/ace-reports/2026-07-22-ac-0.3.57-rc-build-and-process-fix.md",
+    "docs/quality-gates/2026-07-22_ac-ocr-cost-healthcheck-release.json",
+    "docs/regression-audits/2026-07-22_ac-ocr-cost-healthcheck-bugfix.json",
+    "docs/regression-evidence/2026-07-22_ac-ocr-cost-healthcheck-bugfix.json",
+    "docs/regression-work/2026-07-22_ac-ocr-cost-healthcheck-bugfix.json",
+    "scripts/ac_release_candidate.py",
+    "scripts/tests/test_ac_release_candidate.py",
+    "tools/MetContract.sikuli/MetContract.py",
+    "tools/auto_clicker_v2/VERSION",
+    "tools/auto_clicker_v2/build/build.ps1",
+    "tools/auto_clicker_v2/ocr/parse_customerlist_final.py",
+    "tools/auto_clicker_v2/ocr/upstage_ocr_api.py",
+    "tools/auto_clicker_v2/tests/test_contract_list_parent_usage_bridge.py",
+    "tools/auto_clicker_v2/tests/test_issue319_contract_ocr_failure_recovery.py",
+    "tools/auto_clicker_v2/tests/test_met_contract_packaged_ocr.py"
+  ],
+  "evidence": [
+    "Independent review bound protected base f88ed62417229930cce054f008c912d601da4cd5, candidate 59b019ac9820542373fe5f8e6e05030170a26285, and candidate tree adda7dc9db35a24578d07d6b1a1708c8c80cd828.",
+    "The immutable #388 schema harness produced four assertion failures before the fix and four passes after it; the current parent event bridge and packaged stdio path additionally passed 42 targeted tests.",
+    "Exact AC 0.3.59 source f46f17a1098ecdeeaba861f35be3054c3cd172a3 completed package integrity, health check, and installer smoke without Bad file descriptor.",
+    "Live acceptance is intentionally none because local schema/event serialization and packaged import ownership are deterministic; live OCR output cannot increase proof strength for this boundary."
+  ]
+}
