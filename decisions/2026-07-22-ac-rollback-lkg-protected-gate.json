@@ -1,0 +1,39 @@
+{
+  "schema": "aims.regression_work_classification_decision.v1",
+  "verdict": "PASS",
+  "repository": "aim2nasa/aims",
+  "workClassification": "docs/regression-work/2026-07-22_ac-rollback-lkg-protected-gate.json",
+  "workClassificationSha256": "c39b67b77b3b80e545d19bac5a6a2c28d9d9fdf30b0182f7c451bcc0a2afa3f7",
+  "workKind": "feature",
+  "stagedBehaviorFiles": [
+    "scripts/ac_release_candidate.py",
+    "scripts/bounded_latency_gate.py",
+    "scripts/tests/test_ac_rollback_lkg_protected_flow.py",
+    "scripts/tests/test_issue374_ac_release_candidate_cli.py",
+    "tools/auto_clicker_v2/scripts/ac_build_provenance.py",
+    "tools/auto_clicker_v2/scripts/publish_provenance_release.ps1",
+    "tools/auto_clicker_v2/scripts/rollback_provenance_release.ps1"
+  ],
+  "stagedBehaviorDigest": "f1013d9cf60c3837b71abccb4eee29cd4655f9afcba42f4d3094a67529eef46f",
+  "auditorIdentity": "regression-auditor-agent:ac-protected-deploy-gini-20260722",
+  "decisionReviewerIdentity": "github-app-id:4291228",
+  "reviewedFiles": [
+    "docs/regression-work/2026-07-22_ac-rollback-lkg-protected-gate.json",
+    "docs/quality-gates/2026-07-22_ac-rollback-lkg-protected-gate.json",
+    "docs/e2e-matrices/2026-07-22_ac-rollback-lkg-protected-gate.json",
+    "docs/plans/2026-07-22_ac-rollback-lkg-protected-gate.md",
+    "scripts/ac_release_candidate.py",
+    "scripts/bounded_latency_gate.py",
+    "scripts/tests/test_ac_rollback_lkg_protected_flow.py",
+    "scripts/tests/test_issue374_ac_release_candidate_cli.py",
+    "tools/auto_clicker_v2/scripts/ac_build_provenance.py",
+    "tools/auto_clicker_v2/scripts/publish_provenance_release.ps1",
+    "tools/auto_clicker_v2/scripts/rollback_provenance_release.ps1"
+  ],
+  "evidence": [
+    "The change adds a single protected release-controller feature for normal publish, exact readback, last-known-good recovery, and signed rollback rather than changing AC user automation behavior.",
+    "The exact independent Gini review completed 94 protected tests and 4 focused LKG transitions with no P0, P1, or P2 finding after all reported blockers were fixed.",
+    "Targeted verification completed 61 tests, the full AutoClicker suite completed 1004 tests with 12 environment skips, and backend AC routes completed 49 tests.",
+    "The production 0.3.50 public metadata and recovered LKG match exact version, build ID, installer SHA, distribution SHA, and latest manifest SHA; targeted tests preserved the LKG file SHA."
+  ]
+}
