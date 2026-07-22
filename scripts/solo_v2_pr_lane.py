@@ -20,7 +20,7 @@ from pathlib import Path, PurePosixPath
 from typing import Collection, Sequence
 
 
-SNAPSHOT_VERSION = "solo-v2-external-2026-07-21.1"
+SNAPSHOT_VERSION = "solo-v2-external-2026-07-22.1"
 SOLO_POLICY_VERSION = "solo-v2"
 LEGACY_POLICY_VERSION = "legacy-v1"
 POLICY_POINTER_PATH = "docs/requirements/solo-agent-quality-gate-policy.json"
@@ -34,6 +34,8 @@ EXPECTED_CANDIDATE_CLASSIFIER_SHA256S = frozenset(
         "6689e7ef95a95c4e777dec3c304c34c4000bd26e28456eb9ef9d329399152a95",
         # AIMS main after #384 runtime PNG classifier correction.
         "2ff30f54ebb235b59a373925d8dbf5314cdb3675cdaf36fe8069074d80ef4dda",
+        # AIMS main after #398 added .spec/.cs as ordinary code suffixes.
+        "5945bc8ee5dc837d35afdb02dfc3f4af666cca0de39a1625da86326d4f1b021e",
     }
 )
 AC_RUNTIME_IMAGE_CLASSIFIER_SHA256S = frozenset(
@@ -41,6 +43,14 @@ AC_RUNTIME_IMAGE_CLASSIFIER_SHA256S = frozenset(
         # AIMS #384 introduced the exact runtime-PNG semantics mirrored below.
         # Older accepted classifier snapshots must not inherit this capability.
         "2ff30f54ebb235b59a373925d8dbf5314cdb3675cdaf36fe8069074d80ef4dda",
+        "5945bc8ee5dc837d35afdb02dfc3f4af666cca0de39a1625da86326d4f1b021e",
+    }
+)
+EXTENDED_CODE_SUFFIX_CLASSIFIER_SHA256S = frozenset(
+    {
+        # AIMS #398 introduced the exact .spec/.cs semantics mirrored below.
+        # Older accepted classifier snapshots must not inherit this capability.
+        "5945bc8ee5dc837d35afdb02dfc3f4af666cca0de39a1625da86326d4f1b021e",
     }
 )
 EXPECTED_CANDIDATE_POINTER_SHA256 = (
@@ -71,6 +81,7 @@ CODE_SUFFIXES = {
     ".webmanifest",
     ".iss",
 }
+EXTENDED_CODE_SUFFIXES = {".spec", ".cs"}
 RUNTIME_METADATA_PATHS = {
     "tools/auto_clicker_v2/version",
     "backend/api/aims_api/version",
@@ -241,12 +252,19 @@ def _is_ac_runtime_image_path(path: str) -> bool:
     )
 
 
-def _is_executable_agent_or_gate_path(path: str) -> bool:
+def _is_executable_agent_or_gate_path(
+    path: str,
+    *,
+    allow_extended_code_suffixes: bool = False,
+) -> bool:
     suffix = PurePosixPath(path).suffix
     name = PurePosixPath(path).name
     if path.startswith((".agents/", ".claude/", ".codex/")):
         return suffix not in DIRECT_SUFFIXES
-    if not path.startswith("scripts/") or suffix not in CODE_SUFFIXES:
+    allowed_code_suffixes = CODE_SUFFIXES | (
+        EXTENDED_CODE_SUFFIXES if allow_extended_code_suffixes else set()
+    )
+    if not path.startswith("scripts/") or suffix not in allowed_code_suffixes:
         return False
     return any(
         marker in name
@@ -267,7 +285,12 @@ def _is_executable_agent_or_gate_path(path: str) -> bool:
     )
 
 
-def _is_protected_path(path: str, *, allow_ac_runtime_images: bool = False) -> bool:
+def _is_protected_path(
+    path: str,
+    *,
+    allow_ac_runtime_images: bool = False,
+    allow_extended_code_suffixes: bool = False,
+) -> bool:
     name = PurePosixPath(path).name
     return (
         path == POLICY_POINTER_PATH
@@ -277,7 +300,10 @@ def _is_protected_path(path: str, *, allow_ac_runtime_images: bool = False) -> b
         or path in CANONICAL_GATE_PATHS
         or _is_dependency_manifest(path)
         or _is_deployment_manifest(path)
-        or _is_executable_agent_or_gate_path(path)
+        or _is_executable_agent_or_gate_path(
+            path,
+            allow_extended_code_suffixes=allow_extended_code_suffixes,
+        )
         or (
             not (allow_ac_runtime_images and _is_ac_runtime_image_path(path))
             and (
@@ -366,6 +392,7 @@ def classify_paths(
     policy_version: str,
     *,
     allow_ac_runtime_images: bool = False,
+    allow_extended_code_suffixes: bool = False,
 ) -> LaneDecision:
     if policy_version == LEGACY_POLICY_VERSION:
         return protected(
@@ -399,6 +426,7 @@ def classify_paths(
         if _is_protected_path(
             path,
             allow_ac_runtime_images=allow_ac_runtime_images,
+            allow_extended_code_suffixes=allow_extended_code_suffixes,
         )
     ]
     if protected_paths:
@@ -417,6 +445,10 @@ def classify_paths(
         )
     if all(
         PurePosixPath(path).suffix in CODE_SUFFIXES
+        or (
+            allow_extended_code_suffixes
+            and PurePosixPath(path).suffix in EXTENDED_CODE_SUFFIXES
+        )
         or _is_direct_path(path)
         or _is_evidence_asset_path(path)
         or (allow_ac_runtime_images and _is_ac_runtime_image_path(path))
@@ -480,6 +512,9 @@ def classify_git_delta(
     ac_runtime_image_classifier_sha256s: Collection[
         str
     ] = AC_RUNTIME_IMAGE_CLASSIFIER_SHA256S,
+    extended_code_suffix_classifier_sha256s: Collection[
+        str
+    ] = EXTENDED_CODE_SUFFIX_CLASSIFIER_SHA256S,
 ) -> LaneDecision:
     if not SHA_PATTERN.fullmatch(base) or not SHA_PATTERN.fullmatch(head):
         return protected("invalid_coordinates", "invalid PR commit coordinates")
@@ -568,6 +603,9 @@ def classify_git_delta(
         policy_version,
         allow_ac_runtime_images=(
             classifier_sha256 in ac_runtime_image_classifier_sha256s
+        ),
+        allow_extended_code_suffixes=(
+            classifier_sha256 in extended_code_suffix_classifier_sha256s
         ),
     )
 
