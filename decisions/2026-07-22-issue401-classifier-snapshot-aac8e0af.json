@@ -8,7 +8,7 @@
   "candidateDigest": "37825fcb495c5270b8d62f101555df1c596fe30849782ce37fb5aa7fcbcb11b1",
   "workKind": "verification-gate",
   "subjectReceipt": "docs/regression-audits/2026-07-22_issue401-external-classifier-snapshot.json",
-  "subjectReceiptSha256": "b51ba324a329e40c2be40615d43f20214891d391169c51f7c7b44c47dfd53101",
+  "subjectReceiptSha256": "4211821635a4b89467b0496c886b9e6f38c318b3f44fa70a975564e14d7c549d",
   "auditorIdentity": "regression-auditor-agent:issue401-sync-classifier-snapshot-20260722",
   "auditorSessionId": "/root/issue398_protected_finish/issue398_protected_audit",
   "implementationIdentity": "github-actor-id:26228531",
@@ -28,7 +28,7 @@
   ],
   "evidence": [
     "Independent recomputation bound base 3df82376c1423785c8ba3137b3e4bd367d570ada, candidate aac8e0af5345a1a821773259e5810fb87f29c478, tree 2b8b9ae2e0997427a398664caaf9a5706c10e9b8, and the exact nine-file candidate digest 37825fcb495c5270b8d62f101555df1c596fe30849782ce37fb5aa7fcbcb11b1.",
-    "Subject hash b51ba324a329e40c2be40615d43f20214891d391169c51f7c7b44c47dfd53101, runner SHA-256 5444dd7a1bbb6c2756badd51e7499ea2e0d82a81208bec23901ad65d30200904, harness SHA-256 6f4680473779645d7a2cdf7dc6a402d2ffec614cea33e902cfafdafc8cc871c6, closure 459def08c52511cf8eb913970848a57c54d7a19f11da07a7c770624f9143c828, and behavior digest 5025e23cbd6c77a4af8069748980c9569b931d5926a4f3353488e2e058b2964c matched independently.",
+    "Canonical subject hash 4211821635a4b89467b0496c886b9e6f38c318b3f44fa70a975564e14d7c549d, runner SHA-256 5444dd7a1bbb6c2756badd51e7499ea2e0d82a81208bec23901ad65d30200904, harness SHA-256 6f4680473779645d7a2cdf7dc6a402d2ffec614cea33e902cfafdafc8cc871c6, closure 459def08c52511cf8eb913970848a57c54d7a19f11da07a7c770624f9143c828, and behavior digest 5025e23cbd6c77a4af8069748980c9569b931d5926a4f3353488e2e058b2964c matched independently.",
     "The immutable harness reproduced two causal assertion failures and two passes on external baseline 9c97602201bcf8fefcabc9f29bbe3cb283f64908, then four passes on protected main 3d4296cd924981d6a92f52a008345c3175b4eea1; evidence validation returned VALID.",
     "New snapshot and capability classify exact .spec/.cs sources as Core; unregistered snapshots, absent capability, suffix lookalikes, and gate paths remain fail-closed Protected.",
     "Actual AIMS PR 400 trusted verifier run 29927739201 succeeded from GitHub App aims-regression-auditor-security integration 4291228, and issue 401 issue-close acceptance is complete with liveOnlyStatus none."
