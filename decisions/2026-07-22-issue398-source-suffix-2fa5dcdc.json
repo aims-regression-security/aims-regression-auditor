@@ -1,0 +1,37 @@
+{
+  "schema": "aims.regression_auditor_decision.v1",
+  "verdict": "PASS",
+  "repository": "aim2nasa/aims",
+  "candidateCommitSha": "2fa5dcdc0b0f925f595244d6841853d411e89bbe",
+  "candidateTreeSha": "7a18bf1e6ba4cd4be2eea05b1c0c07be47155cdc",
+  "pullRequestBaseSha": "dcb001ca28ae84e497648760b302d1c3af4e1593",
+  "candidateDigest": "ad433e64fe5c6e27b42728bb45363fd53838790c435f92e13a219a0b300f845f",
+  "workKind": "verification-gate",
+  "subjectReceipt": "docs/regression-audits/2026-07-22_issue398-pyinstaller-spec-classifier.json",
+  "subjectReceiptSha256": "742ad96b6d7eb9404607deeeb6e4a35d9abec5e45c047e1bee1bc0470d1eee46",
+  "auditorIdentity": "regression-auditor-agent:issue398-spec-classifier-20260722",
+  "auditorSessionId": "/root/issue398_protected_finish/issue398_protected_audit",
+  "implementationIdentity": "github-actor-id:26228531",
+  "decisionReviewerIdentity": "github-app-id:4291228",
+  "issuedAt": 1784727850,
+  "expiresAt": 1784728750,
+  "reviewedFiles": [
+    "docs/ace-reports/2026-07-22_issue398-pyinstaller-spec-classifier.md",
+    "docs/e2e-matrices/2026-07-22_issue398-pyinstaller-spec-classifier.json",
+    "docs/plans/2026-07-22_issue398-pyinstaller-spec-classifier.md",
+    "docs/quality-gates/2026-07-22_issue398-pyinstaller-spec-classifier.json",
+    "docs/regression-audits/2026-07-22_issue398-pyinstaller-spec-classifier.json",
+    "docs/regression-evidence/2026-07-22_issue398-pyinstaller-spec-classifier.json",
+    "docs/regression-work/2026-07-22_issue398-pyinstaller-spec-classifier.json",
+    "docs/requirements/requirements-log.md",
+    "scripts/solo_agent_quality_gate_policy.py",
+    "scripts/tests/test_solo_agent_quality_gate_policy.py"
+  ],
+  "evidence": [
+    "Independent recomputation bound base dcb001ca28ae84e497648760b302d1c3af4e1593, candidate 2fa5dcdc0b0f925f595244d6841853d411e89bbe, tree 7a18bf1e6ba4cd4be2eea05b1c0c07be47155cdc, and the exact ten-file candidate digest ad433e64fe5c6e27b42728bb45363fd53838790c435f92e13a219a0b300f845f.",
+    "Subject hash 742ad96b6d7eb9404607deeeb6e4a35d9abec5e45c047e1bee1bc0470d1eee46, runner SHA-256 47534b86b62ba046ba7bbcdd0e6f114fd4b53fc2e5e1ee4daac66cb73e44f8f9 and behavior digest 5b859513370dbb8b2122c315498bb2cd1fe0b46e43a61b86d366fd8ff25a2226 were independently recomputed and matched.",
+    "The immutable harness produced two causal assertion failures and two passes on the baseline, then four passes on the candidate; the evidence validator returned VALID, the classifier suite passed 35 tests, the exact related suite passed 77 tests and expanded consumers passed 104 tests.",
+    "The actual #397 30-path canonical manifest SHA-256 1d587ec6284fe7b4ec6455c6997456a0e0d2838aef368cb26de734f818ad457c, including AutoClicker.spec and pdf_window_guard_native.cs, classified as core/READY/close_allowed=true.",
+    "Exact .spec and .cs sources are Core, suffix lookalikes remain fail-closed, deploy/release/gate-trust contexts remain Protected, the remote candidate ref resolves to the exact SHA and no signed envelope is present in the candidate."
+  ]
+}
