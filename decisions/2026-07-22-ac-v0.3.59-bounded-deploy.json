@@ -35,8 +35,8 @@
   "auditorSessionId": "regression-auditor-session:/root/release_audit:2026-07-22T19:27:00+09:00:v1",
   "implementationIdentity": "github-actor-id:26228531",
   "decisionReviewerIdentity": "github-app-id:4291228",
-  "issuedAt": 1784716031,
-  "expiresAt": 1784716931,
+  "issuedAt": 1784716286,
+  "expiresAt": 1784716886,
   "evidence": [
     "Exact source tag ac-source-v0.3.59-f46f17a1 resolves to f46f17a1098ecdeeaba861f35be3054c3cd172a3 and source tree 2cc9f1b6ee719c7d8116d4af6fe3031ce3493833.",
     "RC 0.3.59 build 5c0cd238ac47437688e90dc258e32c9d passed package integrity, frozen health check, and installer smoke; its installer, distribution and latest manifest digests are bound above.",
