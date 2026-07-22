@@ -10,6 +10,7 @@ from pathlib import Path
 from scripts.solo_v2_pr_lane import (
     AC_RUNTIME_IMAGE_CLASSIFIER_SHA256S,
     CLASSIFIER_PATH,
+    EXTENDED_CODE_SUFFIX_CLASSIFIER_SHA256S,
     EXPECTED_CANDIDATE_CLASSIFIER_SHA256S,
     POLICY_POINTER_PATH,
     classify_git_delta,
@@ -82,13 +83,15 @@ class SnapshotClassificationTests(unittest.TestCase):
         current = "2aa1ba6698eb78d7e43cc509ef802b2b8a268e2675dd0d41565762a4de80c088"
         transition = "6689e7ef95a95c4e777dec3c304c34c4000bd26e28456eb9ef9d329399152a95"
         issue384 = "2ff30f54ebb235b59a373925d8dbf5314cdb3675cdaf36fe8069074d80ef4dda"
+        issue398 = "5945bc8ee5dc837d35afdb02dfc3f4af666cca0de39a1625da86326d4f1b021e"
         self.assertEqual(
             EXPECTED_CANDIDATE_CLASSIFIER_SHA256S,
-            {current, transition, issue384},
+            {current, transition, issue384, issue398},
         )
         self.assertTrue(is_expected_classifier_sha256(current))
         self.assertTrue(is_expected_classifier_sha256(transition))
         self.assertTrue(is_expected_classifier_sha256(issue384))
+        self.assertTrue(is_expected_classifier_sha256(issue398))
 
     def test_unknown_classifier_snapshot_fails_closed(self) -> None:
         self.assertFalse(is_expected_classifier_sha256("f" * 64))
@@ -288,6 +291,56 @@ class GitDeltaIntegrationTests(unittest.TestCase):
                 ),
             )
 
+    def classify_extended_suffix_candidate(
+        self,
+        classifier_text: str,
+        path: str,
+        *,
+        grant_extended_suffix_capability: bool,
+    ):
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            self.git(root, "init", "-b", "main")
+            self.git(root, "config", "user.email", "test@example.invalid")
+            self.git(root, "config", "user.name", "Verifier Test")
+            self.write(
+                root,
+                POLICY_POINTER_PATH,
+                json.dumps({"activePolicyVersion": "solo-v2"}),
+            )
+            self.write(root, CLASSIFIER_PATH, classifier_text)
+            self.write(root, "src/app.ts", "export const value = 1;\n")
+            self.git(root, "add", ".")
+            self.git(root, "commit", "-m", "base")
+            base = self.git(root, "rev-parse", "HEAD")
+            self.write(root, path, "synthetic source\n")
+            self.git(root, "add", ".")
+            self.git(root, "commit", "-m", "extended source")
+            head = self.git(root, "rev-parse", "HEAD")
+            pointer = subprocess.run(
+                ["git", "-C", str(root), "show", f"{head}:{POLICY_POINTER_PATH}"],
+                capture_output=True,
+                check=True,
+            ).stdout
+            classifier = subprocess.run(
+                ["git", "-C", str(root), "show", f"{head}:{CLASSIFIER_PATH}"],
+                capture_output=True,
+                check=True,
+            ).stdout
+            classifier_sha256 = hashlib.sha256(classifier).hexdigest()
+            return classify_git_delta(
+                root,
+                base,
+                head,
+                expected_pointer_sha256=hashlib.sha256(pointer).hexdigest(),
+                expected_classifier_sha256s={classifier_sha256},
+                extended_code_suffix_classifier_sha256s=(
+                    {classifier_sha256}
+                    if grant_extended_suffix_capability
+                    else set()
+                ),
+            )
+
     def write_snapshot(self, root: Path) -> None:
         self.write(
             root,
@@ -336,8 +389,60 @@ class GitDeltaIntegrationTests(unittest.TestCase):
         self.assertEqual(
             AC_RUNTIME_IMAGE_CLASSIFIER_SHA256S,
             {
-                "2ff30f54ebb235b59a373925d8dbf5314cdb3675cdaf36fe8069074d80ef4dda"
+                "2ff30f54ebb235b59a373925d8dbf5314cdb3675cdaf36fe8069074d80ef4dda",
+                "5945bc8ee5dc837d35afdb02dfc3f4af666cca0de39a1625da86326d4f1b021e",
             },
+        )
+
+    def test_issue398_suffix_capability_is_bound_to_classifier_snapshot(self) -> None:
+        for path in ("tools/example.spec", "tools/example.cs"):
+            with self.subTest(path=path, snapshot="old"):
+                old_decision = self.classify_extended_suffix_candidate(
+                    "# classifier before issue 398\n",
+                    path,
+                    grant_extended_suffix_capability=False,
+                )
+                self.assertEqual(old_decision.lane, "protected")
+                self.assertEqual(old_decision.reason_code, "unknown_path")
+            with self.subTest(path=path, snapshot="new"):
+                new_decision = self.classify_extended_suffix_candidate(
+                    "# classifier after issue 398\n",
+                    path,
+                    grant_extended_suffix_capability=True,
+                )
+                self.assertEqual(new_decision.lane, "core")
+                self.assertFalse(new_decision.requires_protected_verifier)
+
+    def test_issue398_suffix_capability_does_not_downgrade_gate_paths(self) -> None:
+        decision = self.classify_extended_suffix_candidate(
+            "# classifier after issue 398\n",
+            "scripts/custom_gate.cs",
+            grant_extended_suffix_capability=True,
+        )
+        self.assertEqual(decision.lane, "protected")
+        self.assertEqual(decision.reason_code, "protected_path")
+
+    def test_issue398_suffix_capability_rejects_lookalikes(self) -> None:
+        for path in ("tools/example.csx", "tools/example.specx"):
+            with self.subTest(path=path):
+                decision = self.classify_extended_suffix_candidate(
+                    "# classifier after issue 398\n",
+                    path,
+                    grant_extended_suffix_capability=True,
+                )
+                self.assertEqual(decision.lane, "protected")
+                self.assertEqual(decision.reason_code, "unknown_path")
+
+    def test_issue398_capability_set_contains_only_new_main_snapshot(self) -> None:
+        self.assertEqual(
+            EXTENDED_CODE_SUFFIX_CLASSIFIER_SHA256S,
+            {
+                "5945bc8ee5dc837d35afdb02dfc3f4af666cca0de39a1625da86326d4f1b021e"
+            },
+        )
+        self.assertIn(
+            "5945bc8ee5dc837d35afdb02dfc3f4af666cca0de39a1625da86326d4f1b021e",
+            EXPECTED_CANDIDATE_CLASSIFIER_SHA256S,
         )
 
     def test_exact_git_rename_fails_closed(self) -> None:
