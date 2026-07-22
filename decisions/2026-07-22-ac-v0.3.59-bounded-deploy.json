@@ -1,0 +1,46 @@
+{
+  "schema": "aims.bounded_deploy_attestation_decision.v1",
+  "verdict": "PASS",
+  "repository": "aim2nasa/aims",
+  "operation": "deploy",
+  "artifactKind": "aims-auto-clicker-distribution-manifest",
+  "issuer": "github-environment:regression-auditor",
+  "keyId": "primary-2026-07",
+  "signatureAlgorithm": "ed25519",
+  "certifiedSha": "f46f17a1098ecdeeaba861f35be3054c3cd172a3",
+  "artifactDigest": "e4ac5053e94a0a90727b860b7bdd9a858bbe2117dec1eb5162aec7edd83796a5",
+  "installerDigest": "d00592334191cbd52dc9cfa75766504d2e5ee48d0d2f19f6e591449f19dc44f8",
+  "latestManifestDigest": "ceaacc8f15c716fb5e71bdef7796586dfe0b12d84ed28c506e91ec37d0391fbb",
+  "publisherScriptDigest": "802c4e09eb5474129312be3abecb26247bade9df8eda3583b129b0bc9acf2671",
+  "commandContract": "aims.auto_clicker.publish_provenance_release.v1",
+  "sourceTag": "refs/tags/ac-source-v0.3.59-f46f17a1",
+  "tagObjectSha": "4f874e499b18b7268d25f70a99445d3613b2a72e",
+  "publisherCommitSha": "b357a42a10867832f4a64fe0e843242af3ab4c71",
+  "sourceTreeSha": "2cc9f1b6ee719c7d8116d4af6fe3031ce3493833",
+  "publisherFiles": {
+    "tools/auto_clicker_v2/scripts/publish_provenance_release.ps1": "802c4e09eb5474129312be3abecb26247bade9df8eda3583b129b0bc9acf2671",
+    "tools/auto_clicker_v2/scripts/ac_build_provenance.py": "ccf4cc9c079a9e23a53fcf0da7f4965aa133da3638a6b5499843e998e53723fd",
+    "tools/auto_clicker_v2/execution_provenance.py": "9b6f0d17a549a814a1b593ae17c01e0b3a308f6b610699b6920d15e86f408c65",
+    "tools/auto_clicker_v2/provenance_trust.py": "65af95c6eb7380d01b22d4b27b897f311db83f01152db782c9e67f8fd743f267"
+  },
+  "sourceTagProtection": {
+    "rulesetId": 19181898,
+    "target": "tag",
+    "enforcement": "active",
+    "include": ["refs/tags/ac-source-*"],
+    "rules": ["deletion", "non_fast_forward"],
+    "bypassActors": []
+  },
+  "auditorIdentity": "regression-auditor-agent:ac-v0359-protected-deploy-20260722",
+  "auditorSessionId": "regression-auditor-session:/root/release_audit:2026-07-22T19:27:00+09:00:v1",
+  "implementationIdentity": "github-actor-id:26228531",
+  "decisionReviewerIdentity": "github-app-id:4291228",
+  "issuedAt": 1784716031,
+  "expiresAt": 1784716931,
+  "evidence": [
+    "Exact source tag ac-source-v0.3.59-f46f17a1 resolves to f46f17a1098ecdeeaba861f35be3054c3cd172a3 and source tree 2cc9f1b6ee719c7d8116d4af6fe3031ce3493833.",
+    "RC 0.3.59 build 5c0cd238ac47437688e90dc258e32c9d passed package integrity, frozen health check, and installer smoke; its installer, distribution and latest manifest digests are bound above.",
+    "PR #395 independent signed receipt passed the required trusted-verifier check before main merge; live.required=false because deterministic package/offline evidence covers this release boundary.",
+    "The publisher files and protected source tag are frozen before deployment, so a later gate or publisher mutation fails closed rather than changing the released artifact."
+  ]
+}
