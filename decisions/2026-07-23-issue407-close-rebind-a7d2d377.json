@@ -1,0 +1,34 @@
+{
+  "schema": "aims.regression_work_classification_decision.v1",
+  "verdict": "PASS",
+  "repository": "aim2nasa/aims",
+  "workClassification": "docs/regression-work/2026-07-23_issue407-close-rebind.json",
+  "workClassificationSha256": "a7d2d377d6bfe2cdd5d59c6f239d0280280a03c8bb89e3d59ade7d557efb2664",
+  "workKind": "verification-gate",
+  "stagedBehaviorFiles": [
+    "scripts/regression_auditor_candidate.py",
+    "scripts/tests/test_issue372_solo_core_pr_promotion.py"
+  ],
+  "stagedBehaviorDigest": "8bd0e54257493d4e52ae55f7b4d32c023505d9459966733b17501c72c763dc65",
+  "auditorIdentity": "codex-regression-auditor-408-d773a0c88",
+  "auditorSessionId": "issue403_review-20260723",
+  "implementationIdentity": "github-actor-id:26228531",
+  "decisionReviewerIdentity": "github-app-id:4291228",
+  "pullRequestBaseSha": "52ef82c4df522c936b96408b8b5fcd5ce09ebab4",
+  "reviewedFiles": [
+    "docs/ace-reports/2026-07-23_issue407-close-rebind-gate.md",
+    "docs/plans/2026-07-23_issue407-close-rebind-gate.md",
+    "docs/quality-gates/2026-07-23_issue407-close-rebind-gate.json",
+    "docs/regression-audits/2026-07-23_issue407-close-rebind-gate.json",
+    "docs/regression-evidence/2026-07-23_issue407-close-rebind.json",
+    "docs/regression-work/2026-07-23_issue407-close-rebind.json",
+    "docs/requirements/requirements-log.md",
+    "scripts/regression_auditor_candidate.py",
+    "scripts/tests/test_issue372_solo_core_pr_promotion.py"
+  ],
+  "evidence": [
+    "Fail-first evidence records 10 PASS and 1 ASSERTION failure when subject-only issue-close rebind remains blocked.",
+    "The identical harness passes all 11 tests after the constrained rebind exception is added.",
+    "The exception requires remote=origin, base_ref=origin/main, and a single already-merged subject receipt delta; unmerged Core changes remain blocked."
+  ]
+}
