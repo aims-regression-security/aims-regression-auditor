@@ -1,0 +1,37 @@
+{
+  "schema": "aims.regression_auditor_decision.v1",
+  "verdict": "PASS",
+  "repository": "aim2nasa/aims",
+  "candidateCommitSha": "49e528118074bcad6a7f4dd25722186926e51eb6",
+  "candidateTreeSha": "982411487c7ef348474e7dfebaea70294ad751f2",
+  "pullRequestBaseSha": "1213b68f2959795a42b621b9919c14629627d173",
+  "candidateDigest": "3a80e4ff9009ff2d5251dfa0cd7f7705c5ca9fdd8cc1d71cdb0be7490f14e0e4",
+  "workKind": "bugfix",
+  "subjectReceipt": "docs/regression-audits/2026-07-23_issue405-ac-ocr-default-alias.json",
+  "subjectReceiptSha256": "97bef8b2b6867734c3df417db06524d8598df0036f3fca68ea0a5f2308639008",
+  "auditorIdentity": "codex-regression-auditor-405-e56397499",
+  "auditorSessionId": "/root/issue403_review/reused-for-issue405",
+  "implementationIdentity": "github-actor-id:26228531",
+  "decisionReviewerIdentity": "github-app-id:4291228",
+  "issuedAt": 1784786200,
+  "expiresAt": 1784787100,
+  "reviewedFiles": [
+    "docs/ace-reports/2026-07-23_issue405-ac-ocr-default-alias.md",
+    "docs/e2e-matrices/2026-07-23_issue405-ac-ocr-default-alias.json",
+    "docs/quality-gates/2026-07-23_issue405-ac-ocr-default-alias.json",
+    "docs/regression-audits/2026-07-23_issue405-ac-ocr-default-alias.json",
+    "docs/regression-evidence/2026-07-23_issue405-ac-ocr-default-alias.json",
+    "docs/regression-work/2026-07-23_issue405-ac-ocr-default-alias.json",
+    "backend/api/aims_api/lib/upstageProxyClient.js",
+    "tools/MetContract.sikuli/MetContract.py",
+    "tools/MetContract.sikuli/poc/ocr_single.py",
+    "tools/metdo_reader/read_customer.py",
+    "tools/auto_clicker_v2/ocr_usage.py",
+    "tools/auto_clicker_v2/tests/test_issue405_ac_ocr_default_alias.py"
+  ],
+  "evidence": [
+    "Independent audit bound protected base 1213b68f2959795a42b621b9919c14629627d173, candidate 49e528118074bcad6a7f4dd25722186926e51eb6, and tree 982411487c7ef348474e7dfebaea70294ad751f2.",
+    "The immutable #405 harness produced two assertion failures before the fix and two passes after it; AC full regression reported 937 PASS/12 skipped and backend proxy reported 32 PASS.",
+    "Contract-list, customer-detail, MetDO reader, and AIMS proxy runtime paths use document-parse/auto only; version pin and model/mode override paths were removed."
+  ]
+}
