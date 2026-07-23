@@ -1,0 +1,46 @@
+{
+  "schema": "aims.bounded_deploy_attestation_decision.v1",
+  "verdict": "PASS",
+  "repository": "aim2nasa/aims",
+  "operation": "deploy",
+  "artifactKind": "aims-auto-clicker-distribution-manifest",
+  "issuer": "github-environment:regression-auditor",
+  "keyId": "primary-2026-07",
+  "signatureAlgorithm": "ed25519",
+  "certifiedSha": "52ef82c4df522c936b96408b8b5fcd5ce09ebab4",
+  "artifactDigest": "221c80c602ef36ce6c0a87df401e099f3f3b687a527624440156f9acd7c701d5",
+  "installerDigest": "7c71b474736790ef506f89855ab396a2c9fb99844ab34a64bcbe3f66dbe00097",
+  "latestManifestDigest": "5af0e2dfbe18acbe0ff62d0c1ba5956f5cd494f53d342851d6161cfa0da1d111",
+  "publisherScriptDigest": "802c4e09eb5474129312be3abecb26247bade9df8eda3583b129b0bc9acf2671",
+  "commandContract": "aims.auto_clicker.publish_provenance_release.v1",
+  "sourceTag": "refs/tags/ac-source-v0.3.65-52ef82c4d",
+  "tagObjectSha": "b8a3405f8341b744d4c1090275205f7e713262d9",
+  "publisherCommitSha": "52ef82c4df522c936b96408b8b5fcd5ce09ebab4",
+  "sourceTreeSha": "212a1ed2f5dc81d8a54700123fcada8112675950",
+  "sourceTagProtection": {
+    "rulesetId": 19181898,
+    "target": "tag",
+    "enforcement": "active",
+    "include": ["refs/tags/ac-source-*"],
+    "rules": ["deletion", "non_fast_forward"],
+    "bypassActors": []
+  },
+  "publisherFiles": {
+    "tools/auto_clicker_v2/scripts/publish_provenance_release.ps1": "802c4e09eb5474129312be3abecb26247bade9df8eda3583b129b0bc9acf2671",
+    "tools/auto_clicker_v2/scripts/ac_build_provenance.py": "ccf4cc9c079a9e23a53fcf0da7f4965aa133da3638a6b5499843e998e53723fd",
+    "tools/auto_clicker_v2/execution_provenance.py": "ae6ea59e2260bdbc4e87a9d8597a3f76feb3a6998b21d15fe9d6d1bffc7216dc",
+    "tools/auto_clicker_v2/provenance_trust.py": "65af95c6eb7380d01b22d4b27b897f311db83f01152db782c9e67f8fd743f267"
+  },
+  "auditorIdentity": "regression-auditor-agent:issue405-default-alias-20260723",
+  "auditorSessionId": "/root/issue403_review/reused-for-issue405",
+  "implementationIdentity": "github-actor-id:26228531",
+  "decisionReviewerIdentity": "github-app-id:4291228",
+  "issuedAt": 1784787287,
+  "expiresAt": 1784787887,
+  "evidence": [
+    "AC 0.3.65 RC build b1691b1866e643028f93c07213923ca6 is bound to main commit 52ef82c4df522c936b96408b8b5fcd5ce09ebab4 and its protected annotated source tag.",
+    "The #405 fail-first harness produced two failures before the fix and two passes after it; AC regression reported 937 PASS/12 skipped and the proxy suite 32 PASS.",
+    "Independent review confirmed all operational OCR paths use the document-parse default alias with auto mode and remove version-pinned or caller-selected model/mode paths.",
+    "The prior same-artifact decision used an unsupported 900-second expiry and was rejected before attestation issuance; this replacement keeps the issuer-required 600-second window."
+  ]
+}
