@@ -1,0 +1,46 @@
+{
+  "schema": "aims.bounded_deploy_attestation_decision.v1",
+  "verdict": "PASS",
+  "repository": "aim2nasa/aims",
+  "operation": "deploy",
+  "artifactKind": "aims-auto-clicker-distribution-manifest",
+  "issuer": "github-environment:regression-auditor",
+  "keyId": "primary-2026-07",
+  "signatureAlgorithm": "ed25519",
+  "certifiedSha": "1213b68f2959795a42b621b9919c14629627d173",
+  "artifactDigest": "a414045f87ce30a3243854a4a5d78c384704704585fc8c841648a9bbc2bdb38a",
+  "installerDigest": "4c08cf27ea898b9b35884af9ef72544af65476b62d57999c4311f8ab5f9d93d3",
+  "latestManifestDigest": "f32bded88c645bbb57f039dd19281eb2840dadf993d6b2036f8e45fdd503e457",
+  "publisherScriptDigest": "802c4e09eb5474129312be3abecb26247bade9df8eda3583b129b0bc9acf2671",
+  "commandContract": "aims.auto_clicker.publish_provenance_release.v1",
+  "sourceTag": "refs/tags/ac-source-v0.3.64-1213b68f2",
+  "tagObjectSha": "83f50d509bf8c51007ff9681fbe23f0fd2efa93d",
+  "publisherCommitSha": "1213b68f2959795a42b621b9919c14629627d173",
+  "sourceTreeSha": "75b5cf8321b88decf2dc9732f9761f7fe9040ce3",
+  "publisherFiles": {
+    "tools/auto_clicker_v2/scripts/publish_provenance_release.ps1": "802c4e09eb5474129312be3abecb26247bade9df8eda3583b129b0bc9acf2671",
+    "tools/auto_clicker_v2/scripts/ac_build_provenance.py": "ccf4cc9c079a9e23a53fcf0da7f4965aa133da3638a6b5499843e998e53723fd",
+    "tools/auto_clicker_v2/execution_provenance.py": "ae6ea59e2260bdbc4e87a9d8597a3f76feb3a6998b21d15fe9d6d1bffc7216dc",
+    "tools/auto_clicker_v2/provenance_trust.py": "65af95c6eb7380d01b22d4b27b897f311db83f01152db782c9e67f8fd743f267"
+  },
+  "sourceTagProtection": {
+    "rulesetId": 19181898,
+    "target": "tag",
+    "enforcement": "active",
+    "include": ["refs/tags/ac-source-*"],
+    "rules": ["deletion", "non_fast_forward"],
+    "bypassActors": []
+  },
+  "auditorIdentity": "regression-auditor-agent:ac-v0364-protected-deploy-20260723",
+  "auditorSessionId": "regression-auditor-session:/root/issue403_review:ac-v0364:v1",
+  "implementationIdentity": "github-actor-id:26228531",
+  "decisionReviewerIdentity": "github-app-id:4291228",
+  "issuedAt": 1784779882,
+  "expiresAt": 1784780482,
+  "evidence": [
+    "Exact source commit and tree are on origin/main, and the protected annotated source tag resolves to the same commit.",
+    "RC 0.3.64 build 832d0af72d5a4cf98156adabcf5011d7 passed controller build, package integrity and installer smoke; installer, distribution and latest manifest digests are bound above.",
+    "Independent high-reasoning review found zero blocking findings and verified #403 customer-detail and visible-OCR terminal state transitions with durable dynamic regression coverage.",
+    "live.required=false because the external OCR outage is deterministically simulated in regression coverage; deployment remains fail-closed until API and downloaded installer SHA readback pass."
+  ]
+}
