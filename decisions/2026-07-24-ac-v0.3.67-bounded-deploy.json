@@ -1,0 +1,46 @@
+{
+  "schema": "aims.bounded_deploy_attestation_decision.v1",
+  "verdict": "PASS",
+  "repository": "aim2nasa/aims",
+  "operation": "deploy",
+  "artifactKind": "aims-auto-clicker-distribution-manifest",
+  "issuer": "github-environment:regression-auditor",
+  "keyId": "primary-2026-07",
+  "signatureAlgorithm": "ed25519",
+  "certifiedSha": "118229c9482355295abf4497da2cc894ee2189c2",
+  "artifactDigest": "0f01d7cd7301388be3de2cc813f70e3ab14224c062992ef03119e2e489a064d2",
+  "installerDigest": "eba1b644e7558853678e98ce0dbdc473f3b884077839fe9a84b88c2292bcc57f",
+  "latestManifestDigest": "969f81ab0065cf3611e35acc1a42c197a4c7313198a2e265d59fc74c484ba422",
+  "publisherScriptDigest": "802c4e09eb5474129312be3abecb26247bade9df8eda3583b129b0bc9acf2671",
+  "commandContract": "aims.auto_clicker.publish_provenance_release.v1",
+  "sourceTag": "refs/tags/ac-source-v0.3.67-118229c94",
+  "tagObjectSha": "68b7297a1d9009b2e5b1545b446d4779a27b2ee8",
+  "publisherCommitSha": "118229c9482355295abf4497da2cc894ee2189c2",
+  "sourceTreeSha": "867c7e659e23c25d410cb8c9a6387e93cb0526ca",
+  "sourceTagProtection": {
+    "rulesetId": 19181898,
+    "target": "tag",
+    "enforcement": "active",
+    "include": ["refs/tags/ac-source-*"],
+    "rules": ["deletion", "non_fast_forward"],
+    "bypassActors": []
+  },
+  "publisherFiles": {
+    "tools/auto_clicker_v2/scripts/publish_provenance_release.ps1": "802c4e09eb5474129312be3abecb26247bade9df8eda3583b129b0bc9acf2671",
+    "tools/auto_clicker_v2/scripts/ac_build_provenance.py": "ccf4cc9c079a9e23a53fcf0da7f4965aa133da3638a6b5499843e998e53723fd",
+    "tools/auto_clicker_v2/execution_provenance.py": "ae6ea59e2260bdbc4e87a9d8597a3f76feb3a6998b21d15fe9d6d1bffc7216dc",
+    "tools/auto_clicker_v2/provenance_trust.py": "65af95c6eb7380d01b22d4b27b897f311db83f01152db782c9e67f8fd743f267"
+  },
+  "auditorIdentity": "regression-auditor-agent:hms-ac-exact-verify-20260724",
+  "auditorSessionId": "/root/hms_ac_exact_verify",
+  "implementationIdentity": "github-actor-id:26228531",
+  "decisionReviewerIdentity": "github-app-id:4291228",
+  "issuedAt": 1784840052,
+  "expiresAt": 1784840652,
+  "evidence": [
+    "AC 0.3.67 RC build ba04a788b4ea4fb4a070fbf63c45b3fa is bound to main commit 118229c9482355295abf4497da2cc894ee2189c2 and its protected annotated source tag.",
+    "Issues 415 through 418 passed 51 targeted regression tests and the full AC suite reported 958 PASS and 12 skipped.",
+    "Independent exact-tree review of 867c7e659e23c25d410cb8c9a6387e93cb0526ca reported PASS with zero blocking findings across normal, timeout, fatal, geometry, and recovery paths.",
+    "Package integrity, health check, and unattended installer smoke all passed for installer digest eba1b644e7558853678e98ce0dbdc473f3b884077839fe9a84b88c2292bcc57f."
+  ]
+}
