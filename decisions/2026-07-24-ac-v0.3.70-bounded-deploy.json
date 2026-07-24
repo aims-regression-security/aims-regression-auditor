@@ -1,0 +1,51 @@
+{
+  "schema": "aims.bounded_deploy_attestation_decision.v1",
+  "verdict": "PASS",
+  "repository": "aim2nasa/aims",
+  "operation": "deploy",
+  "artifactKind": "aims-auto-clicker-distribution-manifest",
+  "issuer": "github-environment:regression-auditor",
+  "keyId": "primary-2026-07",
+  "signatureAlgorithm": "ed25519",
+  "certifiedSha": "891cce006df6a88229b42afa8194892e01464460",
+  "artifactDigest": "7b10684b64a85099d0222adf94681300a21938e19e7b4884159c3c606c063982",
+  "installerDigest": "e9cd0d004c0026db35c0703a363607353baa1e623455998116c8800b8860098d",
+  "latestManifestDigest": "24cc713db47e98b5efc70650711a0d043746312cfa920028ed11853db04dfc91",
+  "publisherScriptDigest": "802c4e09eb5474129312be3abecb26247bade9df8eda3583b129b0bc9acf2671",
+  "commandContract": "aims.auto_clicker.publish_provenance_release.v1",
+  "sourceTag": "refs/tags/ac-source-v0.3.70-891cce006d",
+  "tagObjectSha": "ebf6daaba6487f5c0e8edc63d3c57e3d8dfcb08b",
+  "publisherCommitSha": "891cce006df6a88229b42afa8194892e01464460",
+  "sourceTreeSha": "2252893c3a8ca5c35735203580b58615fe76d570",
+  "sourceTagProtection": {
+    "rulesetId": 19181898,
+    "target": "tag",
+    "enforcement": "active",
+    "include": [
+      "refs/tags/ac-source-*"
+    ],
+    "rules": [
+      "deletion",
+      "non_fast_forward"
+    ],
+    "bypassActors": []
+  },
+  "publisherFiles": {
+    "tools/auto_clicker_v2/scripts/publish_provenance_release.ps1": "802c4e09eb5474129312be3abecb26247bade9df8eda3583b129b0bc9acf2671",
+    "tools/auto_clicker_v2/scripts/ac_build_provenance.py": "ccf4cc9c079a9e23a53fcf0da7f4965aa133da3638a6b5499843e998e53723fd",
+    "tools/auto_clicker_v2/execution_provenance.py": "ae6ea59e2260bdbc4e87a9d8597a3f76feb3a6998b21d15fe9d6d1bffc7216dc",
+    "tools/auto_clicker_v2/provenance_trust.py": "65af95c6eb7380d01b22d4b27b897f311db83f01152db782c9e67f8fd743f267"
+  },
+  "auditorIdentity": "regression-auditor-agent:issue420-exact-verifier-20260724",
+  "auditorSessionId": "/root/issue420_exact_verifier",
+  "implementationIdentity": "github-actor-id:26228531",
+  "decisionReviewerIdentity": "github-app-id:4291228",
+  "issuedAt": 1784872485,
+  "expiresAt": 1784873085,
+  "evidence": [
+    "AC 0.3.70 RC build aa9c60380b1c49b49b139ef81093ebbb is bound to main commit 891cce006df6a88229b42afa8194892e01464460 and its protected annotated source tag.",
+    "Issue 420 passed 105 targeted and static regression tests; the full AC suite reported 971 passed and 12 skipped.",
+    "Independent exact-tree review of 2252893c3a8ca5c35735203580b58615fe76d570 reported PASS with zero blocking findings across success, retry, late transition, stale click cancellation, exact failure reporting, resume-row persistence, and immediate fatal paths.",
+    "Package build completed for installer digest e9cd0d004c0026db35c0703a363607353baa1e623455998116c8800b8860098d."
+  ]
+}
