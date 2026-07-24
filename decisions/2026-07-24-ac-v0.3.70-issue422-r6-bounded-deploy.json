@@ -1,0 +1,52 @@
+{
+  "schema": "aims.bounded_deploy_attestation_decision.v1",
+  "verdict": "PASS",
+  "repository": "aim2nasa/aims",
+  "operation": "deploy",
+  "artifactKind": "aims-auto-clicker-distribution-manifest",
+  "issuer": "github-environment:regression-auditor",
+  "keyId": "primary-2026-07",
+  "signatureAlgorithm": "ed25519",
+  "certifiedSha": "20354f1a991c2258744567026772c5aadd3b026a",
+  "artifactDigest": "9714fd1de22f5e0931fe56bab8f5d030fa354ca117f54498c196dc49acb1d74e",
+  "installerDigest": "ba7e7c73955f5cca1f7cf16d09d9fa610d124515bb842b487f0e430e1ebfeb5b",
+  "latestManifestDigest": "829a35ade9a97ec4627a96df1cb00e3811e8f1de0de4142971951b130062339d",
+  "publisherScriptDigest": "802c4e09eb5474129312be3abecb26247bade9df8eda3583b129b0bc9acf2671",
+  "commandContract": "aims.auto_clicker.publish_provenance_release.v1",
+  "sourceTag": "refs/tags/ac-source-v0.3.70-20354f1a99",
+  "tagObjectSha": "a2dd00d723911b65aaf5e0127d4eaef2accb1dea",
+  "publisherCommitSha": "20354f1a991c2258744567026772c5aadd3b026a",
+  "sourceTreeSha": "48ec3191f2699cb9622bf6a0706d351e6e08ad79",
+  "sourceTagProtection": {
+    "rulesetId": 19181898,
+    "target": "tag",
+    "enforcement": "active",
+    "include": [
+      "refs/tags/ac-source-*"
+    ],
+    "rules": [
+      "deletion",
+      "non_fast_forward"
+    ],
+    "bypassActors": []
+  },
+  "publisherFiles": {
+    "tools/auto_clicker_v2/scripts/publish_provenance_release.ps1": "802c4e09eb5474129312be3abecb26247bade9df8eda3583b129b0bc9acf2671",
+    "tools/auto_clicker_v2/scripts/ac_build_provenance.py": "ccf4cc9c079a9e23a53fcf0da7f4965aa133da3638a6b5499843e998e53723fd",
+    "tools/auto_clicker_v2/execution_provenance.py": "ae6ea59e2260bdbc4e87a9d8597a3f76feb3a6998b21d15fe9d6d1bffc7216dc",
+    "tools/auto_clicker_v2/provenance_trust.py": "65af95c6eb7380d01b22d4b27b897f311db83f01152db782c9e67f8fd743f267"
+  },
+  "auditorIdentity": "regression-auditor-agent:issue422-r6-exact-verifier-20260724",
+  "auditorSessionId": "/root/issue422_r6_exact_verifier",
+  "implementationIdentity": "github-actor-id:26228531",
+  "decisionReviewerIdentity": "github-app-id:4291228",
+  "issuedAt": 1784889923,
+  "expiresAt": 1784890523,
+  "evidence": [
+    "AC 0.3.70 #422 r6 RC build 09123ceb5f384efd94c6af1450ce2f4d is bound to main merge commit 20354f1a991c2258744567026772c5aadd3b026a and protected annotated source tag refs/tags/ac-source-v0.3.70-20354f1a99.",
+    "r5 deployment was correctly blocked by the release controller as BLOCKED_GATE_CHANGED, so r6 was rebuilt from the current main checkout without reusing stale RC bytes.",
+    "Issue 422 replaces stdout JSON transport with atomic local IPC result envelopes across customer detail/list/PDF routes and keeps stdout/stderr as diagnostics only.",
+    "Targeted #422 regression tests passed for envelope validation, requestId/attempt mismatch rejection, parse-only recovery, and three-failure FATAL evidence/checkpoint handling.",
+    "r6 package build and installer smoke completed for installer digest ba7e7c73955f5cca1f7cf16d09d9fa610d124515bb842b487f0e430e1ebfeb5b."
+  ]
+}
